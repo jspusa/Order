@@ -1,1596 +1,1486 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <title>訂單產生器</title>
-  <style>
-    /* ======================== [CSS] ======================== */
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 5px;
-      box-sizing: border-box;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 1200px;
-    }
-    .header-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    .factory-switch {
-      background-color: #eee;
-      padding: 10px 15px;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-      transition: background-color 0.3s, box-shadow 0.3s;
-    }
-    .factory-switch:hover {
-      background-color: #ddd;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    .factory-switch label {
-      margin-right: 10px;
-      font-weight: bold;
-      color: #333;
-    }
-    .factory-switch input[type="radio"] {
-      margin-right: 5px;
-    }
-    .header-bar h1 {
-      margin: 10px 20px;
-      color: #333;
-      flex-grow: 1;
-      text-align: center;
-    }
-    .box-size-button {
-      background-color: transparent;
-      color: #007bff;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      text-decoration: underline;
-      position: relative;
-      margin-right: 10px;
-    }
-    .box-size-button:hover {
-      color: #0069d9;
-      background-color: #e2e6ea;
-      text-decoration: underline;
-    }
-    h1 {
-      color: #333;
-    }
-    label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-    select, input[type="number"], input[type="text"] {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 20px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-    button {
-      padding: 10px 15px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin: 5px;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .product-button {
-      padding: 10px 15px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin: 5px;
-    }
-    .product-button:hover {
-      background-color: #218838;
-    }
-    .product-buttons-container {
-      display: flex;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-    table {
-      width: 100%;
-      margin-top: 20px;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
-    table, th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-      box-sizing: border-box;
-    }
-    th {
-      background-color: #007bff;
-      color: white;
-    }
-    .action-button, .remove-button {
-      background-color: #6c757d;
-      color: white;
-      padding: 4px 8px;
-      margin: 2px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      display: inline-block;
-    }
-    .remove-button {
-      background-color: #dc3545;
-    }
-    .total {
-      margin-top: 20px;
-      font-weight: bold;
-      font-size: 18px;
-      text-align: right;
-    }
-    .totals-container {
-      text-align: right;
-      margin-top: 20px;
-    }
-    table input[type="number"] {
-      width: 100%;
-      box-sizing: border-box;
-    }
-    td {
-      overflow: hidden;
-    }
-    .action-button-group {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .action-button-group button {
-      margin: 0 2px;
-    }
-    .export-button {
-      background-color: #17a2b8;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin: 5px;
-    }
-    .export-button:hover {
-      background-color: #117a8b;
-    }
-    .brand-button, .spec-button {
-      padding: 10px 15px;
-      background-color: #6c757d;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin: 5px;
-    }
-    .brand-button.active, .spec-button.active {
-      background-color: #007bff;
-    }
-    .progress-container {
-      width: 100%;
-      background-color: #e0e0e0;
-      border-radius: 5px;
-      margin: 10px 0;
-      position: relative;
-      height: 25px;
-    }
-    .progress-bar {
-      height: 100%;
-      border-radius: 5px;
-      width: 0%;
-      text-align: center;
-      color: white;
-      line-height: 25px;
-      font-weight: bold;
-      background-color: #007bff;
-    }
-    .container-info {
-      margin-bottom: 20px;
-    }
-    .box-size-A {
-      color: #28a745;
-    }
-    .box-size-B {
-      color: #007bff;
-    }
-    .box-size-C {
-      color: #fd7e14;
-    }
-    .box-size-D {
-      color: #6f42c1;
-    }
-    .box-size-icon {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      margin-right: 5px;
-      vertical-align: middle;
-      border-radius: 50%;
-    }
-    .box-size-icon-A {
-      background-color: #28a745;
-    }
-    .box-size-icon-B {
-      background-color: #007bff;
-    }
-    .box-size-icon-C {
-      background-color: #fd7e14;
-    }
-    .box-size-icon-D {
-      background-color: #6f42c1;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.5);
-    }
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 5px;
-      width: 80%;
-      max-width: 500px;
-      position: relative;
-    }
-    .close-modal {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-      position: absolute;
-      right: 10px;
-      top: 5px;
-    }
-    .close-modal:hover, .close-modal:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .modal-content p {
-      margin: 10px 0;
-    }
-    .search-container {
-      position: relative;
-      margin-bottom: 20px;
-    }
-    .search-input {
-      width: 100%;
-      padding: 8px;
-      font-size: 16px;
-      box-sizing: border-box;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .search-results {
-      position: absolute;
-      top: 45px;
-      left: 0;
-      width: 100%;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      border-top: none;
-      max-height: 200px;
-      overflow-y: auto;
-      z-index: 100;
-    }
-    .search-result-item {
-      padding: 8px;
-      cursor: pointer;
-    }
-    .search-result-item:hover {
-      background-color: #f1f1f1;
-    }
-    .box-counts {
-      margin-top: 10px;
-      font-size: 16px;
-      text-align: right;
-    }
-    .lock-button {
-      background-color: #ffc107;
-      color: white;
-      padding: 4px 8px;
-      margin: 2px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      display: inline-block;
-    }
-    .lock-button:hover {
-      background-color: #e0a800;
-    }
-    .locked {
-      background-color: #f0f0f0;
-    }
-    .target-input {
-      width: 100%;
-      box-sizing: border-box;
-    }
-    table th:first-child, table td:first-child {
-      width: 5%;
-    }
-    table th:nth-child(2), table td:nth-child(2) {
-      width: 10%;
-    }
-    table th:nth-child(3), table td:nth-child(3) {
-      width: 12%;
-    }
-    table th:nth-child(4), table td:nth-child(4) {
-      width: 12%;
-    }
-    table th:nth-child(5), table td:nth-child(5) {
-      width: 12%;
-    }
-    table th:nth-child(6), table td:nth-child(6) {
-      width: 10%;
-    }
-    table th:nth-child(7), table td:nth-child(7) {
-      width: 10%;
-    }
-    table th:nth-child(8), table td:nth-child(8) {
-      width: 10%;
-    }
-    table th:nth-child(9), table td:nth-child(9) {
-      width: auto;
-    }
-    @media (max-width: 1200px) {
-      table th:first-child, table td:first-child {
-        width: 6%;
-      }
-      table th:nth-child(3), table td:nth-child(3),
-      table th:nth-child(4), table td:nth-child(4),
-      table th:nth-child(6), table td:nth-child(6),
-      table th:nth-child(7), table td:nth-child(7),
-      table th:nth-child(8), table td:nth-child(8) {
-        width: 12%;
-      }
-      table th:nth-child(2), table td:nth-child(2),
-      table th:nth-child(5), table td:nth-child(5),
-      table th:nth-child(9), table td:nth-child(9) {
-        width: auto;
-      }
-    }
-    @media (max-width: 768px) {
-      table th:nth-child(4), table td:nth-child(4),
-      table th:nth-child(6), table td:nth-child(6),
-      table th:nth-child(7), table td:nth-child(7) {
-        display: none;
-      }
-      table th:first-child, table td:first-child {
-        width: 10%;
-      }
-      table th:nth-child(3), table td:nth-child(3),
-      table th:nth-child(8), table td:nth-child(8) {
-        width: 20%;
-      }
-      table th:nth-child(2), table td:nth-child(2),
-      table th:nth-child(5), table td:nth-child(5),
-      table th:nth-child(9), table td:nth-child(9) {
-        width: auto;
-      }
-    }
-    #newItemGeneratorBtn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background-color: #ccc;
-      color: #333;
-      border: none;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-  </style>
-  <!-- xlsx.js for export Excel -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <meta charset="UTF-8">
+    <title>訂單產生器</title>
+    <style>
+        /* =================== [CSS樣式略，同前] =================== */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0; 
+            padding: 20px;
+        }
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 1200px;
+        }
+        .header-bar {
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin-bottom: 20px;
+        }
+        .factory-switch {
+            background-color: #eee;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .factory-switch:hover {
+            background-color: #ddd;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .factory-switch label {
+            margin-right: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        .factory-switch input[type="radio"] {
+            margin-right: 5px;
+        }
+        .header-bar h1 {
+            margin: 10px 20px;
+            color: #333;
+            flex-grow: 1;
+            text-align: center;
+        }
+        .box-size-button {
+            background-color: transparent;
+            color: #007bff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: underline;
+            position: relative; 
+            margin-right: 10px;
+        }
+        .box-size-button:hover {
+            color: #0069d9;
+            background-color: #e2e6ea;
+            text-decoration: underline;
+        }
+        h1 { color: #333; }
+        label { display: block; margin-bottom: 10px; font-weight: bold; }
+        select, input[type="number"], input[type="text"] {
+            width: 100%; padding: 8px; margin-bottom: 20px; font-size: 16px;
+            border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px; background-color: #007bff; color: white; border: none;
+            border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .product-button {
+            padding: 10px 15px; background-color: #28a745; color: white; border: none;
+            border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;
+        }
+        .product-button:hover {
+            background-color: #218838;
+        }
+        .product-buttons-container {
+            display: flex; flex-wrap: wrap; margin-bottom: 20px;
+        }
+        table {
+            width: 100%; margin-top: 20px; border-collapse: collapse; table-layout: fixed;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            box-sizing: border-box;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .action-button, .remove-button {
+            background-color: #6c757d; color: white;
+            padding: 4px 8px; margin: 2px;
+            border: none; border-radius: 5px; cursor: pointer;
+            font-size: 14px; display: inline-block;
+        }
+        .remove-button {
+            background-color: #dc3545;
+        }
+        .total {
+            margin-top: 20px; font-weight: bold; font-size: 18px; text-align: right;
+        }
+        .totals-container {
+            text-align: right; margin-top: 20px;
+        }
+        table input[type="number"] { width: 100%; box-sizing: border-box; }
+        td { overflow: hidden; }
+        .action-button-group {
+            display: flex; justify-content: center; align-items: center;
+        }
+        .action-button-group button { margin: 0 2px; }
+        .export-button {
+            background-color: #17a2b8; color: white; padding: 10px 15px;
+            border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;
+        }
+        .export-button:hover {
+            background-color: #117a8b;
+        }
+        .brand-button, .spec-button {
+            padding: 10px 15px; background-color: #6c757d; color: white; border: none;
+            border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;
+        }
+        .brand-button.active, .spec-button.active {
+            background-color: #007bff;
+        }
+        .progress-container {
+            width: 100%; background-color: #e0e0e0; border-radius: 5px; margin: 10px 0;
+            position: relative; height: 25px;
+        }
+        .progress-bar {
+            height: 100%; border-radius: 5px; width: 0%; text-align: center;
+            color: white; line-height: 25px; font-weight: bold; background-color: #007bff;
+        }
+        .container-info { margin-bottom: 20px; }
+        .box-size-A { color: #28a745; }
+        .box-size-B { color: #007bff; }
+        .box-size-C { color: #fd7e14; }
+        .box-size-D { color: #6f42c1; }
+        .box-size-icon {
+            display: inline-block; width: 12px; height: 12px; margin-right: 5px;
+            vertical-align: middle; border-radius: 50%;
+        }
+        .box-size-icon-A { background-color: #28a745; }
+        .box-size-icon-B { background-color: #007bff; }
+        .box-size-icon-C { background-color: #fd7e14; }
+        .box-size-icon-D { background-color: #6f42c1; }
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+            width: 100%; height: 100%; overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fff; margin: 10% auto; padding: 20px; border-radius: 5px;
+            width: 80%; max-width: 500px; position: relative;
+        }
+        .close-modal {
+            color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;
+            position: absolute; right: 10px; top: 5px;
+        }
+        .close-modal:hover, .close-modal:focus {
+            color: black; text-decoration: none; cursor: pointer;
+        }
+        .modal-content p { margin: 10px 0; }
+        .search-container { position: relative; margin-bottom: 20px; }
+        .search-input {
+            width: 100%; padding: 8px; font-size: 16px; box-sizing: border-box;
+            border-radius: 5px; border: 1px solid #ccc;
+        }
+        .search-results {
+            position: absolute; top: 45px; left: 0; width: 100%; background-color: #fff;
+            border: 1px solid #ccc; border-top: none; max-height: 200px;
+            overflow-y: auto; z-index: 100;
+        }
+        .search-result-item {
+            padding: 8px; cursor: pointer;
+        }
+        .search-result-item:hover {
+            background-color: #f1f1f1;
+        }
+        .box-counts {
+            margin-top: 10px; font-size: 16px; text-align: right;
+        }
+        .lock-button {
+            background-color: #ffc107; color: white; padding: 4px 8px; margin: 2px;
+            border: none; border-radius: 5px; cursor: pointer; font-size: 14px;
+            display: inline-block;
+        }
+        .lock-button:hover {
+            background-color: #e0a800;
+        }
+        .locked {
+            background-color: #f0f0f0;
+        }
+        .target-input {
+            width: 100%; box-sizing: border-box;
+        }
+        table th:first-child, table td:first-child { width: 5%; }
+        table th:nth-child(2), table td:nth-child(2) { width: 10%; }
+        table th:nth-child(3), table td:nth-child(3) { width: 12%; }
+        table th:nth-child(4), table td:nth-child(4) { width: 12%; }
+        table th:nth-child(5), table td:nth-child(5) { width: 12%; }
+        table th:nth-child(6), table td:nth-child(6) { width: 10%; }
+        table th:nth-child(7), table td:nth-child(7) { width: 10%; }
+        table th:nth-child(8), table td:nth-child(8) { width: 10%; }
+        table th:nth-child(9), table td:nth-child(9) { width: auto; }
+        @media (max-width: 1200px) {
+            table th:first-child, table td:first-child { width: 6%; }
+            table th:nth-child(3), table td:nth-child(3),
+            table th:nth-child(4), table td:nth-child(4),
+            table th:nth-child(6), table td:nth-child(6),
+            table th:nth-child(7), table td:nth-child(7),
+            table th:nth-child(8), table td:nth-child(8) {
+                width: 12%;
+            }
+            table th:nth-child(2), table td:nth-child(2),
+            table th:nth-child(5), table td:nth-child(5),
+            table th:nth-child(9), table td:nth-child(9) {
+                width: auto;
+            }
+        }
+        @media (max-width: 768px) {
+            table th:nth-child(4), table td:nth-child(4),
+            table th:nth-child(6), table td:nth-child(6),
+            table th:nth-child(7), table td:nth-child(7) {
+                display: none;
+            }
+            table th:first-child, table td:first-child {
+                width: 10%;
+            }
+            table th:nth-child(3), table td:nth-child(3),
+            table th:nth-child(8), table td:nth-child(8) {
+                width: 20%;
+            }
+            table th:nth-child(2), table td:nth-child(2),
+            table th:nth-child(5), table td:nth-child(5),
+            table th:nth-child(9), table td:nth-child(9) {
+                width: auto;
+            }
+        }
+        #newItemGeneratorBtn {
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            background-color: #ccc; 
+            color: #333; 
+            border: none; 
+            border-radius: 50%; 
+            width: 30px; 
+            height: 30px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 20px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 </head>
 
 <body>
 <div class="container">
-  <!-- header -->
-  <div class="header-bar">
-    <div class="factory-switch">
-      <label><input type="radio" name="factorySelect" value="VN" checked> 越南廠</label>
-      <label><input type="radio" name="factorySelect" value="TW"> 台灣廠</label>
+    <!-- 頂部區：左(國家切換)-中(標題)-右(紙箱規格按鈕) -->
+    <div class="header-bar">
+        <!-- 左：country 切換 (VN / TW / Others) -->
+        <div class="factory-switch">
+            <label><input type="radio" name="countrySelect" value="VN" checked> 越南廠</label>
+            <label><input type="radio" name="countrySelect" value="TW"> 台灣廠</label>
+            <label><input type="radio" name="countrySelect" value="Others"> 其他</label>
+        </div>
+        <h1>訂單產生器</h1>
+        <button class="box-size-button" onclick="openModal()">紙箱規格尺寸</button>
     </div>
-    <h1>訂單產生器</h1>
-    <button class="box-size-button" onclick="openModal()">紙箱規格尺寸</button>
-  </div>
 
-  <div id="brandButtons">
-    <label>選擇品牌：</label>
-  </div>
-
-  <div id="specButtons" style="display:none;">
-    <label>選擇規格：</label>
-  </div>
-
-  <label for="seriesSelect">選擇系列：</label>
-  <select id="seriesSelect" onchange="updateProductOptions()"></select>
-
-  <div id="productButtons" class="product-buttons-container"></div>
-
-  <div class="search-container">
-    <input type="text" id="searchInput" class="search-input" placeholder="輸入品號" oninput="searchProduct()">
-    <div id="searchResults" class="search-results"></div>
-  </div>
-
-  <table id="productTable">
-    <thead>
-    <tr>
-      <th>序號</th>
-      <th>品號</th>
-      <th>包數</th>
-      <th>袋數/盒數</th>
-      <th>目標數量</th>
-      <th>箱數</th>
-      <th>棧板數</th>
-      <th>紙箱規格</th>
-      <th>操作</th>
-    </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-  <div class="totals-container">
-    <div class="total">
-      總包數: <span id="totalQuantity">0</span> |
-      總箱數: <span id="totalBoxes">0</span> |
-      總棧板數: <span id="totalPallets">0</span>
+    <!-- 品牌按鈕區 -->
+    <div id="brandButtons">
+        <label>選擇品牌：</label>
     </div>
-    <div class="box-counts">
-      A 規格棧板數: <span id="countA">0</span> |
-      B 規格棧板數: <span id="countB">0</span> |
-      C 規格棧板數: <span id="countC">0</span>
+
+    <!-- 規格按鈕區 -->
+    <div id="specButtons" style="display:none;">
+        <label>選擇規格：</label>
     </div>
-  </div>
 
-  <div id="containerInfo" class="container-info"></div>
+    <!-- 系列下拉 -->
+    <label for="seriesSelect">選擇系列：</label>
+    <select id="seriesSelect" onchange="updateProductOptions()"></select>
 
-  <button class="export-button" onclick="exportToExcel()">匯出為 Excel</button>
+    <!-- 產品按鈕區 -->
+    <div id="productButtons" class="product-buttons-container"></div>
+
+    <!-- 搜尋區 -->
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="輸入品號" oninput="searchProduct()">
+        <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <!-- 產品表格 -->
+    <table id="productTable">
+        <thead>
+            <tr>
+                <th>序號</th>
+                <th>品號</th>
+                <th>包數</th>
+                <th>袋數/盒數</th>
+                <th>目標數量</th>
+                <th>箱數</th>
+                <th>棧板數</th>
+                <th>紙箱規格</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- 統計區 -->
+    <div class="totals-container">
+        <div class="total">
+            總包數: <span id="totalQuantity">0</span> |
+            總箱數: <span id="totalCartons">0</span> |
+            總棧板數: <span id="totalPallets">0</span>
+        </div>
+        <div class="box-counts">
+            A 規格棧板數: <span id="countA">0</span> |
+            B 規格棧板數: <span id="countB">0</span> |
+            C 規格棧板數: <span id="countC">0</span>
+            <!-- 若需要 D: <span id="countD">0</span> -->
+        </div>
+    </div>
+
+    <!-- 貨櫃資訊 -->
+    <div id="containerInfo" class="container-info"></div>
+
+    <!-- 匯出按鈕 -->
+    <button class="export-button" onclick="exportToExcel()">匯出為 Excel</button>
 </div>
 
-<!-- boxSize Modal -->
+<!-- Modal：紙箱規格 -->
 <div id="boxSizeModal" class="modal">
-  <div class="modal-content">
-    <span class="close-modal" onclick="closeModal()">&times;</span>
-    <h2>紙箱規格尺寸</h2>
-    <p>A：50cm × 40cm × 30cm</p>
-    <p>B：58.5cm × 34.5cm × 35cm</p>
-    <p>C：50cm × 40cm × 40cm</p>
-    <p>D：48cm × 38cm × 28cm <strong>(中三箱)</strong></p>
-  </div>
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <h2>紙箱規格尺寸</h2>
+        <p>A：50cm × 40cm × 30cm</p>
+        <p>B：58.5cm × 34.5cm × 35cm</p>
+        <p>C：50cm × 40cm × 40cm</p>
+        <p>D：48cm × 38cm × 28cm <strong>(中三箱)</strong></p>
+    </div>
 </div>
 
-<!-- 新品產生器按鈕 -->
+<!-- 新品產生器按鈕：固定在右上 -->
 <button id="newItemGeneratorBtn">＋</button>
 
 <!-- 新品產生器 Modal -->
 <div id="newItemModal" class="modal">
-  <div class="modal-content">
-    <span class="close-modal" onclick="closeNewItemModal()">&times;</span>
-    <h2>新品產生器 (無 perCarton)</h2>
-    <p>依序選擇或輸入新商品資訊</p>
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeNewItemModal()">&times;</span>
+        <h2>新品產生器</h2>
+        <p>依序選擇或輸入新商品資訊。</p>
 
-    <label>品牌（brand）： 
-      <select id="newItemBrandSelect" onchange="newItemBrandChanged()"></select>
-      <input type="text" id="newItemBrandInput" placeholder="自行輸入新品牌" style="display:none;">
-    </label>
+        <!-- 品牌下拉+輸入 -->
+        <label>品牌（brand）： 
+            <select id="newItemBrandSelect" onchange="newItemBrandChanged()"></select>
+            <input type="text" id="newItemBrandInput" placeholder="自行輸入新品牌" style="display:none;">
+        </label>
 
-    <label>規格（spec）：
-      <select id="newItemSpecSelect" onchange="newItemSpecChanged()"></select>
-      <input type="text" id="newItemSpecInput" placeholder="自行輸入新規格" style="display:none;">
-    </label>
+        <!-- 規格下拉+輸入 -->
+        <label>規格（spec）：
+            <select id="newItemSpecSelect" onchange="newItemSpecChanged()"></select>
+            <input type="text" id="newItemSpecInput" placeholder="自行輸入新規格" style="display:none;">
+        </label>
 
-    <label>系列（series）：
-      <select id="newItemSeriesSelect" onchange="newItemSeriesChanged()"></select>
-      <input type="text" id="newItemSeriesInput" placeholder="自行輸入新系列" style="display:none;">
-    </label>
+        <!-- 系列下拉+輸入 -->
+        <label>系列（series）：
+            <select id="newItemSeriesSelect" onchange="newItemSeriesChanged()"></select>
+            <input type="text" id="newItemSeriesInput" placeholder="自行輸入新系列" style="display:none;">
+        </label>
 
-    <label>品號（productCode）：<input type="text" id="newItemCode" placeholder="必填"></label>
-    <label>品名（productName）：<input type="text" id="newItemName" placeholder="必填"></label>
+        <!-- 基本資訊 -->
+        <label>品號（productCode）：<input type="text" id="newItemCode" placeholder="必填"></label>
+        <label>品名（productName）：<input type="text" id="newItemName" placeholder="必填"></label>
 
-    <label>紙箱規格（boxSize）： 
-      <select id="newItemBoxSize" onchange="boxSizeChanged()">
-        <option value="A">A</option>
-        <option value="B">B</option>
-        <option value="C">C</option>
-        <option value="D">D</option>
-      </select>
-    </label>
+        <!-- 紙箱規格 -->
+        <label>紙箱規格（boxSize）： 
+            <select id="newItemBoxSize" onchange="boxSizeChanged()">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+            </select>
+        </label>
 
-    <!-- 包裝類型：單包 / 袋裝 / 盒裝 -->
-    <label>包裝類型：
-      <select id="newItemPackagingType" onchange="packagingTypeChanged()">
-        <option value="single">單包</option>
-        <option value="bag">袋裝</option>
-        <option value="box">盒裝</option>
-      </select>
-    </label>
+        <!-- 棧板箱數 -->
+        <label>棧板箱數（perPallet）：<input type="number" id="newItemPallet" placeholder="選箱規後自動帶入，可手改"></label>
 
-    <div id="packagingFields"></div>
+        <!-- country (VN / TW / Others) -->
+        <label>生產國別 / Country：
+            <select id="newItemCountry">
+                <option value="VN">VN (越南)</option>
+                <option value="TW">TW (台灣)</option>
+                <option value="Others">Others</option>
+            </select>
+        </label>
 
-    <label>棧板箱數（perPallet）：<input type="number" id="newItemPallet" placeholder="選箱規後自動帶入，可手改"></label>
-    <button class="product-button" style="background-color:#6c757d;" onclick="addNewItemLine()">加入</button>
-    <hr>
-    <p>結果：</p>
-    <textarea id="newItemResult" style="width:100%;height:100px;"></textarea>
-    <button class="product-button" style="background-color:#28a745;" onclick="copyNewItems()">複製結果</button>
-  </div>
+        <!-- 包裝類型 -->
+        <label>包裝類型：
+            <select id="newItemPackagingType" onchange="packagingTypeChanged()">
+                <option value="single">單包</option>
+                <option value="bag">袋裝</option>
+                <option value="box">盒裝</option>
+            </select>
+        </label>
+
+        <!-- 動態顯示：每箱幾入(perCarton) + 盒裝(perBox) / 袋裝(perPack) -->
+        <div id="packagingFields"></div>
+
+        <!-- 新增按鈕 -->
+        <button class="product-button" style="background-color:#6c757d;" onclick="addNewItemLine()">加入</button>
+        <hr>
+        <p>結果：</p>
+        <textarea id="newItemResult" style="width:100%;height:100px;"></textarea>
+        <button class="product-button" style="background-color:#28a745;" onclick="copyNewItems()">複製結果</button>
+    </div>
 </div>
 
 <script>
-  // ====================== 1) 產品資料 (無 perCarton、袋裝用 perBagPack) ======================
-const vnProducts = [
-        {brand:"GooToE", spec:"普通包", series:"GTS系列", productCode:"GTS01", productName:"Gootoe - Turkey Tendon Strip (85g x 100)", boxSize:"B", perBox:100, perPallet:36},
-        {brand:"GooToE", spec:"普通包", series:"GTS系列", productCode:"GTS03", productName:"Gootoe - Turkey Tendon Stick_M(90g x 100)", boxSize:"B", perBox:100, perPallet:36},
+    // ============================================
+    // 新版本：allProducts + country欄位
+    // ============================================
+    // 僅供示範 (目前先空陣列)
+const allProducts = [
 
-        {brand:"GooToE", spec:"普通包", series:"GTR系列", productCode:"GTR01", productName:"Gootoe - Turkey Tendon Ring_S(72g x 100)", boxSize:"B", perBox:100, perPallet:36},
-        {brand:"GooToE", spec:"普通包", series:"GTR系列", productCode:"GTR03", productName:"Gootoe - Turkey Tendon Ring_M(90g x 100)", boxSize:"B", perBox:100, perPallet:36},
+  // ======================
+  // 以下原屬「vnProducts」，country:"VN"
+  // ======================
 
-        {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB01", productName:"Gootoe - Turkey Tendon Bone_S(72g x 100)", boxSize:"B", perBox:100, perPallet:36},
-        {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB03", productName:"Gootoe - Turkey Tendon Bone_M(90g x 100)", boxSize:"B", perBox:100, perPallet:36},
-        {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB05", productName:"Gootoe - Turkey Tendon Bone_L(100g x 100)", boxSize:"B", perBox:100, perPallet:36},
-        {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB07", productName:"Gootoe - Turkey Tendon Lolipop 15gx5 (75g x 100)", boxSize:"B", perBox:100, perPallet:36},
+  // -- 普通包 (單包) ---
+  {brand:"GooToE", spec:"普通包", series:"GTS系列", productCode:"GTS01", productName:"Gootoe - Turkey Tendon Strip (85g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"普通包", series:"GTS系列", productCode:"GTS03", productName:"Gootoe - Turkey Tendon Stick_M(90g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
 
-        {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP01", productName:"Gootoe - Turkey Tendon Rope_S(72g x 100)", boxSize:"B", perBox:100, perPallet:36},
-        {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP03", productName:"Gootoe - Turkey Tendon Rope_M(90g x 100)", boxSize:"B", perBox:100, perPallet:36},
-        {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP05", productName:"Gootoe - Turkey Tendon Rope_L(100g x 100)", boxSize:"B", perBox:100, perPallet:36},
+  {brand:"GooToE", spec:"普通包", series:"GTR系列", productCode:"GTR01", productName:"Gootoe - Turkey Tendon Ring_S(72g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"普通包", series:"GTR系列", productCode:"GTR03", productName:"Gootoe - Turkey Tendon Ring_M(90g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
 
-        {brand:"GooToE", spec:"普通包", series:"GTZ系列", productCode:"GTZ01", productName:"Gootoe - Turkey Tendon Pretzel_S(72g x 100)", boxSize:"B", perBox:100, perPallet:36},
-        {brand:"GooToE", spec:"普通包", series:"GTZ系列", productCode:"GTZ03", productName:"Gootoe - Turkey Tendon Pretzel_M(90g x 120)", boxSize:"B", perBox:120, perPallet:36},
+  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB01", productName:"Gootoe - Turkey Tendon Bone_S(72g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB03", productName:"Gootoe - Turkey Tendon Bone_M(90g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB05", productName:"Gootoe - Turkey Tendon Bone_L(100g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB07", productName:"Gootoe - Turkey Tendon Lolipop 15gx5 (75g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
 
-        {brand:"GooToE", spec:"普通包", series:"GTA系列", productCode:"GTA01", productName:"Gootoe - Turkey Tendon Braid_S(90g x 120)", boxSize:"B", perBox:120, perPallet:36},
+  {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP01", productName:"Gootoe - Turkey Tendon Rope_S(72g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP03", productName:"Gootoe - Turkey Tendon Rope_M(90g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP05", productName:"Gootoe - Turkey Tendon Rope_L(100g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
 
-        {brand:"GooToE", spec:"普通包", series:"GSF系列", productCode:"GSF01", productName:"Soft Turkey Tendon Strip with Pumpkin (85g x 150)", boxSize:"A", perBox:150, perPallet:42},
-        {brand:"GooToE", spec:"普通包", series:"GSF系列", productCode:"GSF02", productName:"Soft Turkey Tendon Strip (85g x 150)", boxSize:"A", perBox:150, perPallet:42},
+  {brand:"GooToE", spec:"普通包", series:"GTZ系列", productCode:"GTZ01", productName:"Gootoe - Turkey Tendon Pretzel_S(72g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"普通包", series:"GTZ系列", productCode:"GTZ03", productName:"Gootoe - Turkey Tendon Pretzel_M(90g x 120)", boxSize:"B", perCarton:120, perPallet:36, country:"VN"},
 
-        {brand:"GooToE", spec:"普通包", series:"GTC系列", productCode:"GTC01", productName:"Gootoe - Sliced Turkey Tendon (85g x 120)", boxSize:"B", perBox:120, perPallet:36},
+  {brand:"GooToE", spec:"普通包", series:"GTA系列", productCode:"GTA01", productName:"Gootoe - Turkey Tendon Braid_S(90g x 120)", boxSize:"B", perCarton:120, perPallet:36, country:"VN"},
 
-        // GooToE 量販包:
-        {brand:"GooToE", spec:"量販包", series:"GTSL系列", productCode:"GTSL01", productName:"Gootoe - Turkey Tendon Strip (454g x 30)", boxSize:"C", perBox:30, perPallet:30},
-        // 若原程式中有 GTSL03，請在此補上 productName、boxSize、perBox、perPallet 資料，如果沒有則可刪掉此行。
+  {brand:"GooToE", spec:"普通包", series:"GSF系列", productCode:"GSF01", productName:"Soft Turkey Tendon Strip with Pumpkin (85g x 150)", boxSize:"A", perCarton:150, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"普通包", series:"GSF系列", productCode:"GSF02", productName:"Soft Turkey Tendon Strip (85g x 150)", boxSize:"A", perCarton:150, perPallet:42, country:"VN"},
 
-        {brand:"GooToE", spec:"量販包", series:"GTRL系列", productCode:"GTRL01", productName:"Gootoe - Turkey Tendon Ring_S (454g x 24)", boxSize:"C", perBox:24, perPallet:30},
-        {brand:"GooToE", spec:"量販包", series:"GTRL系列", productCode:"GTRL03", productName:"Gootoe - Turkey Tendon Ring_M (454g x 30)", boxSize:"C", perBox:30, perPallet:30},
+  {brand:"GooToE", spec:"普通包", series:"GTC系列", productCode:"GTC01", productName:"Gootoe - Sliced Turkey Tendon (85g x 120)", boxSize:"B", perCarton:120, perPallet:36, country:"VN"},
 
-        {brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL01", productName:"Gootoe - Turkey Tendon Rope_S (454g x 30)", boxSize:"C", perBox:30, perPallet:30},
-        {brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL03", productName:"Gootoe - Turkey Tendon Rope_M (454g x 30)", boxSize:"C", perBox:30, perPallet:30},
-        {brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL05", productName:"Gootoe - Turkey Tendon Rope_L (454g x 30)", boxSize:"C", perBox:30, perPallet:30},
+  // -- 量販包 (單包) ---
+  {brand:"GooToE", spec:"量販包", series:"GTSL系列", productCode:"GTSL01", productName:"Gootoe - Turkey Tendon Strip (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
+  // 若有 GTSL03 同理
 
-        {brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL01", productName:"Gootoe - Turkey Tendon Bone_S (454g x 30)", boxSize:"C", perBox:30, perPallet:30},
-        {brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL03", productName:"Gootoe - Turkey Tendon Bone_M (454g x 30)", boxSize:"C", perBox:30, perPallet:30},
-        {brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL05", productName:"Gootoe - Turkey Tendon Bone_L(454g x 30)", boxSize:"C", perBox:30, perPallet:30},
+  {brand:"GooToE", spec:"量販包", series:"GTRL系列", productCode:"GTRL01", productName:"Gootoe - Turkey Tendon Ring_S (454g x 24)", boxSize:"C", perCarton:24, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"量販包", series:"GTRL系列", productCode:"GTRL03", productName:"Gootoe - Turkey Tendon Ring_M (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
 
-        {brand:"GooToE", spec:"量販包", series:"GTAL系列", productCode:"GTAL01", productName:"Gootoe - Turkey Tendon Braid_S (454g x 38)", boxSize:"C", perBox:38, perPallet:30},
+  {brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL01", productName:"Gootoe - Turkey Tendon Rope_S (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL03", productName:"Gootoe - Turkey Tendon Rope_M (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL05", productName:"Gootoe - Turkey Tendon Rope_L (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
 
-        {brand:"GooToE", spec:"量販包", series:"GSFL系列", productCode:"GSFL01", productName:"Soft Turkey Tendon Strip with Pumpkin  (454g x 38)", boxSize:"C", perBox:38, perPallet:42},
-        {brand:"GooToE", spec:"量販包", series:"GSFL系列", productCode:"GSFL02", productName:"Soft Turkey Tendon Strip  (454g x 38)", boxSize:"C", perBox:38, perPallet:42},
+  {brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL01", productName:"Gootoe - Turkey Tendon Bone_S (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL03", productName:"Gootoe - Turkey Tendon Bone_M (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL05", productName:"Gootoe - Turkey Tendon Bone_L(454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
 
-        {brand:"GooToE", spec:"量販包", series:"GTCL系列", productCode:"GTCL01", productName:"Gootoe - Turkey Tendon Sliced (454g x 30)", boxSize:"C", perBox:30, perPallet:30},
+  {brand:"GooToE", spec:"量販包", series:"GTAL系列", productCode:"GTAL01", productName:"Gootoe - Turkey Tendon Braid_S (454g x 38)", boxSize:"C", perCarton:38, perPallet:30, country:"VN"},
 
-        {brand:"GooToE", spec:"量販包", series:"GTZL系列", productCode:"GTZL03", productName:"Gootoe - Turkey Tendon Pretzel_M (454g x 30)", boxSize:"C", perBox:30, perPallet:30},
+  {brand:"GooToE", spec:"量販包", series:"GSFL系列", productCode:"GSFL01", productName:"Soft Turkey Tendon Strip with Pumpkin  (454g x 38)", boxSize:"C", perCarton:38, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"量販包", series:"GSFL系列", productCode:"GSFL02", productName:"Soft Turkey Tendon Strip  (454g x 38)", boxSize:"C", perCarton:38, perPallet:42, country:"VN"},
 
-        // GooToE 火雞肉零食:
-        {brand:"GooToE", spec:"火雞肉零食", series:"GTT系列", productCode:"GTT01", productName:"Gootoe Turkey Tendon Twists 5oz_Small (142*120)", boxSize:"B", perBox:120, perPallet:36},
-        {brand:"GooToE", spec:"火雞肉零食", series:"GTT系列", productCode:"GTT03", productName:"Gootoe Turkey Tendon Twists 5oz_Medium (142*120)", boxSize:"B", perBox:120, perPallet:36},
+  {brand:"GooToE", spec:"量販包", series:"GTCL系列", productCode:"GTCL01", productName:"Gootoe - Turkey Tendon Sliced (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"量販包", series:"GTZL系列", productCode:"GTZL03", productName:"Gootoe - Turkey Tendon Pretzel_M (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
 
-        // GooToE 雞肉零食:
-        {brand:"GooToE", spec:"雞肉零食", series:"GCBL系列", productCode:"GCBL01", productName:"Gootoe - Chicken Fillet Jerky (454g x 30)", boxSize:"C", perBox:30, perPallet:42},
-        {brand:"GooToE", spec:"雞肉零食", series:"GCBL系列", productCode:"GCBL02", productName:"Gootoe - Chicken Breast Jerky (454g x 36)", boxSize:"C", perBox:36, perPallet:42},
+  // -- 火雞肉零食 (單包) ---
+  {brand:"GooToE", spec:"火雞肉零食", series:"GTT系列", productCode:"GTT01", productName:"Gootoe Turkey Tendon Twists 5oz_Small (142*120)", boxSize:"B", perCarton:120, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"火雞肉零食", series:"GTT系列", productCode:"GTT03", productName:"Gootoe Turkey Tendon Twists 5oz_Medium (142*120)", boxSize:"B", perCarton:120, perPallet:36, country:"VN"},
 
-        {brand:"GooToE", spec:"雞肉零食", series:"GCTL系列", productCode:"GCTL01", productName:"Gootoe - Chicken Sticks (681g x 28)", boxSize:"A", perBox:28, perPallet:42},
-        {brand:"GooToE", spec:"雞肉零食", series:"GCTL系列", productCode:"GCTL04", productName:"Gootoe - Chicken Mini Sticks (681g x 22)", boxSize:"A", perBox:22, perPallet:42},
-        {brand:"GooToE", spec:"雞肉零食", series:"GCTL系列", productCode:"GCTL05", productName:"Gootoe - Chicken Roll (340g x 24)", boxSize:"A", perBox:24, perPallet:42},
+  // -- 雞肉零食 (單包) ---
+  {brand:"GooToE", spec:"雞肉零食", series:"GCBL系列", productCode:"GCBL01", productName:"Gootoe - Chicken Fillet Jerky (454g x 30)", boxSize:"C", perCarton:30, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GCBL系列", productCode:"GCBL02", productName:"Gootoe - Chicken Breast Jerky (454g x 36)", boxSize:"C", perCarton:36, perPallet:42, country:"VN"},
 
-        {brand:"GooToE", spec:"雞肉零食", series:"GSCL系列", productCode:"GSCL01", productName:"Gootoe - Soft Chicken Breast Strips (454g x 36)", boxSize:"A", perBox:36, perPallet:42},
+  {brand:"GooToE", spec:"雞肉零食", series:"GCTL系列", productCode:"GCTL01", productName:"Gootoe - Chicken Sticks (681g x 28)", boxSize:"A", perCarton:28, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GCTL系列", productCode:"GCTL04", productName:"Gootoe - Chicken Mini Sticks (681g x 22)", boxSize:"A", perCarton:22, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GCTL系列", productCode:"GCTL05", productName:"Gootoe - Chicken Roll (340g x 24)", boxSize:"A", perCarton:24, perPallet:42, country:"VN"},
 
-        // GooToE 水牛零食:
-        {brand:"GooToE", spec:"水牛零食", series:"GBS系列", productCode:"GBS01", productName:"Gootoe - Buffalo Stick_S (227g x 70)", boxSize:"A", perBox:70, perPallet:42},
-        {brand:"GooToE", spec:"水牛零食", series:"GBS系列", productCode:"GBS03", productName:"Gootoe - Buffalo Stick_L (227g x 70)", boxSize:"A", perBox:70, perPallet:42},
-        {brand:"GooToE", spec:"水牛零食", series:"GBS系列", productCode:"GBSL01", productName:"Gootoe - Buffalo Bites Stick_S 1.5lb (681g x 28)", boxSize:"A", perBox:28, perPallet:42},
-        {brand:"GooToE", spec:"水牛零食", series:"GBS系列", productCode:"GBSL03", productName:"Gootoe - Buffalo Bites Stick_L 1.5lb (681g x 28)", boxSize:"A", perBox:28, perPallet:42},
+  {brand:"GooToE", spec:"雞肉零食", series:"GSCL系列", productCode:"GSCL01", productName:"Gootoe - Soft Chicken Breast Strips (454g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
 
-        {brand:"GooToE", spec:"水牛零食", series:"GBB系列", productCode:"GBB01", productName:"Gootoe - Buffalo Bone Shaped Treats (227g x 60)", boxSize:"A", perBox:60, perPallet:42},
-        {brand:"GooToE", spec:"水牛零食", series:"GBB系列", productCode:"GBBL01", productName:"Gootoe - Buffalo Bites Bone Shaped  1.5lb (681g x 28)", boxSize:"A", perBox:28, perPallet:42},
+  // -- 水牛零食 (單包) ---
+  {brand:"GooToE", spec:"水牛零食", series:"GBS系列", productCode:"GBS01", productName:"Gootoe - Buffalo Stick_S (227g x 70)", boxSize:"A", perCarton:70, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"水牛零食", series:"GBS系列", productCode:"GBS03", productName:"Gootoe - Buffalo Stick_L (227g x 70)", boxSize:"A", perCarton:70, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"水牛零食", series:"GBS系列", productCode:"GBSL01", productName:"Gootoe - Buffalo Bites Stick_S 1.5lb (681g x 28)", boxSize:"A", perCarton:28, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"水牛零食", series:"GBS系列", productCode:"GBSL03", productName:"Gootoe - Buffalo Bites Stick_L 1.5lb (681g x 28)", boxSize:"A", perCarton:28, perPallet:42, country:"VN"},
 
-        // A Freschi srl 家庭包:
-        {brand:"A Freschi srl", spec:"家庭包", series:"AFML系列", productCode:"AFML01", productName:"AFreschi Turkey Tendon Variety Pack 8oz_Small (227g x 36)", boxSize:"A", perBox:36, perPallet:42},
-        {brand:"A Freschi srl", spec:"家庭包", series:"AFML系列", productCode:"AFML03", productName:"AFreschi Turkey Tendon Variety Pack 10oz_Medium (285g x 36)", boxSize:"A", perBox:36, perPallet:42},
-        {brand:"A Freschi srl", spec:"家庭包", series:"AFML系列", productCode:"AFML05", productName:"AFreschi Turkey Tendon Variety Pack 10oz_Large (285g x 36)", boxSize:"A", perBox:36, perPallet:42},
+  {brand:"GooToE", spec:"水牛零食", series:"GBB系列", productCode:"GBB01", productName:"Gootoe - Buffalo Bone Shaped Treats (227g x 60)", boxSize:"A", perCarton:60, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"水牛零食", series:"GBB系列", productCode:"GBBL01", productName:"Gootoe - Buffalo Bites Bone Shaped  1.5lb (681g x 28)", boxSize:"A", perCarton:28, perPallet:42, country:"VN"},
 
-        {brand:"A Freschi srl", spec:"家庭包", series:"KTBL系列", productCode:"KTBL01", productName:"Afreschi Natural Turkey Tendon Bone 8oz_S-15g (227g x 36)", boxSize:"A", perBox:36, perPallet:42},
-        {brand:"A Freschi srl", spec:"家庭包", series:"KTBL系列", productCode:"KTBL03", productName:"Afreschi Natural Turkey Tendon Bone 10oz_M-36g (285g x 36)", boxSize:"A", perBox:36, perPallet:42},
-        {brand:"A Freschi srl", spec:"家庭包", series:"KTBL系列", productCode:"KTBL05", productName:"Afreschi Natural Turkey Tendon Bone 10oz_L-72g (285g x 36)", boxSize:"A", perBox:30, perPallet:42},
+  // -- A Freschi srl 家庭包 (單包) ---
+  {brand:"A Freschi srl", spec:"家庭包", series:"AFML系列", productCode:"AFML01", productName:"AFreschi Turkey Tendon Variety Pack 8oz_Small (227g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"家庭包", series:"AFML系列", productCode:"AFML03", productName:"AFreschi Turkey Tendon Variety Pack 10oz_Medium (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"家庭包", series:"AFML系列", productCode:"AFML05", productName:"AFreschi Turkey Tendon Variety Pack 10oz_Large (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
 
-        {brand:"A Freschi srl", spec:"家庭包", series:"TTRL系列", productCode:"TTRL01", productName:"Afreschi Natural Turkey Tendon Ring 8oz_S-12g (227g x 36)", boxSize:"A", perBox:36, perPallet:42},
-        {brand:"A Freschi srl", spec:"家庭包", series:"TTRL系列", productCode:"TTRL03", productName:"Afreschi Natural Turkey Tendon Ring 10oz_M-36g (285g x 36)", boxSize:"A", perBox:36, perPallet:42},
-        {brand:"A Freschi srl", spec:"家庭包", series:"TTRL系列", productCode:"TTRL05", productName:"Afreschi Natural Turkey Tendon Ring 10oz_L-72g (285g x 36)", boxSize:"A", perBox:36, perPallet:42},
+  {brand:"A Freschi srl", spec:"家庭包", series:"KTBL系列", productCode:"KTBL01", productName:"Afreschi Natural Turkey Tendon Bone 8oz_S-15g (227g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"家庭包", series:"KTBL系列", productCode:"KTBL03", productName:"Afreschi Natural Turkey Tendon Bone 10oz_M-36g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"家庭包", series:"KTBL系列", productCode:"KTBL05", productName:"Afreschi Natural Turkey Tendon Bone 10oz_L-72g (285g x 36)", boxSize:"A", perCarton:30, perPallet:42, country:"VN"},
 
-        {brand:"A Freschi srl", spec:"家庭包", series:"TPZL系列", productCode:"TPZL01", productName:"Afreschi Natural Turkey Tendon Pretzel 8oz_S-12g (227g x 36)", boxSize:"A", perBox:36, perPallet:42},
-        {brand:"A Freschi srl", spec:"家庭包", series:"TPZL系列", productCode:"TPZL03", productName:"Afreschi Natural Turkey Tendon Pretzel 10oz_M-36g (285g x 36)", boxSize:"A", perBox:36, perPallet:42},
-        {brand:"A Freschi srl", spec:"家庭包", series:"TPZL系列", productCode:"TPZL05", productName:"Afreschi Natural Turkey Tendon Pretzel 10oz_L-72g (285g x 36)", boxSize:"A", perBox:36, perPallet:42},
+  {brand:"A Freschi srl", spec:"家庭包", series:"TTRL系列", productCode:"TTRL01", productName:"Afreschi Natural Turkey Tendon Ring 8oz_S-12g (227g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"家庭包", series:"TTRL系列", productCode:"TTRL03", productName:"Afreschi Natural Turkey Tendon Ring 10oz_M-36g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"家庭包", series:"TTRL系列", productCode:"TTRL05", productName:"Afreschi Natural Turkey Tendon Ring 10oz_L-72g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
 
-        {brand:"A Freschi srl", spec:"家庭包", series:"TRPL系列", productCode:"TRPL01", productName:"Afreschi Natural Turkey Tendon Rope 8oz_S-12g (227g x 36)", boxSize:"A", perBox:36, perPallet:42},
-        {brand:"A Freschi srl", spec:"家庭包", series:"TRPL系列", productCode:"TRPL03", productName:"Afreschi Natural Turkey Tendon Rope 10oz_M-36g (285g x 36)", boxSize:"A", perBox:36, perPallet:42},
-        {brand:"A Freschi srl", spec:"家庭包", series:"TRPL系列", productCode:"TRPL05", productName:"Afreschi Natural Turkey Tendon Rope 10oz_L-72g (285g x 36)", boxSize:"A", perBox:36, perPallet:42},
+  {brand:"A Freschi srl", spec:"家庭包", series:"TPZL系列", productCode:"TPZL01", productName:"Afreschi Natural Turkey Tendon Pretzel 8oz_S-12g (227g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"家庭包", series:"TPZL系列", productCode:"TPZL03", productName:"Afreschi Natural Turkey Tendon Pretzel 10oz_M-36g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"家庭包", series:"TPZL系列", productCode:"TPZL05", productName:"Afreschi Natural Turkey Tendon Pretzel 10oz_L-72g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
 
-        {brand:"A Freschi srl", spec:"家庭包", series:"ATAL系列", productCode:"ATAL01", productName:"Afreschi Natural Turkey Tendon Braid 8oz (GTA01:227g x 42)", boxSize:"A", perBox:42, perPallet:42},
+  {brand:"A Freschi srl", spec:"家庭包", series:"TRPL系列", productCode:"TRPL01", productName:"Afreschi Natural Turkey Tendon Rope 8oz_S-12g (227g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"家庭包", series:"TRPL系列", productCode:"TRPL03", productName:"Afreschi Natural Turkey Tendon Rope 10oz_M-36g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"家庭包", series:"TRPL系列", productCode:"TRPL05", productName:"Afreschi Natural Turkey Tendon Rope 10oz_L-72g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
 
-        {brand:"A Freschi srl", spec:"家庭包", series:"TTSL系列", productCode:"TTSL05", productName:"Afreschi Natural Turkey Tendon Strip 10oz (285g x 36)", boxSize:"A", perBox:30, perPallet:42},
+  {brand:"A Freschi srl", spec:"家庭包", series:"ATAL系列", productCode:"ATAL01", productName:"Afreschi Natural Turkey Tendon Braid 8oz (GTA01:227g x 42)", boxSize:"A", perCarton:42, perPallet:42, country:"VN"},
 
-        // A Freschi srl 火雞肉零食:
-        {brand:"A Freschi srl", spec:"火雞肉零食", series:"ATJ系列", productCode:"ATJ01", productName:"A Freschi srl – Turkey Jerky 4oz (113g x 110 )", boxSize:"A", perBox:110, perPallet:42},
-        {brand:"A Freschi srl", spec:"火雞肉零食", series:"ATJ系列", productCode:"ATJL01", productName:"A Freschi srl – Turkey Jerky 12oz (340g x 42 )", boxSize:"A", perBox:42, perPallet:42},
-
-        {brand:"A Freschi srl", spec:"火雞肉零食", series:"ASF系列", productCode:"ASF01", productName:"A Freschi srl – Natural Turkey Treats Soft Stick (170g x 100)", boxSize:"A", perBox:100, perPallet:42},
-        {brand:"A Freschi srl", spec:"火雞肉零食", series:"ASF系列", productCode:"ASFL01", productName:"A Freschi srl – Natural Turkey Treats Soft Stick (454g x 36)", boxSize:"A", perBox:36, perPallet:42},
-
-        {brand:"A Freschi srl", spec:"火雞肉零食", series:"ABM系列", productCode:"ABM01", productName:"A Freschi srl – Natural Turkey Treats Stick_β-Carotene (170g x 110)", boxSize:"A", perBox:110, perPallet:42},
-        {brand:"A Freschi srl", spec:"火雞肉零食", series:"ABM系列", productCode:"ABML01", productName:"A Freschi srl – Natural Turkey Treats Stick_β-Carotene (454g x 42)", boxSize:"A", perBox:42, perPallet:42},
-
-        {brand:"A Freschi srl", spec:"火雞肉零食", series:"ATN系列", productCode:"ATN01", productName:"A Freschi srl – Natural Turkey Treats Star Bites (170g x 80)", boxSize:"A", perBox:80, perPallet:42},
-        {brand:"A Freschi srl", spec:"火雞肉零食", series:"ATN系列", productCode:"ATNL01", productName:"A Freschi srl – Natural Turkey Treats Star Bites (454g x 42)", boxSize:"A", perBox:42, perPallet:42},
-
-        {brand:"A Freschi srl", spec:"火雞肉零食", series:"ASA系列", productCode:"ASA01", productName:"A Freschi srl – Natural Turkey Treats Sausage (170g x 80)", boxSize:"A", perBox:80, perPallet:42},
-        {brand:"A Freschi srl", spec:"火雞肉零食", series:"ASA系列", productCode:"ASAL01", productName:"A Freschi srl – Natural Turkey Treats Sausage (454g x 36)", boxSize:"A", perBox:36, perPallet:42},
-
-        {brand:"A Freschi srl", spec:"火雞肉零食", series:"ADT系列", productCode:"ADT03", productName:"Natural Dental Treats - Real Turkey Meat (1kg x 20 units / CTN)", boxSize:"A", perBox:20, perPallet:42},
-
-        // A Freschi srl 乾糧:
-        {brand:"A Freschi srl", spec:"乾糧", series:"AWD系列", productCode:"AWD010", productName:"A Freschi srl – Air-Dried dog food W shape turkey recipe - 454g(38/ctn)", boxSize:"A", perBox:38, perPallet:42},
-        {brand:"A Freschi srl", spec:"乾糧", series:"AWD系列", productCode:"AWD011", productName:"A Freschi srl – Air-Dried dog food W shape turkey recipe - 1kg(20/ctn)", boxSize:"A", perBox:20, perPallet:42},
-        {brand:"A Freschi srl", spec:"乾糧", series:"AWD系列", productCode:"AWD070", productName:"A Freschi srl – Air-Dried dog food W shape turkey & salmon recipe - 454g(38/ctn)", boxSize:"A", perBox:38, perPallet:42},
-        {brand:"A Freschi srl", spec:"乾糧", series:"AWD系列", productCode:"AWD071", productName:"A Freschi srl – Air-Dried dog food W shape turkey & salmon recipe - 1kg(20/ctn)", boxSize:"A", perBox:20, perPallet:42},
-
-        // A Freschi srl 袋裝 (AM系列):
-        {brand:"A Freschi srl", spec:"袋裝", series:"KTB系列", productCode:"KTB01AM-4", productName:"Natural Turkey Tendon Bone_S (90 units /CTN)", boxSize:"A", perBox:90, perBagPack:4, perPallet:42},
-        {brand:"A Freschi srl", spec:"袋裝", series:"KTB系列", productCode:"KTB03AM-2", productName:"Natural Turkey Tendon Bone_M (80 units /CTN)", boxSize:"A", perBox:80, perBagPack:2, perPallet:42},
-        {brand:"A Freschi srl", spec:"袋裝", series:"KTB系列", productCode:"KTB05AM-1", productName:"Natural Turkey Tendon Bone_L (90 units /CTN)", boxSize:"A", perBox:90, perBagPack:1, perPallet:42},
-        {brand:"A Freschi srl", spec:"袋裝", series:"KTB系列", productCode:"KTB06AM-4", productName:"Natural Turkey Tendon Lollipop (90 units /CTN)", boxSize:"A", perBox:90, perBagPack:4, perPallet:42},
-
-        {brand:"A Freschi srl", spec:"袋裝", series:"TTR系列", productCode:"TTR01AM-4", productName:"Natural Turkey Tendon Ring_S (90 units /CTN)", boxSize:"A", perBox:90, perBagPack:4, perPallet:42},
-        {brand:"A Freschi srl", spec:"袋裝", series:"TTR系列", productCode:"TTR03AM-2", productName:"Natural Turkey Tendon Ring_M (80 units；/CTN)", boxSize:"A", perBox:80, perBagPack:2, perPallet:42},
-        {brand:"A Freschi srl", spec:"袋裝", series:"TTR系列", productCode:"TTR05AM-1", productName:"Natural Turkey Tendon Ring_L (120 units；/CTN)", boxSize:"A", perBox:120, perPallet:42},
-
-        {brand:"A Freschi srl", spec:"袋裝", series:"TRP系列", productCode:"TRP01AM-4", productName:"Natural Turkey Tendon Rope_S (90 units /CTN)", boxSize:"A", perBox:90, perBagPack:4, perPallet:42},
-        {brand:"A Freschi srl", spec:"袋裝", series:"TRP系列", productCode:"TRP03AM-2", productName:"Natural Turkey Tendon Rope_M (90 units /CTN)", boxSize:"A", perBox:90, perBagPack:2, perPallet:42},
-        {brand:"A Freschi srl", spec:"袋裝", series:"TRP系列", productCode:"TRP05AM-1", productName:"Natural Turkey Tendon Rope_L (90 units /CTN)", boxSize:"A", perBox:90, perPallet:42},
-
-        {brand:"A Freschi srl", spec:"袋裝", series:"TPZ系列", productCode:"TPZ01AM-4", productName:"Natural Turkey Tendon Pretzel_S (90 units /CTN)", boxSize:"A", perBox:90, perBagPack:4, perPallet:42},
-        {brand:"A Freschi srl", spec:"袋裝", series:"TPZ系列", productCode:"TPZ03AM-2", productName:"Natural Turkey Tendon Pretzel_M (90 units /CTN)", boxSize:"A", perBox:90, perBagPack:2, perPallet:42},
-        {brand:"A Freschi srl", spec:"袋裝", series:"TPZ系列", productCode:"TPZ05AM-1", productName:"Natural Turkey Tendon Pretzel_L (120 units /CTN)", boxSize:"A", perBox:120, perPallet:42},
-
-        {brand:"A Freschi srl", spec:"袋裝", series:"TTS系列", productCode:"TTS05AM-1", productName:"Natural Turkey Tendon Strip (100 units /CTN)", boxSize:"A", perBox:100, perPallet:42},
-
-        // A Freschi srl 盒裝 (AM系列):
-        // KTB01AM→(40,8)->(perBox=8, perBoxPack=40)
-        {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB01AM", productName:"Natural Turkey Tendon Bone_S (40 units；8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:40, perPallet:36},
-        {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB03AM", productName:"Natural Turkey Tendon Bone_M (20 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:20, perPallet:36},
-        {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB05AM", productName:"Natural Turkey Tendon Bone_L (10 units；8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:10, perPallet:36},
-        {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB06AM", productName:"Natural Turkey Tendon Lollipop (40 units；8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:40, perPallet:36},
-
-        {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR01AM", productName:"Natural Turkey Tendon Ring_S (40 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:40, perPallet:36},
-        {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR03AM", productName:"Natural Turkey Tendon Ring_M (20 units；8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:20, perPallet:36},
-        {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR05AM", productName:"Natural Turkey Tendon Ring_L (10 units；8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:10, perPallet:36},
-
-        {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP01AM", productName:"Natural Turkey Tendon Rope_S (40 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:40, perPallet:36},
-        {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP03AM", productName:"Natural Turkey Tendon Rope_M (20 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:20, perPallet:36},
-        {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP05AM", productName:"Natural Turkey Tendon Rope_L (10 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:10, perPallet:36},
-
-        {brand:"A Freschi srl", spec:"盒裝", series:"TPZ系列", productCode:"TPZ01AM", productName:"Natural Turkey Tendon Pretzel_S (40 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:40, perPallet:36},
-        {brand:"A Freschi srl", spec:"盒裝", series:"TPZ系列", productCode:"TPZ03AM", productName:"Natural Turkey Tendon Pretzel_M (20 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:20, perPallet:36},
-        {brand:"A Freschi srl", spec:"盒裝", series:"TPZ系列", productCode:"TPZ05AM", productName:"Natural Turkey Tendon Pretzel_L (10 units；8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:10, perPallet:36},
-
-        {brand:"A Freschi srl", spec:"盒裝", series:"TTS系列", productCode:"TTS05AM", productName:"Natural Turkey Tendon Strip (10 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:8, perBoxPack:10, perPallet:36},
-
-        // A Freschi srl 重組:
-        {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA11", productName:"Turkey Tendon Thin Stick (100g /pk)；AFK package (120 units /CTN)", boxSize:"A", perBox:120, perPallet:42},
-        {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA12", productName:"Turkey Tendon Braided Stick (100g /pk)；AFK (120 units /CTN)", boxSize:"A", perBox:120, perPallet:42},
-        {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA13", productName:"Sliced Turkey Tendon (100g /pk)；AFK (100 units /CTN)", boxSize:"A", perBox:100, perPallet:42},
-        {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA14", productName:"Natural Turkey Tendon Flake (100g /pk)；AFK (80 units /CTN)", boxSize:"A", perBox:80, perPallet:42},
-        {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA21", productName:"Soft Turkey Tendon Strip with Pumpkin (100g /pk)；AFK (120 units /CTN)", boxSize:"A", perBox:120, perPallet:42},
-        {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA22", productName:"Soft Turkey Tendon Strip (100g /pk)；AFK (120 units /CTN)", boxSize:"A", perBox:120, perPallet:42},
-        {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA31", productName:"Natural Turkey Tendon wrapped with Chicken Stick (100g /pk)；AFK (100 units /CTN)", boxSize:"A", perBox:100, perPallet:42},
-        {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA32", productName:"Natural Turkey Tendon wrapped with Brown Rice Stick (100g /pk)；AFK (100 units /CTN)", boxSize:"A", perBox:100, perPallet:42},
-
-        // Vitaday 火雞筋:
-        {brand:"Vitaday", spec:"火雞筋", series:"VTS系列", productCode:"VTS01-1", productName:"Vitaday - Turkey Tendon Strip (85g x 100)", boxSize:"A", perBox:100, perPallet:42},
-
-        // Vitaday 的袋裝 - 有 perCarton → 改為 perBox
-        // VTR01-4 perCarton=90, perBagPack=4 → perBox=90, perBagPack=4
-        {brand:"Vitaday", spec:"火雞筋", series:"VTR系列", productCode:"VTR01-4", productName:"Vitaday -Turkey Tendon Ring_S (90 units /CTN)", boxSize:"A", perBox:90, perBagPack:4, perPallet:42},
-
-        // VTB01-4 同理
-        {brand:"Vitaday", spec:"火雞筋", series:"VTB系列", productCode:"VTB01-4", productName:"Vitaday - Turkey Tendon Bone_S (90 units /CTN)", boxSize:"A", perBox:90, perBagPack:4, perPallet:42},
-
-        {brand:"Vitaday", spec:"火雞筋", series:"VTB系列", productCode:"VTB05-1", productName:"Vitaday - Turkey Tendon Bone_L (50g x 120)", boxSize:"A", perBox:120, perPallet:42}
-    ];
-
-  // 台灣廠 (範例)
-const twProducts = [
-{brand:"GooToE", spec:"量販包", series:"GTSL系列", productCode:"GTSL01J", productName:"Gootoe - Turkey Tendon Strip (454g)", boxSize:"B", perBox:24, perPallet:36},
-{brand:"GooToE", spec:"量販包", series:"GTRL系列", productCode:"GTRL05J", productName:"Gootoe - Turkey Tendon Ring_L (454g)", boxSize:"B", perBox:24, perPallet:36},
-{brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL05J", productName:"Gootoe - Turkey Tendon Rope_L (454g)", boxSize:"B", perBox:24, perPallet:36},
-{brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL05J", productName:"Gootoe - Turkey Tendon Bone_L (454g)", boxSize:"B", perBox:24, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GSF系列", productCode:"GSF01J", productName:"Gootoe -Turkey Tendon Pumpkin Strip (85g)", boxSize:"B", perBox:150, perPallet:36},
-{brand:"GooToE", spec:"量販包", series:"GTRL系列", productCode:"GTRL01J", productName:"Gootoe - Turkey Tendon Ring_S (454g)", boxSize:"B", perBox:24, perPallet:36},
-{brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL01J", productName:"Gootoe - Turkey Tendon Rope_S (454g)", boxSize:"B", perBox:24, perPallet:36},
-{brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL01J", productName:"Gootoe - Turkey Tendon Bone_S (454g)", boxSize:"B", perBox:24, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GTR系列", productCode:"GTR01J", productName:"Gootoe - Turkey Tendon Ring_S (72g)", boxSize:"B", perBox:100, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GTR系列", productCode:"GTR03J", productName:"Gootoe - Turkey Tendon Ring_M (90g)", boxSize:"B", perBox:100, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB01J", productName:"Gootoe - Turkey Tendon Bone_S (72g)", boxSize:"B", perBox:100, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB03J", productName:"Gootoe - Turkey Tendon Bone_M (90g)", boxSize:"B", perBox:100, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB05J", productName:"Gootoe - Turkey Tendon Bone_L (100g)", boxSize:"B", perBox:100, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP01J", productName:"Gootoe - Turkey Tendon Rope_S (72g)", boxSize:"B", perBox:100, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP03J", productName:"Gootoe - Turkey Tendon Rope_M (90g)", boxSize:"B", perBox:100, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP05J", productName:"Gootoe - Turkey Tendon Rope_L (100g)", boxSize:"B", perBox:100, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GTS系列", productCode:"GTS01J", productName:"Gootoe - Turkey Tendon Strip  (85g)", boxSize:"B", perBox:100, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GTS系列", productCode:"GTS03J", productName:"Gootoe - Turkey Tendon Stick_M (90g)", boxSize:"B", perBox:100, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GTZ系列", productCode:"GTZ01J", productName:"Gootoe - Turkey Tendon Pretzel_S (72g)", boxSize:"B", perBox:100, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GTZ系列", productCode:"GTZ03J", productName:"Gootoe - Turkey Tendon Pretzel_M (90g)", boxSize:"B", perBox:100, perPallet:36},
-{brand:"GooToE", spec:"普通包", series:"GTA系列", productCode:"GTA01J", productName:"Gootoe - Turkey Tendon Braid (72g)", boxSize:"B", perBox:100, perPallet:36},
-
-// 移除 perCarton:8, 改為 perBox=8:
-{brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB01J", productName:"Natural Turkey Tendon Bone_S (15g)", boxSize:"B", perBox:8, perBoxPack:40, perPallet:36},
-{brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB03J", productName:"Natural Turkey Tendon Bone_M (36g)", boxSize:"B", perBox:8, perBoxPack:20, perPallet:36},
-{brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB05J", productName:"Natural Turkey Tendon Bone_L (72g)", boxSize:"B", perBox:8, perBoxPack:10, perPallet:36},
-{brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB06J", productName:"Natural Turkey Tendon Lollipop (15g)", boxSize:"B", perBox:8, perBoxPack:40, perPallet:36},
-
-{brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR01J", productName:"Natural Turkey Tendon Ring_S (12g)", boxSize:"B", perBox:8, perBoxPack:40, perPallet:36},
-{brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR03J", productName:"Natural Turkey Tendon Ring_M (36g)", boxSize:"B", perBox:8, perBoxPack:20, perPallet:36},
-{brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR05J", productName:"Natural Turkey Tendon Ring_L (72g)", boxSize:"B", perBox:8, perBoxPack:10, perPallet:36},
-
-{brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP01J", productName:"Natural Turkey Tendon Rope_S (15g)", boxSize:"B", perBox:8, perBoxPack:40, perPallet:36},
-{brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP03J", productName:"Natural Turkey Tendon Rope_M (36g)", boxSize:"B", perBox:8, perBoxPack:20, perPallet:36},
-{brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP05J", productName:"Natural Turkey Tendon Rope_L (72g)", boxSize:"B", perBox:8, perBoxPack:10, perPallet:36},
-
-{brand:"A Freschi srl", spec:"盒裝", series:"TTS系列", productCode:"TTS05J", productName:"Natural Turkey Tendon Strip (85g)", boxSize:"B", perBox:8, perBoxPack:10, perPallet:36},
-
-{brand:"A Freschi srl", spec:"盒裝", series:"TTA系列", productCode:"TTA01J", productName:"Turkey Tendon Rice Stick (60g)", boxSize:"B", perBox:8, perBoxPack:20, perPallet:36},
-{brand:"A Freschi srl", spec:"盒裝", series:"TTA系列", productCode:"TTA02J", productName:"Turkey Tendon Chicken Stick (60g)", boxSize:"B", perBox:8, perBoxPack:20, perPallet:36},
-{brand:"A Freschi srl", spec:"盒裝", series:"TTA系列", productCode:"TTA03J", productName:"Turkey Tendon Thin Stick (60g)", boxSize:"B", perBox:8, perBoxPack:20, perPallet:36},
-{brand:"A Freschi srl", spec:"盒裝", series:"TTA系列", productCode:"TTA04J", productName:"Turkey Tendon Pumpkin Strip (60g)", boxSize:"B", perBox:8, perBoxPack:20, perPallet:36},
-
-{brand:"GooToE", spec:"小牛肋", series:"GRB系列", productCode:"GRB01AM", productName:"Gootoe - Veal Rib Bone, 113g", boxSize:"B", perBox:130, perPallet:36},
-{brand:"GooToE", spec:"小牛肋", series:"GRB系列", productCode:"GRB01J", productName:"Gootoe - Veal Rib Bone, 113g", boxSize:"B", perBox:130, perPallet:36},
-{brand:"A Freschi srl", spec:"小牛肋", series:"ART系列", productCode:"ART01AM", productName:"Afreschi - Turkey Tendon Wrapped Veal Rib Bone, 85g", boxSize:"B", perBox:130, perPallet:36},
-{brand:"A Freschi srl", spec:"小牛肋", series:"ART系列", productCode:"ART01J", productName:"Afreschi - Turkey Tendon Wrapped Veal Rib Bone, 85g", boxSize:"B", perBox:130, perPallet:36},
-{brand:"A Freschi srl", spec:"訓練零食", series:"AFT系列", productCode:"AFT011", productName:"A Freschi srl - Training Treat -Turkey & Chicken Recipe (681g)", boxSize:"B", perBox:28, perPallet:36},
-{brand:"A Freschi srl", spec:"訓練零食", series:"AFT系列", productCode:"AFT021", productName:"A Freschi srl - Training Treat - Salmon & Chicken Recipe (681g)", boxSize:"B", perBox:28, perPallet:36},
-{brand:"A Freschi srl", spec:"訓練零食", series:"AFT系列", productCode:"AFT031", productName:"A Freschi srl - Training Treat - Duck Liver & Chicken Recipe (681g)", boxSize:"B", perBox:28, perPallet:36},
-{brand:"GooToE", spec:"訓練零食", series:"GWT系列", productCode:"GWT011", productName:"GooToE - Functional Training Treat - Hair Care, W shape (681g)", boxSize:"B", perBox:28, perPallet:36},
-{brand:"GooToE", spec:"訓練零食", series:"GWT系列", productCode:"GWT021", productName:"GooToE - Functional Training Treat - Joint Care, W shape (681g)", boxSize:"B", perBox:28, perPallet:36},
-{brand:"GooToE", spec:"訓練零食", series:"GFT系列", productCode:"GFT011", productName:"GooToE - Functional Training Treat - Odor Control (681g)", boxSize:"B", perBox:28, perPallet:36},
-{brand:"GooToE", spec:"訓練零食", series:"GFT系列", productCode:"GFT021", productName:"GooToE - Functional Training Treat - Gut Health (681g)", boxSize:"B", perBox:28, perPallet:36},
-    // 2磅裝
-    {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD011AM", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (908g/Pk)", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD021AM", productName:"Herz Grain-Free Australian Lamb Recipe (908g/Pk)", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD041AM", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (908g/Pk)", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD051AM", productName:"Herz Grain-Free New Zealand Venison Recipe (908g/Pk)", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD061AM", productName:"Herz Grain-Free U.S.A. Chicken Recipe (908g/Pk)", boxSize:"B", perBox:18, perPallet:36},
-
-    // 100克
-    {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD010AM", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (100g/Pk)", boxSize:"B", perBox:100, perPallet:36},
-    {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD020AM", productName:"Herz Grain-Free Australian Lamb Recipe (100g/Pk)", boxSize:"B", perBox:100, perPallet:36},
-    {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD040AM", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (100g/Pk)", boxSize:"B", perBox:100, perPallet:36},
-    {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD050AM", productName:"Herz Grain-Free New Zealand Venison Recipe (100g/Pk)", boxSize:"B", perBox:100, perPallet:36},
-    {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD060AM", productName:"Herz Grain-Free U.S.A. Chicken Recipe (100g/Pk)", boxSize:"B", perBox:100, perPallet:36},
-
-    // 100克3包組
-    {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD010AM-3", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (100g/Pk)", boxSize:"B", perBox:30, perBagPack:3, perPallet:36},
-    {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD020AM-3", productName:"Herz Grain-Free Australian Lamb Recipe (100g/Pk)", boxSize:"B", perBox:30, perBagPack:3, perPallet:36},
-    {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD040AM-3", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (100g/Pk)", boxSize:"B", perBox:30, perBagPack:3, perPallet:36},
-    {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD050AM-3", productName:"Herz Grain-Free New Zealand Venison Recipe (100g/Pk)", boxSize:"B", perBox:30, perBagPack:3, perPallet:36},
-    {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD060AM-3", productName:"Herz Grain-Free U.S.A. Chicken Recipe (100g/Pk)", boxSize:"B", perBox:30, perBagPack:3, perPallet:36},
-
-    // 1公斤
-    {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD011AM", productName:"Herz Premium Canine Cuisine – Turkey with Duck Liver Recipe, 1kg", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD021AM", productName:"Herz Premium Canine Cuisine – Lamb with Duck Liver Recipe, 1kg", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD041AM", productName:"Herz Premium Canine Cuisine - Beef with Duck Liver Recipe, 1kg", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD051AM", productName:"Herz Premium Canine Cuisine – Venison with Duck Liver Recipe, 1kg", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD061AM", productName:"Herz Premium Canine Cuisine - Chicken with Duck Liver Recipe, 1kg", boxSize:"B", perBox:18, perPallet:36},
-
-    // 454克
-    {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD010AM", productName:"Herz Premium Canine Cuisine – Turkey with Duck Liver Recipe, 454g", boxSize:"B", perBox:30, perPallet:36},
-    {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD020AM", productName:"Herz Premium Canine Cuisine – Lamb with Duck Liver Recipe, 454g", boxSize:"B", perBox:30, perPallet:36},
-    {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD040AM", productName:"Herz Premium Canine Cuisine-Beef with Duck Liver Recipe, 454g", boxSize:"B", perBox:30, perPallet:36},
-    {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD050AM", productName:"Herz Premium Canine Cuisine – Venison with Duck Liver Recipe, 454g", boxSize:"B", perBox:30, perPallet:36},
-    {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD060AM", productName:"Herz Premium Canine Cuisine - Chicken with Duck Liver Recipe, 454g", boxSize:"B", perBox:30, perPallet:36},
-
-    // 2磅裝 (J系列)
-    {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD011J", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (908g/Pk)", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD021J", productName:"Herz Grain-Free Australian Lamb Recipe (908g/Pk)", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD041J", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (908g/Pk)", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD051J", productName:"Herz Grain-Free New Zealand Venison Recipe (908g/Pk)", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD061J", productName:"Herz Grain-Free U.S.A. Chicken Recipe (908g/Pk)", boxSize:"B", perBox:18, perPallet:36},
-
-    // 100克3包組 (J-3系列)
-    {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD010J-3", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (100g/Pk)", boxSize:"B", perBox:30, perBagPack:3, perPallet:36},
-    {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD020J-3", productName:"Herz Grain-Free Australian Lamb Recipe (100g/Pk)", boxSize:"B", perBox:30, perBagPack:3, perPallet:36},
-    {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD040J-3", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (100g/Pk)", boxSize:"B", perBox:30, perBagPack:3, perPallet:36},
-    {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD050J-3", productName:"Herz Grain-Free New Zealand Venison Recipe (100g/Pk)", boxSize:"B", perBox:30, perBagPack:3, perPallet:36},
-    {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD060J-3", productName:"Herz Grain-Free U.S.A. Chicken Recipe (100g/Pk)", boxSize:"B", perBox:30, perBagPack:3, perPallet:36},
-
-    // 1公斤 (J系列)
-    {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD011J", productName:"Herz Premium Canine Cuisine – Turkey with Duck Liver Recipe, 1kg", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD021J", productName:"Premium Canine Cuisine-Lamb with Duck Liver Recipe-1kg", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD041J", productName:"Premium Canine Cuisine-Beef with Duck Liver Recipe-1kg", boxSize:"B", perBox:18, perPallet:36},
-    {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD061J", productName:"Premium Canine Cuisine-Chicken with Duck Liver Recipe-1kg", boxSize:"B", perBox:18, perPallet:36},
-
-    // 454克 (J系列)
-    {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD010J", productName:"Premium Canine Cuisine – Turkey with Duck Liver Recipe-454g", boxSize:"B", perBox:30, perPallet:36},
-    {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD020J", productName:"Premium Canine Cuisine-Lamb with Duck Liver Recipe-454g", boxSize:"B", perBox:30, perPallet:36},
-    {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD040J", productName:"Premium Canine Cuisine-Beef with Duck Liver Recipe-454g", boxSize:"B", perBox:30, perPallet:36},
-    {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD060J", productName:"Premium Canine Cuisine-Chicken with Duck Liver Recipe-454g", boxSize:"B", perBox:30, perPallet:36},
+  {brand:"A Freschi srl", spec:"家庭包", series:"TTSL系列", productCode:"TTSL05", productName:"Afreschi Natural Turkey Tendon Strip 10oz (285g x 36)", boxSize:"A", perCarton:30, perPallet:42, country:"VN"},
+
+  // -- A Freschi srl 火雞肉零食 (單包) ---
+  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ATJ系列", productCode:"ATJ01", productName:"A Freschi srl – Turkey Jerky 4oz (113g x 110 )", boxSize:"A", perCarton:110, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ATJ系列", productCode:"ATJL01", productName:"A Freschi srl – Turkey Jerky 12oz (340g x 42 )", boxSize:"A", perCarton:42, perPallet:42, country:"VN"},
+
+  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ASF系列", productCode:"ASF01", productName:"A Freschi srl – Natural Turkey Treats Soft Stick (170g x 100)", boxSize:"A", perCarton:100, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ASF系列", productCode:"ASFL01", productName:"A Freschi srl – Natural Turkey Treats Soft Stick (454g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
+
+  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ABM系列", productCode:"ABM01", productName:"A Freschi srl – Natural Turkey Treats Stick_β-Carotene (170g x 110)", boxSize:"A", perCarton:110, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ABM系列", productCode:"ABML01", productName:"A Freschi srl – Natural Turkey Treats Stick_β-Carotene (454g x 42)", boxSize:"A", perCarton:42, perPallet:42, country:"VN"},
+
+  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ATN系列", productCode:"ATN01", productName:"A Freschi srl – Natural Turkey Treats Star Bites (170g x 80)", boxSize:"A", perCarton:80, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ATN系列", productCode:"ATNL01", productName:"A Freschi srl – Natural Turkey Treats Star Bites (454g x 42)", boxSize:"A", perCarton:42, perPallet:42, country:"VN"},
+
+  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ASA系列", productCode:"ASA01", productName:"A Freschi srl – Natural Turkey Treats Sausage (170g x 80)", boxSize:"A", perCarton:80, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ASA系列", productCode:"ASAL01", productName:"A Freschi srl – Natural Turkey Treats Sausage (454g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
+
+  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ADT系列", productCode:"ADT03", productName:"Natural Dental Treats - Real Turkey Meat (1kg x 20 units / CTN)", boxSize:"A", perCarton:20, perPallet:42, country:"VN"},
+
+  // -- A Freschi srl 乾糧 (單包) ---
+  {brand:"A Freschi srl", spec:"乾糧", series:"AWD系列", productCode:"AWD010", productName:"A Freschi srl – Air-Dried dog food W shape turkey recipe - 454g(38/ctn)", boxSize:"A", perCarton:38, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"乾糧", series:"AWD系列", productCode:"AWD011", productName:"A Freschi srl – Air-Dried dog food W shape turkey recipe - 1kg(20/ctn)", boxSize:"A", perCarton:20, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"乾糧", series:"AWD系列", productCode:"AWD070", productName:"A Freschi srl – Air-Dried dog food W shape turkey & salmon recipe - 454g(38/ctn)", boxSize:"A", perCarton:38, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"乾糧", series:"AWD系列", productCode:"AWD071", productName:"A Freschi srl – Air-Dried dog food W shape turkey & salmon recipe - 1kg(20/ctn)", boxSize:"A", perCarton:20, perPallet:42, country:"VN"},
+
+  // -- A Freschi srl 袋裝 (AM系列): bag => perCarton(每箱袋數), perPack(每袋幾入) --
+  {brand:"A Freschi srl", spec:"袋裝", series:"KTB系列", productCode:"KTB01AM-4", productName:"Natural Turkey Tendon Bone_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"袋裝", series:"KTB系列", productCode:"KTB03AM-2", productName:"Natural Turkey Tendon Bone_M (80 units /CTN)", boxSize:"A", perCarton:80, perPack:2, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"單包", series:"KTB系列", productCode:"KTB05AM-1", productName:"Natural Turkey Tendon Bone_L (90 units /CTN)", boxSize:"A", perCarton:90, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"袋裝", series:"KTB系列", productCode:"KTB06AM-4", productName:"Natural Turkey Tendon Lollipop (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
+
+  {brand:"A Freschi srl", spec:"袋裝", series:"TTR系列", productCode:"TTR01AM-4", productName:"Natural Turkey Tendon Ring_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"袋裝", series:"TTR系列", productCode:"TTR03AM-2", productName:"Natural Turkey Tendon Ring_M (80 units；/CTN)", boxSize:"A", perCarton:80, perPack:2, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"單包", series:"TTR系列", productCode:"TTR05AM-1", productName:"Natural Turkey Tendon Ring_L (120 units；/CTN)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
+
+  {brand:"A Freschi srl", spec:"袋裝", series:"TRP系列", productCode:"TRP01AM-4", productName:"Natural Turkey Tendon Rope_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"袋裝", series:"TRP系列", productCode:"TRP03AM-2", productName:"Natural Turkey Tendon Rope_M (90 units /CTN)", boxSize:"A", perCarton:90, perPack:2, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"單包", series:"TRP系列", productCode:"TRP05AM-1", productName:"Natural Turkey Tendon Rope_L (90 units /CTN)", boxSize:"A", perCarton:90, perPallet:42, country:"VN"},
+
+  {brand:"A Freschi srl", spec:"袋裝", series:"TPZ系列", productCode:"TPZ01AM-4", productName:"Natural Turkey Tendon Pretzel_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"袋裝", series:"TPZ系列", productCode:"TPZ03AM-2", productName:"Natural Turkey Tendon Pretzel_M (90 units /CTN)", boxSize:"A", perCarton:90, perPack:2, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"單包", series:"TPZ系列", productCode:"TPZ05AM-1", productName:"Natural Turkey Tendon Pretzel_L (120 units /CTN)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
+
+  {brand:"A Freschi srl", spec:"單包", series:"TTS系列", productCode:"TTS05AM-1", productName:"Natural Turkey Tendon Strip (100 units /CTN)", boxSize:"A", perCarton:100, perPallet:42, country:"VN"},
+
+  // -- A Freschi srl 盒裝 (AM系列): box => perCarton(每箱幾盒), perBox(每盒幾入) --
+  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB01AM", productName:"Natural Turkey Tendon Bone_S (40 units；8 boxes /CTN)", boxSize:"A", perBox:40, perCarton:8, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB03AM", productName:"Natural Turkey Tendon Bone_M (20 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:20, perCarton:8, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB05AM", productName:"Natural Turkey Tendon Bone_L (10 units；8 boxes /CTN)", boxSize:"A", perBox:10, perCarton:8, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB06AM", productName:"Natural Turkey Tendon Lollipop (40 units；8 boxes /CTN)", boxSize:"A", perBox:40, perCarton:8, perPallet:36, country:"VN"},
+
+  {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR01AM", productName:"Natural Turkey Tendon Ring_S (40 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:40, perCarton:8, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR03AM", productName:"Natural Turkey Tendon Ring_M (20 units；8 boxes /CTN)", boxSize:"A", perBox:20, perCarton:8, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR05AM", productName:"Natural Turkey Tendon Ring_L (10 units；8 boxes /CTN)", boxSize:"A", perBox:10, perCarton:8, perPallet:36, country:"VN"},
+
+  {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP01AM", productName:"Natural Turkey Tendon Rope_S (40 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:40, perCarton:8, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP03AM", productName:"Natural Turkey Tendon Rope_M (20 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:20, perCarton:8, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP05AM", productName:"Natural Turkey Tendon Rope_L (10 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:10, perCarton:8, perPallet:36, country:"VN"},
+
+  {brand:"A Freschi srl", spec:"盒裝", series:"TPZ系列", productCode:"TPZ01AM", productName:"Natural Turkey Tendon Pretzel_S (40 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:40, perCarton:8, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TPZ系列", productCode:"TPZ03AM", productName:"Natural Turkey Tendon Pretzel_M (20 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:20, perCarton:8, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TPZ系列", productCode:"TPZ05AM", productName:"Natural Turkey Tendon Pretzel_L (10 units；8 boxes /CTN)", boxSize:"A", perBox:10, perCarton:8, perPallet:36, country:"VN"},
+
+  {brand:"A Freschi srl", spec:"盒裝", series:"TTS系列", productCode:"TTS05AM", productName:"Natural Turkey Tendon Strip (10 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:10, perCarton:8, perPallet:36, country:"VN"},
+
+  // -- A Freschi srl 重組 (單包) ---
+  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA11", productName:"Turkey Tendon Thin Stick (100g /pk)；AFK package (120 units /CTN)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA12", productName:"Turkey Tendon Braided Stick (100g /pk)；AFK (120 units /CTN)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA13", productName:"Sliced Turkey Tendon (100g /pk)；AFK (100 units /CTN)", boxSize:"A", perCarton:100, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA14", productName:"Natural Turkey Tendon Flake (100g /pk)；AFK (80 units /CTN)", boxSize:"A", perCarton:80, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA21", productName:"Soft Turkey Tendon Strip with Pumpkin (100g /pk)；AFK (120 units /CTN)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA22", productName:"Soft Turkey Tendon Strip (100g /pk)；AFK (120 units /CTN)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA31", productName:"Natural Turkey Tendon wrapped with Chicken Stick (100g /pk)；AFK (100 units /CTN)", boxSize:"A", perCarton:100, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA32", productName:"Natural Turkey Tendon wrapped with Brown Rice Stick (100g /pk)；AFK (100 units /CTN)", boxSize:"A", perCarton:100, perPallet:42, country:"VN"},
+
+  // -- Vitaday 火雞筋 (單包/袋裝) --
+  {brand:"Vitaday", spec:"火雞筋", series:"VTS系列", productCode:"VTS01-1", productName:"Vitaday - Turkey Tendon Strip (85g x 100)", boxSize:"A", perCarton:100, perPallet:42, country:"VN"},
+
+  {brand:"Vitaday", spec:"火雞筋", series:"VTR系列", productCode:"VTR01-4", productName:"Vitaday -Turkey Tendon Ring_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
+
+  {brand:"Vitaday", spec:"火雞筋", series:"VTB系列", productCode:"VTB01-4", productName:"Vitaday - Turkey Tendon Bone_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
+  {brand:"Vitaday", spec:"火雞筋", series:"VTB系列", productCode:"VTB05-1", productName:"Vitaday - Turkey Tendon Bone_L (50g x 120)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
+
+  // ======================
+  // 以下原屬「twProducts」，country:"TW"
+  // ======================
+
+  {brand:"GooToE", spec:"量販包", series:"GTSL系列", productCode:"GTSL01J", productName:"Gootoe - Turkey Tendon Strip (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"量販包", series:"GTRL系列", productCode:"GTRL05J", productName:"Gootoe - Turkey Tendon Ring_L (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL05J", productName:"Gootoe - Turkey Tendon Rope_L (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL05J", productName:"Gootoe - Turkey Tendon Bone_L (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"普通包", series:"GSF系列", productCode:"GSF01J", productName:"Gootoe -Turkey Tendon Pumpkin Strip (85g)", boxSize:"B", perCarton:150, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"量販包", series:"GTRL系列", productCode:"GTRL01J", productName:"Gootoe - Turkey Tendon Ring_S (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL01J", productName:"Gootoe - Turkey Tendon Rope_S (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL01J", productName:"Gootoe - Turkey Tendon Bone_S (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
+
+  {brand:"GooToE", spec:"普通包", series:"GTR系列", productCode:"GTR01J", productName:"Gootoe - Turkey Tendon Ring_S (72g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"普通包", series:"GTR系列", productCode:"GTR03J", productName:"Gootoe - Turkey Tendon Ring_M (90g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB01J", productName:"Gootoe - Turkey Tendon Bone_S (72g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB03J", productName:"Gootoe - Turkey Tendon Bone_M (90g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB05J", productName:"Gootoe - Turkey Tendon Bone_L (100g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP01J", productName:"Gootoe - Turkey Tendon Rope_S (72g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP03J", productName:"Gootoe - Turkey Tendon Rope_M (90g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP05J", productName:"Gootoe - Turkey Tendon Rope_L (100g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"普通包", series:"GTS系列", productCode:"GTS01J", productName:"Gootoe - Turkey Tendon Strip  (85g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"普通包", series:"GTS系列", productCode:"GTS03J", productName:"Gootoe - Turkey Tendon Stick_M (90g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"普通包", series:"GTZ系列", productCode:"GTZ01J", productName:"Gootoe - Turkey Tendon Pretzel_S (72g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"普通包", series:"GTZ系列", productCode:"GTZ03J", productName:"Gootoe - Turkey Tendon Pretzel_M (90g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"普通包", series:"GTA系列", productCode:"GTA01J", productName:"Gootoe - Turkey Tendon Braid (72g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+
+  // -- 盒裝 (J系列): 預設是 8盒/箱 ? → 看原本 perCarton:8 ---
+  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB01J", productName:"Natural Turkey Tendon Bone_S (15g)", boxSize:"B", perBox:40, perCarton:8, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB03J", productName:"Natural Turkey Tendon Bone_M (36g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB05J", productName:"Natural Turkey Tendon Bone_L (72g)", boxSize:"B", perBox:10, perCarton:8, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB06J", productName:"Natural Turkey Tendon Lollipop (15g)", boxSize:"B", perBox:40, perCarton:8, perPallet:36, country:"TW"},
+
+  {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR01J", productName:"Natural Turkey Tendon Ring_S (12g)", boxSize:"B", perBox:40, perCarton:8, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR03J", productName:"Natural Turkey Tendon Ring_M (36g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR05J", productName:"Natural Turkey Tendon Ring_L (72g)", boxSize:"B", perBox:10, perCarton:8, perPallet:36, country:"TW"},
+
+  {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP01J", productName:"Natural Turkey Tendon Rope_S (15g)", boxSize:"B", perBox:40, perCarton:8, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP03J", productName:"Natural Turkey Tendon Rope_M (36g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP05J", productName:"Natural Turkey Tendon Rope_L (72g)", boxSize:"B", perBox:10, perCarton:8, perPallet:36, country:"TW"},
+
+  {brand:"A Freschi srl", spec:"盒裝", series:"TTS系列", productCode:"TTS05J", productName:"Natural Turkey Tendon Strip (85g)", boxSize:"B", perBox:10, perCarton:8, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TTA系列", productCode:"TTA01J", productName:"Turkey Tendon Rice Stick (60g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TTA系列", productCode:"TTA02J", productName:"Turkey Tendon Chicken Stick (60g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TTA系列", productCode:"TTA03J", productName:"Turkey Tendon Thin Stick (60g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"盒裝", series:"TTA系列", productCode:"TTA04J", productName:"Turkey Tendon Pumpkin Strip (60g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
+
+  {brand:"GooToE", spec:"小牛肋", series:"GRB系列", productCode:"GRB01AM", productName:"Gootoe - Veal Rib Bone, 113g", boxSize:"B", perCarton:130, perPallet:36, country:"TW"}, 
+  {brand:"GooToE", spec:"小牛肋", series:"GRB系列", productCode:"GRB01J", productName:"Gootoe - Veal Rib Bone, 113g", boxSize:"B", perCarton:130, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"小牛肋", series:"ART系列", productCode:"ART01AM", productName:"Afreschi - Turkey Tendon Wrapped Veal Rib Bone, 85g", boxSize:"B", perCarton:130, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"小牛肋", series:"ART系列", productCode:"ART01J", productName:"Afreschi - Turkey Tendon Wrapped Veal Rib Bone, 85g", boxSize:"B", perCarton:130, perPallet:36, country:"TW"},
+
+  {brand:"A Freschi srl", spec:"訓練零食", series:"AFT系列", productCode:"AFT011", productName:"A Freschi srl - Training Treat -Turkey & Chicken Recipe (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"訓練零食", series:"AFT系列", productCode:"AFT021", productName:"A Freschi srl - Training Treat - Salmon & Chicken Recipe (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"訓練零食", series:"AFT系列", productCode:"AFT031", productName:"A Freschi srl - Training Treat - Duck Liver & Chicken Recipe (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"訓練零食", series:"GWT系列", productCode:"GWT011", productName:"GooToE - Functional Training Treat - Hair Care, W shape (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"訓練零食", series:"GWT系列", productCode:"GWT021", productName:"GooToE - Functional Training Treat - Joint Care, W shape (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"訓練零食", series:"GFT系列", productCode:"GFT011", productName:"GooToE - Functional Training Treat - Odor Control (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
+  {brand:"GooToE", spec:"訓練零食", series:"GFT系列", productCode:"GFT021", productName:"GooToE - Functional Training Treat - Gut Health (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
+
+  // 2磅裝 (TW)
+  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD011AM", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD021AM", productName:"Herz Grain-Free Australian Lamb Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD041AM", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD051AM", productName:"Herz Grain-Free New Zealand Venison Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD061AM", productName:"Herz Grain-Free U.S.A. Chicken Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+
+  // 100克
+  {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD010AM", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (100g/Pk)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD020AM", productName:"Herz Grain-Free Australian Lamb Recipe (100g/Pk)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD040AM", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (100g/Pk)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD050AM", productName:"Herz Grain-Free New Zealand Venison Recipe (100g/Pk)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD060AM", productName:"Herz Grain-Free U.S.A. Chicken Recipe (100g/Pk)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
+
+  // 100克3包組
+  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD010AM-3", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD020AM-3", productName:"Herz Grain-Free Australian Lamb Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD040AM-3", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD050AM-3", productName:"Herz Grain-Free New Zealand Venison Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD060AM-3", productName:"Herz Grain-Free U.S.A. Chicken Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
+
+  // 1公斤
+  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD011AM", productName:"Herz Premium Canine Cuisine – Turkey with Duck Liver Recipe, 1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD021AM", productName:"Herz Premium Canine Cuisine – Lamb with Duck Liver Recipe, 1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD041AM", productName:"Herz Premium Canine Cuisine - Beef with Duck Liver Recipe, 1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD051AM", productName:"Herz Premium Canine Cuisine – Venison with Duck Liver Recipe, 1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD061AM", productName:"Herz Premium Canine Cuisine - Chicken with Duck Liver Recipe, 1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+
+  // 454克
+  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD010AM", productName:"Herz Premium Canine Cuisine – Turkey with Duck Liver Recipe, 454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD020AM", productName:"Herz Premium Canine Cuisine – Lamb with Duck Liver Recipe, 454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD040AM", productName:"Herz Premium Canine Cuisine-Beef with Duck Liver Recipe, 454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD050AM", productName:"Herz Premium Canine Cuisine – Venison with Duck Liver Recipe, 454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD060AM", productName:"Herz Premium Canine Cuisine - Chicken with Duck Liver Recipe, 454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
+
+  // 2磅裝 (J系列)
+  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD011J", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD021J", productName:"Herz Grain-Free Australian Lamb Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD041J", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD051J", productName:"Herz Grain-Free New Zealand Venison Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD061J", productName:"Herz Grain-Free U.S.A. Chicken Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+
+  // 100克3包組 (J-3系列)
+  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD010J-3", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD020J-3", productName:"Herz Grain-Free Australian Lamb Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD040J-3", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD050J-3", productName:"Herz Grain-Free New Zealand Venison Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD060J-3", productName:"Herz Grain-Free U.S.A. Chicken Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
+
+  // 1公斤 (J系列)
+  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD011J", productName:"Herz Premium Canine Cuisine – Turkey with Duck Liver Recipe, 1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD021J", productName:"Premium Canine Cuisine-Lamb with Duck Liver Recipe-1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD041J", productName:"Premium Canine Cuisine-Beef with Duck Liver Recipe-1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD061J", productName:"Premium Canine Cuisine-Chicken with Duck Liver Recipe-1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
+
+  // 454克 (J系列)
+  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD010J", productName:"Premium Canine Cuisine – Turkey with Duck Liver Recipe-454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD020J", productName:"Premium Canine Cuisine-Lamb with Duck Liver Recipe-454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD040J", productName:"Premium Canine Cuisine-Beef with Duck Liver Recipe-454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
+  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD060J", productName:"Premium Canine Cuisine-Chicken with Duck Liver Recipe-454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
 ];
 
-  // 紙箱對應棧板
-  const boxSizePalletMap = {A:42, B:36, C:30, D:36};
 
-  let currentFactory = 'VN';
-  function getAllProducts(){
-    return (currentFactory==='VN') ? vnProducts : twProducts;
-  }
+    const boxSizePalletMap = {
+        A: 42,
+        B: 36,
+        C: 30,
+        D: 36 
+    };
 
-  let selectedBrand='';
-  let selectedSpec='';
-  let selectedSeries='';
+    let currentCountry = 'VN';  // radio 預設選 VN
 
-  // ====================== 2) DOM 加載後 ======================
-  window.addEventListener('DOMContentLoaded', ()=>{
-    document.querySelectorAll('[name="factorySelect"]').forEach(r=>{
-      r.addEventListener('change', e=>{
-        currentFactory=e.target.value;
-        reloadFactoryData();
-      });
-    });
+    function getFilteredProducts(){
+        // 若選 Others, 就挑出 country ≠ 'VN' & ≠ 'TW'
+        if(currentCountry==='Others') return allProducts.filter(p=>p.country!=='VN' && p.country!=='TW');
+        // 否則只顯示 country === currentCountry
+        return allProducts.filter(p=>p.country===currentCountry);
+    }
 
-    reloadFactoryData();
-    initNewItemModal();
-    packagingTypeChanged();
-    boxSizeChanged();
-  });
+    // ============================================
+    // 頁面初始化
+    // ============================================
+    let selectedBrand='';
+    let selectedSpec='';
+    let selectedSeries='';
 
-  function reloadFactoryData(){
-    selectedBrand='';
-    selectedSpec='';
-    selectedSeries='';
-    document.getElementById('searchInput').value='';
-    document.getElementById('searchResults').innerHTML='';
-    document.getElementById('searchResults').style.display='none';
-
-    initBrandButtons();
-    document.getElementById('seriesSelect').innerHTML='<option value="">請先選擇規格</option>';
-    document.getElementById('productButtons').innerHTML='';
-    clearTable();
-    updateTotals();
-  }
-
-  function clearTable(){
-    document.querySelector('#productTable tbody').innerHTML='';
-  }
-
-  function initBrandButtons(){
-    const brandDiv=document.getElementById('brandButtons');
-    brandDiv.innerHTML='<label>選擇品牌：</label>';
-    const allProds=getAllProducts();
-    const brandSet=[...new Set(allProds.map(p=>p.brand))];
-    brandSet.forEach(b=>{
-      const btn=document.createElement('button');
-      btn.className='brand-button';
-      btn.textContent=b;
-      btn.onclick=()=>selectBrand(b);
-      brandDiv.appendChild(btn);
-    });
-  }
-
-  function selectBrand(b){
-    selectedBrand=b;
-    selectedSpec='';
-    toggleActiveButton('.brand-button', b);
-    updateSpecButtons();
-    resetSeriesAndProducts();
-  }
-
-  function toggleActiveButton(selector, text){
-    const btns=document.querySelectorAll(selector);
-    btns.forEach(btn=>{
-      btn.classList.toggle('active', btn.textContent===text);
-    });
-  }
-
-  function updateSpecButtons(){
-    const specDiv=document.getElementById('specButtons');
-    specDiv.innerHTML='';
-    const allProds=getAllProducts();
-    if(selectedBrand){
-      const specs=[...new Set(allProds.filter(p=>p.brand===selectedBrand).map(p=>p.spec))];
-      if(specs.length>0){
-        specDiv.style.display='block';
-        specDiv.innerHTML='<label>選擇規格：</label>';
-        specs.forEach(sp=>{
-          const btn=document.createElement('button');
-          btn.textContent=sp;
-          btn.className='spec-button';
-          btn.onclick=()=>selectSpec(sp);
-          specDiv.appendChild(btn);
+    window.addEventListener('DOMContentLoaded',()=>{
+        // 國家切換
+        document.querySelectorAll('[name="countrySelect"]').forEach(radio=>{
+            radio.addEventListener('change', e=>{
+                currentCountry=e.target.value;
+                reloadData();
+            });
         });
-      }else{
-        specDiv.style.display='none';
-      }
-    }else{
-      specDiv.style.display='none';
-    }
-  }
 
-  function selectSpec(sp){
-    selectedSpec=sp;
-    toggleActiveButton('.spec-button',sp);
-    updateSeriesOptions();
-  }
+        reloadData();
 
-  function updateSeriesOptions(){
-    const seriesSel=document.getElementById('seriesSelect');
-    seriesSel.innerHTML='<option value="">請選擇系列</option>';
-    const allProds=getAllProducts();
-    if(selectedBrand && selectedSpec){
-      const seriesSet=[...new Set(allProds.filter(p=>p.brand===selectedBrand&&p.spec===selectedSpec).map(p=>p.series))];
-      seriesSet.forEach(s=>{
-        seriesSel.innerHTML+=`<option value="${s}">${s}</option>`;
-      });
-    }else{
-      seriesSel.innerHTML='<option value="">請先選擇規格</option>';
-    }
-    document.getElementById('productButtons').innerHTML='';
-  }
-
-  function resetSeriesAndProducts(){
-    document.getElementById('seriesSelect').innerHTML='<option value="">請先選擇規格</option>';
-    document.getElementById('productButtons').innerHTML='';
-  }
-
-  function updateProductOptions(){
-    selectedSeries=document.getElementById('seriesSelect').value;
-    const productDiv=document.getElementById('productButtons');
-    productDiv.innerHTML='';
-    if(selectedBrand&&selectedSpec&&selectedSeries){
-      const allProds=getAllProducts();
-      const prods=allProds.filter(p=>p.brand===selectedBrand&&p.spec===selectedSpec&&p.series===selectedSeries);
-      prods.forEach(prod=>{
-        const btn=document.createElement('button');
-        btn.textContent=prod.productCode;
-        btn.className='product-button';
-        btn.onclick=()=>addProduct(prod);
-        productDiv.appendChild(btn);
-      });
-    }else{
-      productDiv.innerHTML='請先選擇系列';
-    }
-  }
-
-  // ====================== 3) 新增產品 ======================
-  function addProduct(prod){
-    const tbody=document.querySelector('#productTable tbody');
-    // 檢查是否已存在
-    if(Array.from(tbody.querySelectorAll('tr')).some(r=>r.cells[1].textContent===prod.productCode)){
-      alert('該產品已添加');
-      return;
-    }
-
-    const rowIndex=tbody.children.length+1;
-    const {hasBag,hasBox}=checkPackageType(prod);
-
-    const bagOrBoxInput=(hasBag)?`<input type="number" class="edit-bag-input" placeholder="袋數" oninput="updateFields(this,'${prod.productCode}')">`
-                     :(hasBox)?`<input type="number" class="edit-box-input" placeholder="盒數" oninput="updateFields(this,'${prod.productCode}')">`
-                     :`-`;
-
-    const targetPlaceholder=(hasBag?"目標袋數":(hasBox?"目標盒數":"目標包數"));
-
-    const rowHTML=`
-      <tr data-product="${prod.productCode}">
-        <td>${rowIndex}</td>
-        <td>${prod.productCode}</td>
-        <td><input type="number" class="edit-quantity-input" placeholder="包數" oninput="updateFields(this,'${prod.productCode}')"></td>
-        <td>${bagOrBoxInput}</td>
-        <td><input type="number" class="target-input" placeholder="${targetPlaceholder}" oninput="checkTarget(this)"></td>
-        <td><input type="number" class="edit-boxes-input" placeholder="箱數" oninput="updateFields(this,'${prod.productCode}')"></td>
-        <td><input type="number" class="edit-pallets-input" placeholder="棧板數" oninput="updateFields(this,'${prod.productCode}')"></td>
-        <td class="box-size-${prod.boxSize}">
-          <span class="box-size-icon box-size-icon-${prod.boxSize}"></span>${prod.boxSize}
-        </td>
-        <td class="action-button-group">
-          <button type="button" class="action-button" onclick="moveUp(this)">↑</button>
-          <button type="button" class="action-button" onclick="moveDown(this)">↓</button>
-          <button type="button" class="lock-button" onclick="toggleLock(this)">鎖定</button>
-          <button type="button" class="remove-button" onclick="removeRow(this)">刪除</button>
-        </td>
-      </tr>
-    `;
-    tbody.insertAdjacentHTML('beforeend',rowHTML);
-    updateRowNumbers();
-  }
-
-  // 判斷袋裝/盒裝/單包
-  function checkPackageType(prod){
-    // 袋裝：只要 prod.perBagPack>0
-    const hasBag=(typeof prod.perBagPack!=='undefined'&&prod.perBagPack>0);
-    // 盒裝：perBoxPack>0，但沒有 perBagPack
-    const hasBox=(typeof prod.perBoxPack!=='undefined'&&prod.perBoxPack>0&&!hasBag);
-    return {hasBag, hasBox};
-  }
-
-  function getProductSpecByCode(code){
-    const all=getAllProducts();
-    return all.find(p=>p.productCode===code)||null;
-  }
-
-  // ====================== 4) 欄位更新 ======================
-  function updateFields(input, productCode){
-    const row=input.closest('tr');
-    const prod=getProductSpecByCode(productCode);
-    if(!prod)return;
-
-    let {quantity, units, boxes, pallets}=getCurrentValues(row);
-
-    const perBox=prod.perBox||1;
-    const perBagPack=prod.perBagPack||0; // 用於袋裝
-    const perBoxPack=prod.perBoxPack||0; // 用於盒裝
-    const perPallet=prod.perPallet||1;
-
-    const changedField=getChangedField(input);
-    ({quantity, units, boxes, pallets}=recalcValues(changedField,{
-      quantity, units, boxes, pallets,
-      perBox, perBagPack, perBoxPack, perPallet
-    }));
-
-    // 更新 UI
-    if(changedField!=='quantity' && row.querySelector('.edit-quantity-input')){
-      row.querySelector('.edit-quantity-input').value=quantity.toFixed(0);
-    }
-    const bagInput = row.querySelector('.edit-bag-input')||row.querySelector('.edit-box-input');
-    if(bagInput && changedField!=='units'){
-      bagInput.value=units.toFixed(2);
-    }
-    if(changedField!=='boxes' && row.querySelector('.edit-boxes-input')){
-      row.querySelector('.edit-boxes-input').value=boxes.toFixed(2);
-    }
-    if(changedField!=='pallets' && row.querySelector('.edit-pallets-input')){
-      row.querySelector('.edit-pallets-input').value=pallets.toFixed(2);
-    }
-
-    // 目標
-    const targetInp=row.querySelector('.target-input');
-    if(targetInp) checkTarget(targetInp);
-    updateTotals();
-  }
-
-  function getChangedField(input){
-    if(input.classList.contains('edit-quantity-input')) return 'quantity';
-    if(input.classList.contains('edit-bag-input')||input.classList.contains('edit-box-input')) return 'units';
-    if(input.classList.contains('edit-boxes-input')) return 'boxes';
-    if(input.classList.contains('edit-pallets-input')) return 'pallets';
-    return '';
-  }
-
-  function getCurrentValues(row){
-    const quantity=parseFloat(row.querySelector('.edit-quantity-input')?.value)||0;
-    let units=0;
-    const bagInput=row.querySelector('.edit-bag-input')||row.querySelector('.edit-box-input');
-    if(bagInput) units=parseFloat(bagInput.value)||0;
-    const boxes=parseFloat(row.querySelector('.edit-boxes-input')?.value)||0;
-    const pallets=parseFloat(row.querySelector('.edit-pallets-input')?.value)||0;
-    return {quantity, units, boxes, pallets};
-  }
-
-  // 計算
-  function recalcValues(changedField, vals){
-    let {quantity, units, boxes, pallets, perBox, perBagPack, perBoxPack, perPallet}=vals;
-    // 袋裝 => perBagPack>0, 盒裝 => perBoxPack>0
-    const isBag=(perBagPack>0);
-    const isBox=(!isBag && perBoxPack>0);
-    const isSingle=(!isBag && !isBox);
-
-    if(isBag){
-      // 袋裝
-      switch(changedField){
-        case 'quantity':
-          // quantity = 單支數 => units(袋數) = quantity / perBagPack
-          units=quantity/perBagPack;
-          boxes=units/perBox;        // 每箱=perBox袋
-          pallets=boxes/perPallet;
-          break;
-        case 'units':
-          quantity=units*perBagPack;
-          boxes=units/perBox;
-          pallets=boxes/perPallet;
-          break;
-        case 'boxes':
-          units=boxes*perBox;
-          quantity=units*perBagPack;
-          pallets=boxes/perPallet;
-          break;
-        case 'pallets':
-          boxes=pallets*perPallet;
-          units=boxes*perBox;
-          quantity=units*perBagPack;
-          break;
-      }
-    }
-    else if(isBox){
-      // 盒裝
-      switch(changedField){
-        case 'quantity':
-          // quantity = 單支 => units(盒數)=quantity/perBoxPack
-          units=quantity/perBoxPack;
-          boxes=units/perBox; // 每箱=perBox盒
-          pallets=boxes/perPallet;
-          break;
-        case 'units':
-          quantity=units*perBoxPack;
-          boxes=units/perBox;
-          pallets=boxes/perPallet;
-          break;
-        case 'boxes':
-          units=boxes*perBox;
-          quantity=units*perBoxPack;
-          pallets=boxes/perPallet;
-          break;
-        case 'pallets':
-          boxes=pallets*perPallet;
-          units=boxes*perBox;
-          quantity=units*perBoxPack;
-          break;
-      }
-    }
-    else if(isSingle){
-      // 單包
-      switch(changedField){
-        case 'quantity':
-          boxes=quantity/perBox;
-          pallets=boxes/perPallet;
-          break;
-        case 'boxes':
-          quantity=boxes*perBox;
-          pallets=boxes/perPallet;
-          break;
-        case 'pallets':
-          boxes=pallets*perPallet;
-          quantity=boxes*perBox;
-          break;
-      }
-    }
-    return {quantity, units, boxes, pallets};
-  }
-
-  function checkTarget(targetInput){
-    const row=targetInput.closest('tr');
-    let currVal=0;
-    const bagInput=row.querySelector('.edit-bag-input')||row.querySelector('.edit-box-input');
-    if(bagInput){
-      currVal=parseFloat(bagInput.value)||0;
-    }else{
-      currVal=parseFloat(row.querySelector('.edit-quantity-input').value)||0;
-    }
-    const targetVal=parseFloat(targetInput.value)||0;
-    if(targetVal>0 && currVal>=targetVal){
-      targetInput.style.backgroundColor='#28a745';
-      targetInput.style.color='#fff';
-    }else{
-      targetInput.style.backgroundColor='#dc3545';
-      targetInput.style.color='#fff';
-    }
-  }
-
-  // ====================== 5) 行操作 ======================
-  function toggleLock(btn){
-    const row=btn.closest('tr');
-    const inputs=row.querySelectorAll('input');
-    const locked=row.classList.contains('locked');
-    inputs.forEach(i=>i.disabled=!locked);
-    row.classList.toggle('locked',!locked);
-    btn.textContent=locked?'鎖定':'解鎖';
-  }
-
-  function removeRow(btn){
-    btn.closest('tr').remove();
-    updateRowNumbers();
-    updateTotals();
-  }
-
-  function moveUp(btn){
-    const row=btn.closest('tr');
-    const prev=row.previousElementSibling;
-    if(prev) row.parentNode.insertBefore(row,prev);
-    updateRowNumbers();
-  }
-
-  function moveDown(btn){
-    const row=btn.closest('tr');
-    const next=row.nextElementSibling;
-    if(next) row.parentNode.insertBefore(next,row);
-    updateRowNumbers();
-  }
-
-  function updateRowNumbers(){
-    const rows=document.querySelectorAll('#productTable tbody tr');
-    rows.forEach((r,idx)=>{
-      r.cells[0].textContent=idx+1;
-    });
-  }
-
-  // ====================== 6) 統計 & 貨櫃 ======================
-  function updateTotals(){
-    let totalQty=0, totalBox=0;
-    const palletCounts={A:0,B:0,C:0,D:0};
-
-    document.querySelectorAll('.edit-quantity-input').forEach(i=>{
-      totalQty+=parseFloat(i.value)||0;
-    });
-    document.querySelectorAll('.edit-boxes-input').forEach(i=>{
-      totalBox+=parseFloat(i.value)||0;
+        // 新品產生器
+        initNewItemModal();
+        packagingTypeChanged();
+        boxSizeChanged();
     });
 
-    const rows=document.querySelectorAll('#productTable tbody tr');
-    rows.forEach(r=>{
-      const palVal=parseFloat(r.querySelector('.edit-pallets-input').value)||0;
-      const bxSize=r.cells[7].textContent.trim();
-      if(palletCounts.hasOwnProperty(bxSize)){
-        palletCounts[bxSize]+=palVal;
-      }
-    });
+    function reloadData(){
+        selectedBrand='';
+        selectedSpec='';
+        selectedSeries='';
+        document.getElementById('searchInput').value='';
+        document.getElementById('searchResults').innerHTML='';
+        document.getElementById('searchResults').style.display='none';
 
-    let totalPallets=palletCounts.A+palletCounts.B+palletCounts.C+palletCounts.D;
-    document.getElementById('totalQuantity').textContent=totalQty.toFixed(0);
-    document.getElementById('totalBoxes').textContent=totalBox.toFixed(2);
-    document.getElementById('totalPallets').textContent=totalPallets.toFixed(2);
-
-    document.getElementById('countA').textContent=palletCounts.A.toFixed(2);
-    document.getElementById('countB').textContent=palletCounts.B.toFixed(2);
-    document.getElementById('countC').textContent=palletCounts.C.toFixed(2);
-
-    updateContainerInfo(totalPallets);
-  }
-
-  function updateContainerInfo(totalPallets){
-    const infoDiv=document.getElementById('containerInfo');
-    infoDiv.innerHTML='';
-    let remain=totalPallets;
-    let cIndex=1;
-    while(remain>0){
-      let cType, cCap;
-      if(remain<=10){ cType='20 尺貨櫃'; cCap=10; }
-      else{ cType='40 尺貨櫃'; cCap=20; }
-      let used=Math.min(remain,cCap);
-      let rate=(used/cCap)*100;
-      let d=document.createElement('div');
-      d.innerHTML=`<strong>貨櫃 ${cIndex}：${cType}（${rate.toFixed(0)}%）</strong>`;
-
-      let pc=document.createElement('div');
-      pc.className='progress-container';
-      let pb=document.createElement('div');
-      pb.className='progress-bar';
-      pb.style.width=rate+'%';
-      pb.textContent=`${used}/${cCap} 棧板`;
-
-      pc.appendChild(pb);
-      d.appendChild(pc);
-      infoDiv.appendChild(d);
-
-      remain-=used;
-      cIndex++;
-    }
-  }
-
-  // ====================== 7) 匯出 Excel ======================
-  function exportToExcel(){
-    const wb=XLSX.utils.book_new();
-    const wsData=[];
-    const header=["序號","品號","名稱","每箱","包裝類型","箱數","箱","棧板數","棧板"];
-    wsData.push(header);
-
-    const rows=document.querySelectorAll('#productTable tbody tr');
-    rows.forEach(r=>{
-      const idx=r.cells[0].textContent;
-      const code=r.cells[1].textContent;
-      const prod=getProductSpecByCode(code);
-      if(!prod)return;
-      const name=prod.productName||'';
-      const boxVal=prod.perBox||1;
-      let pkgType="單包";
-      if(prod.perBagPack>0) pkgType="袋裝";
-      else if(prod.perBoxPack>0) pkgType="盒裝";
-
-      const bVal=parseFloat(r.cells[5].querySelector('input').value)||0; // 箱數
-      const pVal=parseFloat(r.cells[6].querySelector('input').value)||0; // 棧板
-      wsData.push([idx, code, name, boxVal, pkgType, bVal, "箱", pVal, "棧板"]);
-    });
-
-    const ws=XLSX.utils.aoa_to_sheet(wsData);
-    XLSX.utils.book_append_sheet(wb, ws, "工廠訂單");
-
-    const facName=(currentFactory==='VN')?'越南訂單':'台灣訂單';
-    const dateStr=getTodayString();
-    XLSX.writeFile(wb, `${facName}_${dateStr}.xlsx`);
-  }
-
-  function getTodayString(){
-    const d=new Date();
-    let mm=(d.getMonth()+1).toString().padStart(2,'0');
-    let dd=d.getDate().toString().padStart(2,'0');
-    return mm+dd;
-  }
-
-  // ====================== 8) Modal 控制 ======================
-  function openModal(){
-    document.getElementById('boxSizeModal').style.display='block';
-  }
-  function closeModal(){
-    document.getElementById('boxSizeModal').style.display='none';
-  }
-  window.onclick=(e)=>{
-    if(e.target===document.getElementById('boxSizeModal')) closeModal();
-    if(e.target===document.getElementById('newItemModal')) closeNewItemModal();
-  }
-
-  // ====================== 9) 搜尋 ======================
-  function searchProduct(){
-    const val=document.getElementById('searchInput').value.toUpperCase().trim();
-    const resDiv=document.getElementById('searchResults');
-    resDiv.innerHTML='';
-    if(!val){
-      resDiv.style.display='none';
-      return;
-    }
-    const all=getAllProducts();
-    const matched=all.filter(p=>p.productCode.toUpperCase().includes(val));
-    if(matched.length>0){
-      resDiv.style.display='block';
-      matched.forEach(prod=>{
-        const item=document.createElement('div');
-        item.className='search-result-item';
-        item.textContent=`${prod.productCode} - ${prod.productName}`;
-        item.onclick=()=>{
-          addProduct(prod);
-          document.getElementById('searchInput').value='';
-          resDiv.innerHTML='';
-          resDiv.style.display='none';
-        };
-        resDiv.appendChild(item);
-      });
-    }else{
-      resDiv.style.display='none';
-    }
-  }
-
-  // ====================== 10) 新品產生器 ======================
-  document.getElementById('newItemGeneratorBtn').addEventListener('click', openNewItemModal);
-
-  function openNewItemModal(){
-    document.getElementById('newItemModal').style.display='block';
-  }
-  function closeNewItemModal(){
-    document.getElementById('newItemModal').style.display='none';
-  }
-  function initNewItemModal(){
-    const brandSel=document.getElementById('newItemBrandSelect');
-    brandSel.innerHTML='<option value="">請選擇品牌</option>';
-    const all=getAllProducts();
-    const brandSet=[...new Set(all.map(p=>p.brand))];
-    brandSet.forEach(b=>{
-      brandSel.innerHTML+=`<option value="${b}">${b}</option>`;
-    });
-    brandSel.innerHTML+='<option value="other">其他（手動輸入）</option>';
-  }
-
-  function newItemBrandChanged(){
-    const val=document.getElementById('newItemBrandSelect').value;
-    const inp=document.getElementById('newItemBrandInput');
-    if(val==='other'){inp.style.display='block';}else{inp.style.display='none';inp.value='';}
-    updateNewItemSpecOptions();
-  }
-  function getNewItemBrand(){
-    const val=document.getElementById('newItemBrandSelect').value;
-    return (val==='other')?document.getElementById('newItemBrandInput').value.trim():val;
-  }
-
-  function updateNewItemSpecOptions(){
-    const brand=getNewItemBrand();
-    const specSel=document.getElementById('newItemSpecSelect');
-    specSel.innerHTML='<option value="">請選擇規格</option>';
-    const all=getAllProducts();
-    if(brand){
-      const specs=[...new Set(all.filter(p=>p.brand===brand).map(p=>p.spec))];
-      specs.forEach(s=>{
-        specSel.innerHTML+=`<option value="${s}">${s}</option>`;
-      });
-    }
-    specSel.innerHTML+='<option value="other">其他（手動輸入）</option>';
-  }
-
-  function newItemSpecChanged(){
-    const val=document.getElementById('newItemSpecSelect').value;
-    const inp=document.getElementById('newItemSpecInput');
-    if(val==='other'){inp.style.display='block';}else{inp.style.display='none';inp.value='';}
-    updateNewItemSeriesOptions();
-  }
-  function getNewItemSpec(){
-    const val=document.getElementById('newItemSpecSelect').value;
-    return (val==='other')?document.getElementById('newItemSpecInput').value.trim():val;
-  }
-
-  function updateNewItemSeriesOptions(){
-    const brand=getNewItemBrand();
-    const spec=getNewItemSpec();
-    const seriesSel=document.getElementById('newItemSeriesSelect');
-    seriesSel.innerHTML='<option value="">請選擇系列</option>';
-    const all=getAllProducts();
-    if(brand&&spec){
-      const sList=[...new Set(all.filter(p=>p.brand===brand && p.spec===spec).map(p=>p.series))];
-      sList.forEach(s=>{
-        seriesSel.innerHTML+=`<option value="${s}">${s}</option>`;
-      });
-    }
-    seriesSel.innerHTML+='<option value="other">其他（手動輸入）</option>';
-  }
-
-  function newItemSeriesChanged(){
-    const val=document.getElementById('newItemSeriesSelect').value;
-    const inp=document.getElementById('newItemSeriesInput');
-    if(val==='other'){inp.style.display='block';}else{inp.style.display='none';inp.value='';}
-  }
-  function getNewItemSeries(){
-    const val=document.getElementById('newItemSeriesSelect').value;
-    return (val==='other')?document.getElementById('newItemSeriesInput').value.trim():val;
-  }
-
-  function boxSizeChanged(){
-    const val=document.getElementById('newItemBoxSize').value;
-    const pal=document.getElementById('newItemPallet');
-    pal.value=boxSizePalletMap[val]||42;
-  }
-
-  function packagingTypeChanged(){
-    const val=document.getElementById('newItemPackagingType').value;
-    const container=document.getElementById('packagingFields');
-    container.innerHTML='';
-    if(val==='bag'){
-      // 袋裝 => perBox(每箱袋數), perBagPack(每袋幾支)
-      container.innerHTML+='<label>每箱袋數 (perBox)：<input type="number" id="newItemPerBoxBag" placeholder="必填"></label>';
-      container.innerHTML+='<label>每袋幾支 (perBagPack)：<input type="number" id="newItemPerBagPack" placeholder="必填"></label>';
-    }
-    else if(val==='box'){
-      // 盒裝 => perBox(每箱盒數), perBoxPack(每盒幾支)
-      container.innerHTML+='<label>每箱盒數 (perBox)：<input type="number" id="newItemPerBoxBox" placeholder="必填"></label>';
-      container.innerHTML+='<label>每盒幾支 (perBoxPack)：<input type="number" id="newItemPerBoxPackBox" placeholder="必填"></label>';
-    }
-    else{
-      // 單包 => perBox(每箱包數)
-      container.innerHTML+='<label>每箱包數 (perBox)：<input type="number" id="newItemPerBoxSingle" placeholder="必填"></label>';
-    }
-  }
-
-  function addNewItemLine(){
-    const brand=getNewItemBrand();
-    const spec=getNewItemSpec();
-    const series=getNewItemSeries();
-    const code=document.getElementById('newItemCode').value.trim();
-    const name=document.getElementById('newItemName').value.trim();
-    const boxSize=document.getElementById('newItemBoxSize').value.trim();
-    const palVal=document.getElementById('newItemPallet').value.trim();
-    const pkgType=document.getElementById('newItemPackagingType').value;
-
-    if(!brand||!spec||!series||!code||!name||!palVal){
-      alert("請填完整品牌/規格/系列/品號/品名及棧板數");
-      return;
+        initBrandButtons();
+        document.getElementById('seriesSelect').innerHTML='<option value="">請先選擇規格</option>';
+        document.getElementById('productButtons').innerHTML='';
+        clearTable();
+        updateTotals();
     }
 
-    let itemStr=`{brand:"${brand}", spec:"${spec}", series:"${series}", productCode:"${code}", productName:"${name}", boxSize:"${boxSize}"`;
-
-    if(pkgType==='bag'){
-      const pb=document.getElementById('newItemPerBoxBag').value.trim();
-      const bp=document.getElementById('newItemPerBagPack').value.trim();
-      if(!pb||!bp){alert("袋裝需填：每箱袋數(perBox) & 每袋幾支(perBagPack)");return;}
-      itemStr+=`, perBox:${pb}, perBagPack:${bp}`;
-    }
-    else if(pkgType==='box'){
-      const b=document.getElementById('newItemPerBoxBox').value.trim();
-      const bp=document.getElementById('newItemPerBoxPackBox').value.trim();
-      if(!b||!bp){alert("盒裝需填：每箱盒數(perBox) & 每盒幾支(perBoxPack)");return;}
-      itemStr+=`, perBox:${b}, perBoxPack:${bp}`;
-    }
-    else{
-      const single=document.getElementById('newItemPerBoxSingle').value.trim();
-      if(!single){alert("單包需填：每箱包數(perBox)");return;}
-      itemStr+=`, perBox:${single}`;
+    function clearTable(){
+        document.querySelector('#productTable tbody').innerHTML='';
     }
 
-    if(palVal!==""){
-      itemStr+=`, perPallet:${palVal}`;
+    // ============================================
+    // 品牌按鈕
+    // ============================================
+    function initBrandButtons(){
+        const brandDiv=document.getElementById('brandButtons');
+        brandDiv.innerHTML='<label>選擇品牌：</label>';
+        const filtered = getFilteredProducts();
+        const brandSet=[...new Set(filtered.map(p=>p.brand))];
+        brandSet.forEach(b=>{
+            const btn=document.createElement('button');
+            btn.className='brand-button';
+            btn.textContent=b;
+            btn.onclick=()=>selectBrand(b);
+            brandDiv.appendChild(btn);
+        });
     }
-    itemStr+='},';
 
-    const area=document.getElementById('newItemResult');
-    const curr=area.value.trim();
-    area.value=curr?(curr+' '+itemStr):itemStr;
+    function selectBrand(brand){
+        selectedBrand=brand;
+        selectedSpec='';
+        toggleActiveButton('.brand-button', brand);
+        updateSpecButtons();
+        resetSeriesAndProducts();
+    }
 
-    resetNewItemForm();
-  }
+    function toggleActiveButton(selector, text){
+        const btns=document.querySelectorAll(selector);
+        btns.forEach(b=>{
+            b.classList.toggle('active',b.textContent===text);
+        });
+    }
 
-  function resetNewItemForm(){
-    document.getElementById('newItemBrandSelect').value='';
-    document.getElementById('newItemBrandInput').value='';
-    document.getElementById('newItemBrandInput').style.display='none';
+    function updateSpecButtons(){
+        const specDiv=document.getElementById('specButtons');
+        specDiv.innerHTML='';
+        if(selectedBrand){
+            const fProds=getFilteredProducts().filter(p=>p.brand===selectedBrand);
+            const specs=[...new Set(fProds.map(p=>p.spec))];
+            if(specs.length>0){
+                specDiv.style.display='block';
+                specDiv.innerHTML='<label>選擇規格：</label>';
+                specs.forEach(sp=>{
+                    const btn=document.createElement('button');
+                    btn.textContent=sp;
+                    btn.className='spec-button';
+                    btn.onclick=()=>selectSpec(sp);
+                    specDiv.appendChild(btn);
+                });
+            }else{
+                specDiv.style.display='none';
+            }
+        }else{
+            specDiv.style.display='none';
+        }
+    }
 
-    document.getElementById('newItemSpecSelect').innerHTML='<option value="">請選擇規格</option><option value="other">其他（手動輸入）</option>';
-    document.getElementById('newItemSpecInput').value='';
-    document.getElementById('newItemSpecInput').style.display='none';
+    function selectSpec(spec){
+        selectedSpec=spec;
+        toggleActiveButton('.spec-button', spec);
+        updateSeriesOptions();
+    }
 
-    document.getElementById('newItemSeriesSelect').innerHTML='<option value="">請選擇系列</option><option value="other">其他（手動輸入）</option>';
-    document.getElementById('newItemSeriesInput').value='';
-    document.getElementById('newItemSeriesInput').style.display='none';
+    function updateSeriesOptions(){
+        const sel=document.getElementById('seriesSelect');
+        sel.innerHTML='<option value="">請選擇系列</option>';
+        if(selectedBrand && selectedSpec){
+            const filtered=getFilteredProducts().filter(p=>p.brand===selectedBrand && p.spec===selectedSpec);
+            const seriesList=[...new Set(filtered.map(p=>p.series))];
+            seriesList.forEach(s=>{
+                sel.innerHTML+=`<option value="${s}">${s}</option>`;
+            });
+        }else{
+            sel.innerHTML='<option value="">請先選擇規格</option>';
+        }
+        document.getElementById('productButtons').innerHTML='';
+    }
 
-    document.getElementById('newItemCode').value='';
-    document.getElementById('newItemName').value='';
-    document.getElementById('newItemBoxSize').value='A';
-    boxSizeChanged();
-    document.getElementById('newItemPackagingType').value='single';
-    packagingTypeChanged();
-    document.getElementById('newItemPallet').value=boxSizePalletMap['A'];
-  }
+    function resetSeriesAndProducts(){
+        document.getElementById('seriesSelect').innerHTML='<option value="">請先選擇規格</option>';
+        document.getElementById('productButtons').innerHTML='';
+    }
 
-  function copyNewItems(){
-    const area=document.getElementById('newItemResult');
-    area.select();
-    area.setSelectionRange(0,99999);
-    document.execCommand('copy');
-    alert("已複製結果到剪貼簿！");
-  }
+    function updateProductOptions(){
+        selectedSeries=document.getElementById('seriesSelect').value;
+        const btnDiv=document.getElementById('productButtons');
+        btnDiv.innerHTML='';
+        if(selectedBrand && selectedSpec && selectedSeries){
+            const prods=getFilteredProducts().filter(p=>p.brand===selectedBrand && p.spec===selectedSpec && p.series===selectedSeries);
+            prods.forEach(prod=>{
+                const btn=document.createElement('button');
+                btn.className='product-button';
+                btn.textContent=prod.productCode;
+                btn.onclick=()=>addProduct(prod);
+                btnDiv.appendChild(btn);
+            });
+        }else{
+            btnDiv.innerHTML='請先選擇系列';
+        }
+    }
+
+    // ============================================
+    // 新增產品
+    // ============================================
+    function addProduct(prod){
+        const tbody=document.querySelector('#productTable tbody');
+        if(Array.from(tbody.querySelectorAll('tr')).some(r=>r.cells[1].textContent===prod.productCode)){
+            alert('該產品已添加');
+            return;
+        }
+        const rowIndex=tbody.children.length+1;
+
+        const {hasPack, hasBox} = checkPackageType(prod);
+
+        let packOrBoxInput='-';
+        if(hasPack){
+            packOrBoxInput=`<input type="number" class="edit-pack-input" placeholder="袋數" oninput="updateFields(this,'${prod.productCode}')">`;
+        }else if(hasBox){
+            packOrBoxInput=`<input type="number" class="edit-box-input" placeholder="盒數" oninput="updateFields(this,'${prod.productCode}')">`;
+        }
+
+        const targetPlaceholder= hasPack?'目標袋數':(hasBox?'目標盒數':'目標包數');
+
+        const rowHTML=`
+        <tr data-product="${prod.productCode}">
+            <td>${rowIndex}</td>
+            <td>${prod.productCode}</td>
+            <td><input type="number" class="edit-quantity-input" placeholder="包數" oninput="updateFields(this,'${prod.productCode}')"></td>
+            <td>${packOrBoxInput}</td>
+            <td><input type="number" class="target-input" placeholder="${targetPlaceholder}" oninput="checkTarget(this)"></td>
+            <td><input type="number" class="edit-cartons-input" placeholder="箱數" oninput="updateFields(this,'${prod.productCode}')"></td>
+            <td><input type="number" class="edit-pallets-input" placeholder="棧板數" oninput="updateFields(this,'${prod.productCode}')"></td>
+            <td class="box-size-${prod.boxSize}">
+                <span class="box-size-icon box-size-icon-${prod.boxSize}"></span>${prod.boxSize}
+            </td>
+            <td class="action-button-group">
+                <button type="button" class="action-button" onclick="moveUp(this)">↑</button>
+                <button type="button" class="action-button" onclick="moveDown(this)">↓</button>
+                <button type="button" class="lock-button" onclick="toggleLock(this)">鎖定</button>
+                <button type="button" class="remove-button" onclick="removeRow(this)">刪除</button>
+            </td>
+        </tr>`;
+        tbody.insertAdjacentHTML('beforeend', rowHTML);
+        updateRowNumbers();
+    }
+
+    function checkPackageType(prod){
+        // is bag => if (prod.perPack)
+        // is box => if (prod.perBox && no perPack)
+        const hasPack = (typeof prod.perPack!=='undefined' && prod.perPack>0);
+        const hasBox = (typeof prod.perBox!=='undefined' && prod.perBox>0 && !hasPack);
+        return {hasPack, hasBox};
+    }
+
+    function getProductSpecByCode(code){
+        return allProducts.find(p=>p.productCode===code)||null;
+    }
+
+    // ============================================
+    // 欄位更新
+    // ============================================
+    function updateFields(input,productCode){
+        const row=input.closest('tr');
+        const prod=getProductSpecByCode(productCode);
+        if(!prod)return;
+        let {quantity, units, cartons, pallets}=getCurrentValues(row);
+
+        const {perPack=0, perBox=0, perCarton=1, perPallet=1} = prod;
+        const changedField = getChangedField(input);
+
+        ({quantity, units, cartons, pallets}=recalcValues(changedField,{
+            quantity,units,cartons,pallets,
+            perPack,perBox,perCarton,perPallet
+        }));
+
+        // update UI
+        if(changedField!=='quantity' && row.querySelector('.edit-quantity-input')){
+            row.querySelector('.edit-quantity-input').value=quantity.toFixed(0);
+        }
+        const packInput=row.querySelector('.edit-pack-input')||row.querySelector('.edit-box-input');
+        if(packInput && changedField!=='units'){
+            packInput.value=units.toFixed(2);
+        }
+        if(changedField!=='cartons' && row.querySelector('.edit-cartons-input')){
+            row.querySelector('.edit-cartons-input').value=cartons.toFixed(2);
+        }
+        if(changedField!=='pallets' && row.querySelector('.edit-pallets-input')){
+            row.querySelector('.edit-pallets-input').value=pallets.toFixed(2);
+        }
+        const target=row.querySelector('.target-input');
+        if(target) checkTarget(target);
+        updateTotals();
+    }
+
+    function getChangedField(input){
+        if(input.classList.contains('edit-quantity-input'))return 'quantity';
+        if(input.classList.contains('edit-pack-input')||input.classList.contains('edit-box-input'))return 'units';
+        if(input.classList.contains('edit-cartons-input'))return 'cartons';
+        if(input.classList.contains('edit-pallets-input'))return 'pallets';
+        return '';
+    }
+
+    function getCurrentValues(row){
+        const quantity=parseFloat(row.querySelector('.edit-quantity-input')?.value)||0;
+        let units=0;
+        const packOrBox=row.querySelector('.edit-pack-input')||row.querySelector('.edit-box-input');
+        if(packOrBox) units=parseFloat(packOrBox.value)||0;
+        const cartons=parseFloat(row.querySelector('.edit-cartons-input')?.value)||0;
+        const pallets=parseFloat(row.querySelector('.edit-pallets-input')?.value)||0;
+        return {quantity,units,cartons,pallets};
+    }
+
+    function recalcValues(changedField,vals){
+        let {quantity,units,cartons,pallets,perPack,perBox,perCarton,perPallet}=vals;
+        const isBag=(perPack>0);
+        const isBox=(perBox>0 && !isBag);
+        const isSingle=(!isBag && !isBox);
+
+        // 袋裝 => perPack+perCarton
+        if(isBag){
+            switch(changedField){
+                case 'quantity':
+                    units=quantity/perPack;
+                    cartons=units/perCarton;
+                    pallets=cartons/perPallet;
+                    break;
+                case 'units':
+                    quantity=units*perPack;
+                    cartons=units/perCarton;
+                    pallets=cartons/perPallet;
+                    break;
+                case 'cartons':
+                    units=cartons*perCarton;
+                    quantity=units*perPack;
+                    pallets=cartons/perPallet;
+                    break;
+                case 'pallets':
+                    cartons=pallets*perPallet;
+                    units=cartons*perCarton;
+                    quantity=units*perPack;
+                    break;
+            }
+        }
+        // 盒裝 => perBox+perCarton
+        else if(isBox){
+            switch(changedField){
+                case 'quantity':
+                    units=quantity/perBox;
+                    cartons=units/perCarton;
+                    pallets=cartons/perPallet;
+                    break;
+                case 'units':
+                    quantity=units*perBox;
+                    cartons=units/perCarton;
+                    pallets=cartons/perPallet;
+                    break;
+                case 'cartons':
+                    units=cartons*perCarton;
+                    quantity=units*perBox;
+                    pallets=cartons/perPallet;
+                    break;
+                case 'pallets':
+                    cartons=pallets*perPallet;
+                    units=cartons*perCarton;
+                    quantity=units*perBox;
+                    break;
+            }
+        }
+        // 單包 => perCarton
+        else if(isSingle){
+            switch(changedField){
+                case 'quantity':
+                    cartons=quantity/perCarton;
+                    pallets=cartons/perPallet;
+                    break;
+                case 'cartons':
+                    quantity=cartons*perCarton;
+                    pallets=cartons/perPallet;
+                    break;
+                case 'pallets':
+                    cartons=pallets*perPallet;
+                    quantity=cartons*perCarton;
+                    break;
+            }
+        }
+        return {quantity,units,cartons,pallets};
+    }
+
+    function checkTarget(targetInput){
+        const row=targetInput.closest('tr');
+        let currentVal=0;
+        const packOrBox=row.querySelector('.edit-pack-input')||row.querySelector('.edit-box-input');
+        if(packOrBox){
+            currentVal=parseFloat(packOrBox.value)||0;
+        }else{
+            currentVal=parseFloat(row.querySelector('.edit-quantity-input').value)||0;
+        }
+        const tVal=parseFloat(targetInput.value)||0;
+        if(tVal>0 && currentVal>=tVal){
+            targetInput.style.backgroundColor='#28a745';
+            targetInput.style.color='#fff';
+        }else{
+            targetInput.style.backgroundColor='#dc3545';
+            targetInput.style.color='#fff';
+        }
+    }
+
+    // ============================================
+    // 鎖定/刪除/上下移
+    // ============================================
+    function toggleLock(btn){
+        const row=btn.closest('tr');
+        const isLocked=row.classList.contains('locked');
+        row.querySelectorAll('input').forEach(inp=>inp.disabled=!isLocked);
+        row.classList.toggle('locked',!isLocked);
+        btn.textContent=isLocked?'鎖定':'解鎖';
+    }
+
+    function removeRow(btn){
+        btn.closest('tr').remove();
+        updateRowNumbers();
+        updateTotals();
+    }
+    function moveUp(btn){
+        const tr=btn.closest('tr');
+        const prev=tr.previousElementSibling;
+        if(prev) tr.parentNode.insertBefore(tr,prev);
+        updateRowNumbers();
+    }
+    function moveDown(btn){
+        const tr=btn.closest('tr');
+        const next=tr.nextElementSibling;
+        if(next) tr.parentNode.insertBefore(next,tr);
+        updateRowNumbers();
+    }
+
+    function updateRowNumbers(){
+        const rows=document.querySelectorAll('#productTable tbody tr');
+        rows.forEach((r,i)=>{
+            r.cells[0].textContent=i+1;
+        });
+    }
+
+    // ============================================
+    // 計算總計
+    // ============================================
+    function updateTotals(){
+        let totalQuantity=0, totalCartons=0, totalPallets=0;
+        const palletCounts={A:0,B:0,C:0,D:0};
+
+        document.querySelectorAll('.edit-quantity-input').forEach(i=>{
+            totalQuantity += parseFloat(i.value)||0;
+        });
+        document.querySelectorAll('.edit-cartons-input').forEach(i=>{
+            totalCartons += parseFloat(i.value)||0;
+        });
+
+        const rows=document.querySelectorAll('#productTable tbody tr');
+        rows.forEach(row=>{
+            const pVal=parseFloat(row.querySelector('.edit-pallets-input').value)||0;
+            const bSize=row.cells[7].textContent.trim();
+            if(palletCounts.hasOwnProperty(bSize)){
+                palletCounts[bSize]+=pVal;
+            }
+        });
+
+        totalPallets=palletCounts.A+palletCounts.B+palletCounts.C+palletCounts.D;
+
+        document.getElementById('totalQuantity').textContent=totalQuantity.toFixed(0);
+        document.getElementById('totalCartons').textContent=totalCartons.toFixed(2);
+        document.getElementById('totalPallets').textContent=totalPallets.toFixed(2);
+
+        document.getElementById('countA').textContent=palletCounts.A.toFixed(2);
+        document.getElementById('countB').textContent=palletCounts.B.toFixed(2);
+        document.getElementById('countC').textContent=palletCounts.C.toFixed(2);
+
+        updateContainerInfo(totalPallets);
+    }
+
+    // ============================================
+    // 貨櫃資訊
+    // ============================================
+    function updateContainerInfo(totalPallets){
+        const infoDiv=document.getElementById('containerInfo');
+        infoDiv.innerHTML='';
+        let remaining=totalPallets;
+        let containerCount=1;
+
+        while(remaining>0){
+            let type,cap;
+            if(remaining<=10){type='20 尺貨櫃'; cap=10;}
+            else{type='40 尺貨櫃'; cap=20;}
+            let use=Math.min(remaining,cap);
+            let fillRate=(use/cap)*100;
+
+            let cDiv=document.createElement('div');
+            cDiv.innerHTML=`<strong>貨櫃 ${containerCount}：${type}（${fillRate.toFixed(0)}%）</strong>`;
+
+            let pc=document.createElement('div');
+            pc.className='progress-container';
+            let pb=document.createElement('div');
+            pb.className='progress-bar';
+            pb.style.width=fillRate+'%';
+            pb.textContent=`${use} / ${cap} 棧板`;
+
+            pc.appendChild(pb);
+            cDiv.appendChild(pc);
+            infoDiv.appendChild(cDiv);
+
+            remaining-=use;
+            containerCount++;
+        }
+    }
+
+    // ============================================
+    // 匯出
+    // ============================================
+    function exportToExcel(){
+        const wb=XLSX.utils.book_new();
+        const wsData=[];
+        const header=["序號","品號","名稱","每箱","包裝類型","箱數","單位","棧板數","單位"];
+        wsData.push(header);
+
+        const rows=document.querySelectorAll('#productTable tbody tr');
+        rows.forEach(r=>{
+            const idx=r.cells[0].textContent;
+            const code=r.cells[1].textContent;
+            const prod=allProducts.find(p=>p.productCode===code);
+            if(!prod)return;
+            const name=prod.productName||'';
+
+            const eachCarton=prod.perCarton||1;
+            let pkgType='單包';
+            if(prod.perPack && prod.perPack>0) pkgType='袋裝';
+            else if(prod.perBox && prod.perBox>0) pkgType='盒裝';
+
+            const cVal=parseFloat(r.cells[5].querySelector('input').value)||0;
+            const pVal=parseFloat(r.cells[6].querySelector('input').value)||0;
+
+            wsData.push([idx,code,name,eachCarton,pkgType,cVal,"箱",pVal,"棧板"]);
+        });
+
+        const ws=XLSX.utils.aoa_to_sheet(wsData);
+        XLSX.utils.book_append_sheet(wb, ws,"訂單");
+
+        const dateStr=getTodayString();
+        XLSX.writeFile(wb,`統一Country_${currentCountry}_${dateStr}.xlsx`);
+    }
+
+    function getTodayString(){
+        const now=new Date();
+        let mm=String(now.getMonth()+1).padStart(2,"0");
+        let dd=String(now.getDate()).padStart(2,"0");
+        return mm+dd;
+    }
+
+    // ============================================
+    // Modal
+    // ============================================
+    function openModal(){
+        document.getElementById('boxSizeModal').style.display='block';
+    }
+    function closeModal(){
+        document.getElementById('boxSizeModal').style.display='none';
+    }
+    window.onclick=(e)=>{
+        if(e.target===document.getElementById('boxSizeModal')) closeModal();
+        if(e.target===document.getElementById('newItemModal')) closeNewItemModal();
+    }
+
+    // ============================================
+    // 搜尋
+    // ============================================
+    function searchProduct(){
+        const val=document.getElementById('searchInput').value.trim().toUpperCase();
+        const res=document.getElementById('searchResults');
+        res.innerHTML='';
+        if(!val){
+            res.style.display='none';
+            return;
+        }
+        const matched=getFilteredProducts().filter(p=>p.productCode.toUpperCase().includes(val));
+        if(matched.length>0){
+            res.style.display='block';
+            matched.forEach(prod=>{
+                const item=document.createElement('div');
+                item.className='search-result-item';
+                item.textContent=`${prod.productCode} - ${prod.productName}`;
+                item.onclick=()=>{
+                    addProduct(prod);
+                    document.getElementById('searchInput').value='';
+                    res.innerHTML='';
+                    res.style.display='none';
+                };
+                res.appendChild(item);
+            });
+        }else{
+            res.style.display='none';
+        }
+    }
+
+    // ============================================
+    // 新品產生器
+    // ============================================
+    document.getElementById('newItemGeneratorBtn').addEventListener('click',openNewItemModal);
+    function openNewItemModal(){
+        document.getElementById('newItemModal').style.display='block';
+    }
+    function closeNewItemModal(){
+        document.getElementById('newItemModal').style.display='none';
+    }
+
+    function initNewItemModal(){
+        const brandSel=document.getElementById('newItemBrandSelect');
+        brandSel.innerHTML='<option value="">請選擇品牌</option>';
+        // 從所有產品拿品牌 => 之後再 filter?
+        const brandSet=[...new Set(allProducts.map(p=>p.brand))];
+        brandSet.forEach(b=>{
+            brandSel.innerHTML+=`<option value="${b}">${b}</option>`;
+        });
+        brandSel.innerHTML+='<option value="other">其他（手動輸入）</option>';
+    }
+    function newItemBrandChanged(){
+        const val=document.getElementById('newItemBrandSelect').value;
+        const inp=document.getElementById('newItemBrandInput');
+        if(val==='other') inp.style.display='block'; else {inp.style.display='none';inp.value='';}
+        updateNewItemSpecOptions();
+    }
+    function getNewItemBrand(){
+        const val=document.getElementById('newItemBrandSelect').value;
+        return val==='other'?document.getElementById('newItemBrandInput').value.trim():val;
+    }
+
+    function updateNewItemSpecOptions(){
+        const brand=getNewItemBrand();
+        const specSel=document.getElementById('newItemSpecSelect');
+        specSel.innerHTML='<option value="">請選擇規格</option>';
+        if(brand){
+            const specs=[...new Set(allProducts.filter(p=>p.brand===brand).map(p=>p.spec))];
+            specs.forEach(s=>{
+                specSel.innerHTML+=`<option value="${s}">${s}</option>`;
+            });
+        }
+        specSel.innerHTML+='<option value="other">其他（手動輸入）</option>';
+    }
+    function newItemSpecChanged(){
+        const val=document.getElementById('newItemSpecSelect').value;
+        const inp=document.getElementById('newItemSpecInput');
+        if(val==='other') inp.style.display='block'; else {inp.style.display='none';inp.value='';}
+        updateNewItemSeriesOptions();
+    }
+    function getNewItemSpec(){
+        const val=document.getElementById('newItemSpecSelect').value;
+        return val==='other'?document.getElementById('newItemSpecInput').value.trim():val;
+    }
+
+    function updateNewItemSeriesOptions(){
+        const brand=getNewItemBrand();
+        const spec=getNewItemSpec();
+        const serSel=document.getElementById('newItemSeriesSelect');
+        serSel.innerHTML='<option value="">請選擇系列</option>';
+        if(brand && spec){
+            const sList=[...new Set(allProducts.filter(p=>p.brand===brand && p.spec===spec).map(p=>p.series))];
+            sList.forEach(s=>{
+                serSel.innerHTML+=`<option value="${s}">${s}</option>`;
+            });
+        }
+        serSel.innerHTML+='<option value="other">其他（手動輸入）</option>';
+    }
+    function newItemSeriesChanged(){
+        const val=document.getElementById('newItemSeriesSelect').value;
+        const inp=document.getElementById('newItemSeriesInput');
+        if(val==='other') inp.style.display='block'; else {inp.style.display='none';inp.value='';}
+    }
+    function getNewItemSeries(){
+        const val=document.getElementById('newItemSeriesSelect').value;
+        return val==='other'?document.getElementById('newItemSeriesInput').value.trim():val;
+    }
+
+    function boxSizeChanged(){
+        const val=document.getElementById('newItemBoxSize').value;
+        document.getElementById('newItemPallet').value = boxSizePalletMap[val]||42;
+    }
+
+    function packagingTypeChanged(){
+        const type=document.getElementById('newItemPackagingType').value;
+        const container=document.getElementById('packagingFields');
+        container.innerHTML='';
+        if(type==='bag'){
+            container.innerHTML+='<label>每箱袋數 (perCarton)：<input type="number" id="newItemPerCartonBag" placeholder="必填"></label>';
+            container.innerHTML+='<label>每袋幾入 (perPack)：<input type="number" id="newItemPerPack" placeholder="必填"></label>';
+        }else if(type==='box'){
+            container.innerHTML+='<label>每箱盒數 (perCarton)：<input type="number" id="newItemPerCartonBox" placeholder="必填"></label>';
+            container.innerHTML+='<label>每盒幾入 (perBox)：<input type="number" id="newItemPerBoxBox" placeholder="必填"></label>';
+        }else{
+            container.innerHTML+='<label>每箱包數 (perCarton)：<input type="number" id="newItemPerCartonSingle" placeholder="必填"></label>';
+        }
+    }
+
+    function addNewItemLine(){
+        const brand=getNewItemBrand();
+        const spec=getNewItemSpec();
+        const series=getNewItemSeries();
+        const code=document.getElementById('newItemCode').value.trim();
+        const name=document.getElementById('newItemName').value.trim();
+        const boxSize=document.getElementById('newItemBoxSize').value;
+        const pal=document.getElementById('newItemPallet').value.trim();
+        const countryVal=document.getElementById('newItemCountry').value;
+        const pkgType=document.getElementById('newItemPackagingType').value;
+
+        if(!brand||!spec||!series||!code||!name||!pal){
+            alert("請填完整品牌/規格/系列/品號/品名及棧板數");
+            return;
+        }
+
+        let itemStr=`{brand:"${brand}", spec:"${spec}", series:"${series}", productCode:"${code}", productName:"${name}", boxSize:"${boxSize}", perPallet:${pal}, country:"${countryVal}"`;
+
+        if(pkgType==='bag'){
+            const cBag=document.getElementById('newItemPerCartonBag').value.trim();
+            const pack=document.getElementById('newItemPerPack').value.trim();
+            if(!cBag||!pack){alert("袋裝需: perCarton(每箱袋數), perPack(每袋幾入)");return;}
+            itemStr+=`, perCarton:${cBag}, perPack:${pack}`;
+        }else if(pkgType==='box'){
+            const cBox=document.getElementById('newItemPerCartonBox').value.trim();
+            const bBox=document.getElementById('newItemPerBoxBox').value.trim();
+            if(!cBox||!bBox){alert("盒裝需: perCarton(每箱盒數), perBox(每盒幾入)");return;}
+            itemStr+=`, perCarton:${cBox}, perBox:${bBox}`;
+        }else{
+            const single=document.getElementById('newItemPerCartonSingle').value.trim();
+            if(!single){alert("單包需: perCarton(每箱包數)");return;}
+            itemStr+=`, perCarton:${single}`;
+        }
+
+        itemStr+='},';
+
+        const area=document.getElementById('newItemResult');
+        const currVal=area.value.trim();
+        area.value=currVal?(currVal+' '+itemStr):itemStr;
+
+        resetNewItemForm();
+    }
+
+    function resetNewItemForm(){
+        document.getElementById('newItemBrandSelect').value='';
+        document.getElementById('newItemBrandInput').value='';
+        document.getElementById('newItemBrandInput').style.display='none';
+
+        document.getElementById('newItemSpecSelect').innerHTML='<option value="">請選擇規格</option><option value="other">其他（手動輸入）</option>';
+        document.getElementById('newItemSpecInput').value='';
+        document.getElementById('newItemSpecInput').style.display='none';
+
+        document.getElementById('newItemSeriesSelect').innerHTML='<option value="">請選擇系列</option><option value="other">其他（手動輸入）</option>';
+        document.getElementById('newItemSeriesInput').value='';
+        document.getElementById('newItemSeriesInput').style.display='none';
+
+        document.getElementById('newItemCode').value='';
+        document.getElementById('newItemName').value='';
+        document.getElementById('newItemBoxSize').value='A';
+        boxSizeChanged();
+        document.getElementById('newItemCountry').value='VN';
+        document.getElementById('newItemPackagingType').value='single';
+        packagingTypeChanged();
+        document.getElementById('newItemPallet').value=boxSizePalletMap['A'];
+    }
+
+    function copyNewItems(){
+        const area=document.getElementById('newItemResult');
+        area.select();
+        area.setSelectionRange(0,99999);
+        document.execCommand("copy");
+        alert("已複製結果");
+    }
 </script>
 </body>
 </html>

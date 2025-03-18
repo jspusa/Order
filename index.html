@@ -444,312 +444,150 @@
     // ============================================
     // 僅供示範 (目前先空陣列)
 const allProducts = [
-
-  // ======================
-  // 以下原屬「vnProducts」，country:"VN"
-  // ======================
-
-  // -- 普通包 (單包) ---
-  {brand:"GooToE", spec:"普通包", series:"GTS系列", productCode:"GTS01", productName:"Gootoe - Turkey Tendon Strip (85g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
-  {brand:"GooToE", spec:"普通包", series:"GTS系列", productCode:"GTS03", productName:"Gootoe - Turkey Tendon Stick_M(90g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
-
-  {brand:"GooToE", spec:"普通包", series:"GTR系列", productCode:"GTR01", productName:"Gootoe - Turkey Tendon Ring_S(72g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
-  {brand:"GooToE", spec:"普通包", series:"GTR系列", productCode:"GTR03", productName:"Gootoe - Turkey Tendon Ring_M(90g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
-
-  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB01", productName:"Gootoe - Turkey Tendon Bone_S(72g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
-  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB03", productName:"Gootoe - Turkey Tendon Bone_M(90g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
-  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB05", productName:"Gootoe - Turkey Tendon Bone_L(100g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
-  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB07", productName:"Gootoe - Turkey Tendon Lolipop 15gx5 (75g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
-
-  {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP01", productName:"Gootoe - Turkey Tendon Rope_S(72g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
-  {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP03", productName:"Gootoe - Turkey Tendon Rope_M(90g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
-  {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP05", productName:"Gootoe - Turkey Tendon Rope_L(100g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
-
-  {brand:"GooToE", spec:"普通包", series:"GTZ系列", productCode:"GTZ01", productName:"Gootoe - Turkey Tendon Pretzel_S(72g x 100)", boxSize:"B", perCarton:100, perPallet:36, country:"VN"},
-  {brand:"GooToE", spec:"普通包", series:"GTZ系列", productCode:"GTZ03", productName:"Gootoe - Turkey Tendon Pretzel_M(90g x 120)", boxSize:"B", perCarton:120, perPallet:36, country:"VN"},
-
-  {brand:"GooToE", spec:"普通包", series:"GTA系列", productCode:"GTA01", productName:"Gootoe - Turkey Tendon Braid_S(90g x 120)", boxSize:"B", perCarton:120, perPallet:36, country:"VN"},
-
-  {brand:"GooToE", spec:"普通包", series:"GSF系列", productCode:"GSF01", productName:"Soft Turkey Tendon Strip with Pumpkin (85g x 150)", boxSize:"A", perCarton:150, perPallet:42, country:"VN"},
-  {brand:"GooToE", spec:"普通包", series:"GSF系列", productCode:"GSF02", productName:"Soft Turkey Tendon Strip (85g x 150)", boxSize:"A", perCarton:150, perPallet:42, country:"VN"},
-
-  {brand:"GooToE", spec:"普通包", series:"GTC系列", productCode:"GTC01", productName:"Gootoe - Sliced Turkey Tendon (85g x 120)", boxSize:"B", perCarton:120, perPallet:36, country:"VN"},
-
-  // -- 量販包 (單包) ---
-  {brand:"GooToE", spec:"量販包", series:"GTSL系列", productCode:"GTSL01", productName:"Gootoe - Turkey Tendon Strip (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
-  // 若有 GTSL03 同理
-
-  {brand:"GooToE", spec:"量販包", series:"GTRL系列", productCode:"GTRL01", productName:"Gootoe - Turkey Tendon Ring_S (454g x 24)", boxSize:"C", perCarton:24, perPallet:30, country:"VN"},
-  {brand:"GooToE", spec:"量販包", series:"GTRL系列", productCode:"GTRL03", productName:"Gootoe - Turkey Tendon Ring_M (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
-
-  {brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL01", productName:"Gootoe - Turkey Tendon Rope_S (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
-  {brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL03", productName:"Gootoe - Turkey Tendon Rope_M (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
-  {brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL05", productName:"Gootoe - Turkey Tendon Rope_L (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
-
-  {brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL01", productName:"Gootoe - Turkey Tendon Bone_S (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
-  {brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL03", productName:"Gootoe - Turkey Tendon Bone_M (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
-  {brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL05", productName:"Gootoe - Turkey Tendon Bone_L(454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
-
-  {brand:"GooToE", spec:"量販包", series:"GTAL系列", productCode:"GTAL01", productName:"Gootoe - Turkey Tendon Braid_S (454g x 38)", boxSize:"C", perCarton:38, perPallet:30, country:"VN"},
-
-  {brand:"GooToE", spec:"量販包", series:"GSFL系列", productCode:"GSFL01", productName:"Soft Turkey Tendon Strip with Pumpkin  (454g x 38)", boxSize:"C", perCarton:38, perPallet:42, country:"VN"},
-  {brand:"GooToE", spec:"量販包", series:"GSFL系列", productCode:"GSFL02", productName:"Soft Turkey Tendon Strip  (454g x 38)", boxSize:"C", perCarton:38, perPallet:42, country:"VN"},
-
-  {brand:"GooToE", spec:"量販包", series:"GTCL系列", productCode:"GTCL01", productName:"Gootoe - Turkey Tendon Sliced (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
-  {brand:"GooToE", spec:"量販包", series:"GTZL系列", productCode:"GTZL03", productName:"Gootoe - Turkey Tendon Pretzel_M (454g x 30)", boxSize:"C", perCarton:30, perPallet:30, country:"VN"},
-
-  // -- 火雞肉零食 (單包) ---
-  {brand:"GooToE", spec:"火雞肉零食", series:"GTT系列", productCode:"GTT01", productName:"Gootoe Turkey Tendon Twists 5oz_Small (142*120)", boxSize:"B", perCarton:120, perPallet:36, country:"VN"},
-  {brand:"GooToE", spec:"火雞肉零食", series:"GTT系列", productCode:"GTT03", productName:"Gootoe Turkey Tendon Twists 5oz_Medium (142*120)", boxSize:"B", perCarton:120, perPallet:36, country:"VN"},
-
-  // -- 雞肉零食 (單包) ---
-  {brand:"GooToE", spec:"雞肉零食", series:"GCBL系列", productCode:"GCBL01", productName:"Gootoe - Chicken Fillet Jerky (454g x 30)", boxSize:"C", perCarton:30, perPallet:42, country:"VN"},
-  {brand:"GooToE", spec:"雞肉零食", series:"GCBL系列", productCode:"GCBL02", productName:"Gootoe - Chicken Breast Jerky (454g x 36)", boxSize:"C", perCarton:36, perPallet:42, country:"VN"},
-
-  {brand:"GooToE", spec:"雞肉零食", series:"GCTL系列", productCode:"GCTL01", productName:"Gootoe - Chicken Sticks (681g x 28)", boxSize:"A", perCarton:28, perPallet:42, country:"VN"},
-  {brand:"GooToE", spec:"雞肉零食", series:"GCTL系列", productCode:"GCTL04", productName:"Gootoe - Chicken Mini Sticks (681g x 22)", boxSize:"A", perCarton:22, perPallet:42, country:"VN"},
-  {brand:"GooToE", spec:"雞肉零食", series:"GCTL系列", productCode:"GCTL05", productName:"Gootoe - Chicken Roll (340g x 24)", boxSize:"A", perCarton:24, perPallet:42, country:"VN"},
-
-  {brand:"GooToE", spec:"雞肉零食", series:"GSCL系列", productCode:"GSCL01", productName:"Gootoe - Soft Chicken Breast Strips (454g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-
-  // -- 水牛零食 (單包) ---
-  {brand:"GooToE", spec:"水牛零食", series:"GBS系列", productCode:"GBS01", productName:"Gootoe - Buffalo Stick_S (227g x 70)", boxSize:"A", perCarton:70, perPallet:42, country:"VN"},
-  {brand:"GooToE", spec:"水牛零食", series:"GBS系列", productCode:"GBS03", productName:"Gootoe - Buffalo Stick_L (227g x 70)", boxSize:"A", perCarton:70, perPallet:42, country:"VN"},
-  {brand:"GooToE", spec:"水牛零食", series:"GBS系列", productCode:"GBSL01", productName:"Gootoe - Buffalo Bites Stick_S 1.5lb (681g x 28)", boxSize:"A", perCarton:28, perPallet:42, country:"VN"},
-  {brand:"GooToE", spec:"水牛零食", series:"GBS系列", productCode:"GBSL03", productName:"Gootoe - Buffalo Bites Stick_L 1.5lb (681g x 28)", boxSize:"A", perCarton:28, perPallet:42, country:"VN"},
-
-  {brand:"GooToE", spec:"水牛零食", series:"GBB系列", productCode:"GBB01", productName:"Gootoe - Buffalo Bone Shaped Treats (227g x 60)", boxSize:"A", perCarton:60, perPallet:42, country:"VN"},
-  {brand:"GooToE", spec:"水牛零食", series:"GBB系列", productCode:"GBBL01", productName:"Gootoe - Buffalo Bites Bone Shaped  1.5lb (681g x 28)", boxSize:"A", perCarton:28, perPallet:42, country:"VN"},
-
-  // -- A Freschi srl 家庭包 (單包) ---
-  {brand:"A Freschi srl", spec:"家庭包", series:"AFML系列", productCode:"AFML01", productName:"AFreschi Turkey Tendon Variety Pack 8oz_Small (227g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"家庭包", series:"AFML系列", productCode:"AFML03", productName:"AFreschi Turkey Tendon Variety Pack 10oz_Medium (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"家庭包", series:"AFML系列", productCode:"AFML05", productName:"AFreschi Turkey Tendon Variety Pack 10oz_Large (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"家庭包", series:"KTBL系列", productCode:"KTBL01", productName:"Afreschi Natural Turkey Tendon Bone 8oz_S-15g (227g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"家庭包", series:"KTBL系列", productCode:"KTBL03", productName:"Afreschi Natural Turkey Tendon Bone 10oz_M-36g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"家庭包", series:"KTBL系列", productCode:"KTBL05", productName:"Afreschi Natural Turkey Tendon Bone 10oz_L-72g (285g x 36)", boxSize:"A", perCarton:30, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"家庭包", series:"TTRL系列", productCode:"TTRL01", productName:"Afreschi Natural Turkey Tendon Ring 8oz_S-12g (227g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"家庭包", series:"TTRL系列", productCode:"TTRL03", productName:"Afreschi Natural Turkey Tendon Ring 10oz_M-36g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"家庭包", series:"TTRL系列", productCode:"TTRL05", productName:"Afreschi Natural Turkey Tendon Ring 10oz_L-72g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"家庭包", series:"TPZL系列", productCode:"TPZL01", productName:"Afreschi Natural Turkey Tendon Pretzel 8oz_S-12g (227g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"家庭包", series:"TPZL系列", productCode:"TPZL03", productName:"Afreschi Natural Turkey Tendon Pretzel 10oz_M-36g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"家庭包", series:"TPZL系列", productCode:"TPZL05", productName:"Afreschi Natural Turkey Tendon Pretzel 10oz_L-72g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"家庭包", series:"TRPL系列", productCode:"TRPL01", productName:"Afreschi Natural Turkey Tendon Rope 8oz_S-12g (227g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"家庭包", series:"TRPL系列", productCode:"TRPL03", productName:"Afreschi Natural Turkey Tendon Rope 10oz_M-36g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"家庭包", series:"TRPL系列", productCode:"TRPL05", productName:"Afreschi Natural Turkey Tendon Rope 10oz_L-72g (285g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"家庭包", series:"ATAL系列", productCode:"ATAL01", productName:"Afreschi Natural Turkey Tendon Braid 8oz (GTA01:227g x 42)", boxSize:"A", perCarton:42, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"家庭包", series:"TTSL系列", productCode:"TTSL05", productName:"Afreschi Natural Turkey Tendon Strip 10oz (285g x 36)", boxSize:"A", perCarton:30, perPallet:42, country:"VN"},
-
-  // -- A Freschi srl 火雞肉零食 (單包) ---
-  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ATJ系列", productCode:"ATJ01", productName:"A Freschi srl – Turkey Jerky 4oz (113g x 110 )", boxSize:"A", perCarton:110, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ATJ系列", productCode:"ATJL01", productName:"A Freschi srl – Turkey Jerky 12oz (340g x 42 )", boxSize:"A", perCarton:42, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ASF系列", productCode:"ASF01", productName:"A Freschi srl – Natural Turkey Treats Soft Stick (170g x 100)", boxSize:"A", perCarton:100, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ASF系列", productCode:"ASFL01", productName:"A Freschi srl – Natural Turkey Treats Soft Stick (454g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ABM系列", productCode:"ABM01", productName:"A Freschi srl – Natural Turkey Treats Stick_β-Carotene (170g x 110)", boxSize:"A", perCarton:110, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ABM系列", productCode:"ABML01", productName:"A Freschi srl – Natural Turkey Treats Stick_β-Carotene (454g x 42)", boxSize:"A", perCarton:42, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ATN系列", productCode:"ATN01", productName:"A Freschi srl – Natural Turkey Treats Star Bites (170g x 80)", boxSize:"A", perCarton:80, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ATN系列", productCode:"ATNL01", productName:"A Freschi srl – Natural Turkey Treats Star Bites (454g x 42)", boxSize:"A", perCarton:42, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ASA系列", productCode:"ASA01", productName:"A Freschi srl – Natural Turkey Treats Sausage (170g x 80)", boxSize:"A", perCarton:80, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ASA系列", productCode:"ASAL01", productName:"A Freschi srl – Natural Turkey Treats Sausage (454g x 36)", boxSize:"A", perCarton:36, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"火雞肉零食", series:"ADT系列", productCode:"ADT03", productName:"Natural Dental Treats - Real Turkey Meat (1kg x 20 units / CTN)", boxSize:"A", perCarton:20, perPallet:42, country:"VN"},
-
-  // -- A Freschi srl 乾糧 (單包) ---
-  {brand:"A Freschi srl", spec:"乾糧", series:"AWD系列", productCode:"AWD010", productName:"A Freschi srl – Air-Dried dog food W shape turkey recipe - 454g(38/ctn)", boxSize:"A", perCarton:38, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"乾糧", series:"AWD系列", productCode:"AWD011", productName:"A Freschi srl – Air-Dried dog food W shape turkey recipe - 1kg(20/ctn)", boxSize:"A", perCarton:20, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"乾糧", series:"AWD系列", productCode:"AWD070", productName:"A Freschi srl – Air-Dried dog food W shape turkey & salmon recipe - 454g(38/ctn)", boxSize:"A", perCarton:38, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"乾糧", series:"AWD系列", productCode:"AWD071", productName:"A Freschi srl – Air-Dried dog food W shape turkey & salmon recipe - 1kg(20/ctn)", boxSize:"A", perCarton:20, perPallet:42, country:"VN"},
-
-  // -- A Freschi srl 袋裝 (AM系列): bag => perCarton(每箱袋數), perPack(每袋幾入) --
-  {brand:"A Freschi srl", spec:"袋裝", series:"KTB系列", productCode:"KTB01AM-4", productName:"Natural Turkey Tendon Bone_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"袋裝", series:"KTB系列", productCode:"KTB03AM-2", productName:"Natural Turkey Tendon Bone_M (80 units /CTN)", boxSize:"A", perCarton:80, perPack:2, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"單包", series:"KTB系列", productCode:"KTB05AM-1", productName:"Natural Turkey Tendon Bone_L (90 units /CTN)", boxSize:"A", perCarton:90, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"袋裝", series:"KTB系列", productCode:"KTB06AM-4", productName:"Natural Turkey Tendon Lollipop (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"袋裝", series:"TTR系列", productCode:"TTR01AM-4", productName:"Natural Turkey Tendon Ring_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"袋裝", series:"TTR系列", productCode:"TTR03AM-2", productName:"Natural Turkey Tendon Ring_M (80 units；/CTN)", boxSize:"A", perCarton:80, perPack:2, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"單包", series:"TTR系列", productCode:"TTR05AM-1", productName:"Natural Turkey Tendon Ring_L (120 units；/CTN)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"袋裝", series:"TRP系列", productCode:"TRP01AM-4", productName:"Natural Turkey Tendon Rope_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"袋裝", series:"TRP系列", productCode:"TRP03AM-2", productName:"Natural Turkey Tendon Rope_M (90 units /CTN)", boxSize:"A", perCarton:90, perPack:2, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"單包", series:"TRP系列", productCode:"TRP05AM-1", productName:"Natural Turkey Tendon Rope_L (90 units /CTN)", boxSize:"A", perCarton:90, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"袋裝", series:"TPZ系列", productCode:"TPZ01AM-4", productName:"Natural Turkey Tendon Pretzel_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"袋裝", series:"TPZ系列", productCode:"TPZ03AM-2", productName:"Natural Turkey Tendon Pretzel_M (90 units /CTN)", boxSize:"A", perCarton:90, perPack:2, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"單包", series:"TPZ系列", productCode:"TPZ05AM-1", productName:"Natural Turkey Tendon Pretzel_L (120 units /CTN)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"單包", series:"TTS系列", productCode:"TTS05AM-1", productName:"Natural Turkey Tendon Strip (100 units /CTN)", boxSize:"A", perCarton:100, perPallet:42, country:"VN"},
-
-  // -- A Freschi srl 盒裝 (AM系列): box => perCarton(每箱幾盒), perBox(每盒幾入) --
-  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB01AM", productName:"Natural Turkey Tendon Bone_S (40 units；8 boxes /CTN)", boxSize:"A", perBox:40, perCarton:8, perPallet:36, country:"VN"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB03AM", productName:"Natural Turkey Tendon Bone_M (20 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:20, perCarton:8, perPallet:36, country:"VN"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB05AM", productName:"Natural Turkey Tendon Bone_L (10 units；8 boxes /CTN)", boxSize:"A", perBox:10, perCarton:8, perPallet:36, country:"VN"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB06AM", productName:"Natural Turkey Tendon Lollipop (40 units；8 boxes /CTN)", boxSize:"A", perBox:40, perCarton:8, perPallet:36, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR01AM", productName:"Natural Turkey Tendon Ring_S (40 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:40, perCarton:8, perPallet:36, country:"VN"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR03AM", productName:"Natural Turkey Tendon Ring_M (20 units；8 boxes /CTN)", boxSize:"A", perBox:20, perCarton:8, perPallet:36, country:"VN"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR05AM", productName:"Natural Turkey Tendon Ring_L (10 units；8 boxes /CTN)", boxSize:"A", perBox:10, perCarton:8, perPallet:36, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP01AM", productName:"Natural Turkey Tendon Rope_S (40 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:40, perCarton:8, perPallet:36, country:"VN"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP03AM", productName:"Natural Turkey Tendon Rope_M (20 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:20, perCarton:8, perPallet:36, country:"VN"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP05AM", productName:"Natural Turkey Tendon Rope_L (10 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:10, perCarton:8, perPallet:36, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"盒裝", series:"TPZ系列", productCode:"TPZ01AM", productName:"Natural Turkey Tendon Pretzel_S (40 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:40, perCarton:8, perPallet:36, country:"VN"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TPZ系列", productCode:"TPZ03AM", productName:"Natural Turkey Tendon Pretzel_M (20 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:20, perCarton:8, perPallet:36, country:"VN"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TPZ系列", productCode:"TPZ05AM", productName:"Natural Turkey Tendon Pretzel_L (10 units；8 boxes /CTN)", boxSize:"A", perBox:10, perCarton:8, perPallet:36, country:"VN"},
-
-  {brand:"A Freschi srl", spec:"盒裝", series:"TTS系列", productCode:"TTS05AM", productName:"Natural Turkey Tendon Strip (10 units /box ; 8 boxes /CTN)", boxSize:"A", perBox:10, perCarton:8, perPallet:36, country:"VN"},
-
-  // -- A Freschi srl 重組 (單包) ---
-  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA11", productName:"Turkey Tendon Thin Stick (100g /pk)；AFK package (120 units /CTN)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA12", productName:"Turkey Tendon Braided Stick (100g /pk)；AFK (120 units /CTN)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA13", productName:"Sliced Turkey Tendon (100g /pk)；AFK (100 units /CTN)", boxSize:"A", perCarton:100, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA14", productName:"Natural Turkey Tendon Flake (100g /pk)；AFK (80 units /CTN)", boxSize:"A", perCarton:80, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA21", productName:"Soft Turkey Tendon Strip with Pumpkin (100g /pk)；AFK (120 units /CTN)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA22", productName:"Soft Turkey Tendon Strip (100g /pk)；AFK (120 units /CTN)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA31", productName:"Natural Turkey Tendon wrapped with Chicken Stick (100g /pk)；AFK (100 units /CTN)", boxSize:"A", perCarton:100, perPallet:42, country:"VN"},
-  {brand:"A Freschi srl", spec:"重組", series:"AFA系列", productCode:"AFA32", productName:"Natural Turkey Tendon wrapped with Brown Rice Stick (100g /pk)；AFK (100 units /CTN)", boxSize:"A", perCarton:100, perPallet:42, country:"VN"},
-
-  // -- Vitaday 火雞筋 (單包/袋裝) --
-  {brand:"Vitaday", spec:"火雞筋", series:"VTS系列", productCode:"VTS01-1", productName:"Vitaday - Turkey Tendon Strip (85g x 100)", boxSize:"A", perCarton:100, perPallet:42, country:"VN"},
-
-  {brand:"Vitaday", spec:"火雞筋", series:"VTR系列", productCode:"VTR01-4", productName:"Vitaday -Turkey Tendon Ring_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
-
-  {brand:"Vitaday", spec:"火雞筋", series:"VTB系列", productCode:"VTB01-4", productName:"Vitaday - Turkey Tendon Bone_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perPallet:42, country:"VN"},
-  {brand:"Vitaday", spec:"火雞筋", series:"VTB系列", productCode:"VTB05-1", productName:"Vitaday - Turkey Tendon Bone_L (50g x 120)", boxSize:"A", perCarton:120, perPallet:42, country:"VN"},
-
-  // ======================
-  // 以下原屬「twProducts」，country:"TW"
-  // ======================
-
-  {brand:"GooToE", spec:"量販包", series:"GTSL系列", productCode:"GTSL01J", productName:"Gootoe - Turkey Tendon Strip (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"量販包", series:"GTRL系列", productCode:"GTRL05J", productName:"Gootoe - Turkey Tendon Ring_L (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL05J", productName:"Gootoe - Turkey Tendon Rope_L (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL05J", productName:"Gootoe - Turkey Tendon Bone_L (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"普通包", series:"GSF系列", productCode:"GSF01J", productName:"Gootoe -Turkey Tendon Pumpkin Strip (85g)", boxSize:"B", perCarton:150, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"量販包", series:"GTRL系列", productCode:"GTRL01J", productName:"Gootoe - Turkey Tendon Ring_S (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"量販包", series:"GTPL系列", productCode:"GTPL01J", productName:"Gootoe - Turkey Tendon Rope_S (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"量販包", series:"GTBL系列", productCode:"GTBL01J", productName:"Gootoe - Turkey Tendon Bone_S (454g)", boxSize:"B", perCarton:24, perPallet:36, country:"TW"},
-
-  {brand:"GooToE", spec:"普通包", series:"GTR系列", productCode:"GTR01J", productName:"Gootoe - Turkey Tendon Ring_S (72g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"普通包", series:"GTR系列", productCode:"GTR03J", productName:"Gootoe - Turkey Tendon Ring_M (90g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB01J", productName:"Gootoe - Turkey Tendon Bone_S (72g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB03J", productName:"Gootoe - Turkey Tendon Bone_M (90g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"普通包", series:"GTB系列", productCode:"GTB05J", productName:"Gootoe - Turkey Tendon Bone_L (100g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP01J", productName:"Gootoe - Turkey Tendon Rope_S (72g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP03J", productName:"Gootoe - Turkey Tendon Rope_M (90g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"普通包", series:"GTP系列", productCode:"GTP05J", productName:"Gootoe - Turkey Tendon Rope_L (100g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"普通包", series:"GTS系列", productCode:"GTS01J", productName:"Gootoe - Turkey Tendon Strip  (85g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"普通包", series:"GTS系列", productCode:"GTS03J", productName:"Gootoe - Turkey Tendon Stick_M (90g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"普通包", series:"GTZ系列", productCode:"GTZ01J", productName:"Gootoe - Turkey Tendon Pretzel_S (72g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"普通包", series:"GTZ系列", productCode:"GTZ03J", productName:"Gootoe - Turkey Tendon Pretzel_M (90g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"普通包", series:"GTA系列", productCode:"GTA01J", productName:"Gootoe - Turkey Tendon Braid (72g)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-
-  // -- 盒裝 (J系列): 預設是 8盒/箱 ? → 看原本 perCarton:8 ---
-  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB01J", productName:"Natural Turkey Tendon Bone_S (15g)", boxSize:"B", perBox:40, perCarton:8, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB03J", productName:"Natural Turkey Tendon Bone_M (36g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB05J", productName:"Natural Turkey Tendon Bone_L (72g)", boxSize:"B", perBox:10, perCarton:8, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"KTB系列", productCode:"KTB06J", productName:"Natural Turkey Tendon Lollipop (15g)", boxSize:"B", perBox:40, perCarton:8, perPallet:36, country:"TW"},
-
-  {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR01J", productName:"Natural Turkey Tendon Ring_S (12g)", boxSize:"B", perBox:40, perCarton:8, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR03J", productName:"Natural Turkey Tendon Ring_M (36g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TTR系列", productCode:"TTR05J", productName:"Natural Turkey Tendon Ring_L (72g)", boxSize:"B", perBox:10, perCarton:8, perPallet:36, country:"TW"},
-
-  {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP01J", productName:"Natural Turkey Tendon Rope_S (15g)", boxSize:"B", perBox:40, perCarton:8, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP03J", productName:"Natural Turkey Tendon Rope_M (36g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TRP系列", productCode:"TRP05J", productName:"Natural Turkey Tendon Rope_L (72g)", boxSize:"B", perBox:10, perCarton:8, perPallet:36, country:"TW"},
-
-  {brand:"A Freschi srl", spec:"盒裝", series:"TTS系列", productCode:"TTS05J", productName:"Natural Turkey Tendon Strip (85g)", boxSize:"B", perBox:10, perCarton:8, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TTA系列", productCode:"TTA01J", productName:"Turkey Tendon Rice Stick (60g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TTA系列", productCode:"TTA02J", productName:"Turkey Tendon Chicken Stick (60g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TTA系列", productCode:"TTA03J", productName:"Turkey Tendon Thin Stick (60g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"盒裝", series:"TTA系列", productCode:"TTA04J", productName:"Turkey Tendon Pumpkin Strip (60g)", boxSize:"B", perBox:20, perCarton:8, perPallet:36, country:"TW"},
-
-  {brand:"GooToE", spec:"小牛肋", series:"GRB系列", productCode:"GRB01AM", productName:"Gootoe - Veal Rib Bone, 113g", boxSize:"B", perCarton:130, perPallet:36, country:"TW"}, 
-  {brand:"GooToE", spec:"小牛肋", series:"GRB系列", productCode:"GRB01J", productName:"Gootoe - Veal Rib Bone, 113g", boxSize:"B", perCarton:130, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"小牛肋", series:"ART系列", productCode:"ART01AM", productName:"Afreschi - Turkey Tendon Wrapped Veal Rib Bone, 85g", boxSize:"B", perCarton:130, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"小牛肋", series:"ART系列", productCode:"ART01J", productName:"Afreschi - Turkey Tendon Wrapped Veal Rib Bone, 85g", boxSize:"B", perCarton:130, perPallet:36, country:"TW"},
-
-  {brand:"A Freschi srl", spec:"訓練零食", series:"AFT系列", productCode:"AFT011", productName:"A Freschi srl - Training Treat -Turkey & Chicken Recipe (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"訓練零食", series:"AFT系列", productCode:"AFT021", productName:"A Freschi srl - Training Treat - Salmon & Chicken Recipe (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
-  {brand:"A Freschi srl", spec:"訓練零食", series:"AFT系列", productCode:"AFT031", productName:"A Freschi srl - Training Treat - Duck Liver & Chicken Recipe (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"訓練零食", series:"GWT系列", productCode:"GWT011", productName:"GooToE - Functional Training Treat - Hair Care, W shape (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"訓練零食", series:"GWT系列", productCode:"GWT021", productName:"GooToE - Functional Training Treat - Joint Care, W shape (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"訓練零食", series:"GFT系列", productCode:"GFT011", productName:"GooToE - Functional Training Treat - Odor Control (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
-  {brand:"GooToE", spec:"訓練零食", series:"GFT系列", productCode:"GFT021", productName:"GooToE - Functional Training Treat - Gut Health (681g)", boxSize:"B", perCarton:28, perPallet:36, country:"TW"},
-
-  // 2磅裝 (TW)
-  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD011AM", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD021AM", productName:"Herz Grain-Free Australian Lamb Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD041AM", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD051AM", productName:"Herz Grain-Free New Zealand Venison Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD061AM", productName:"Herz Grain-Free U.S.A. Chicken Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-
-  // 100克
-  {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD010AM", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (100g/Pk)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD020AM", productName:"Herz Grain-Free Australian Lamb Recipe (100g/Pk)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD040AM", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (100g/Pk)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD050AM", productName:"Herz Grain-Free New Zealand Venison Recipe (100g/Pk)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"100克", series:"EZD系列", productCode:"EZD060AM", productName:"Herz Grain-Free U.S.A. Chicken Recipe (100g/Pk)", boxSize:"B", perCarton:100, perPallet:36, country:"TW"},
-
-  // 100克3包組
-  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD010AM-3", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD020AM-3", productName:"Herz Grain-Free Australian Lamb Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD040AM-3", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD050AM-3", productName:"Herz Grain-Free New Zealand Venison Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD060AM-3", productName:"Herz Grain-Free U.S.A. Chicken Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
-
-  // 1公斤
-  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD011AM", productName:"Herz Premium Canine Cuisine – Turkey with Duck Liver Recipe, 1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD021AM", productName:"Herz Premium Canine Cuisine – Lamb with Duck Liver Recipe, 1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD041AM", productName:"Herz Premium Canine Cuisine - Beef with Duck Liver Recipe, 1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD051AM", productName:"Herz Premium Canine Cuisine – Venison with Duck Liver Recipe, 1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD061AM", productName:"Herz Premium Canine Cuisine - Chicken with Duck Liver Recipe, 1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-
-  // 454克
-  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD010AM", productName:"Herz Premium Canine Cuisine – Turkey with Duck Liver Recipe, 454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD020AM", productName:"Herz Premium Canine Cuisine – Lamb with Duck Liver Recipe, 454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD040AM", productName:"Herz Premium Canine Cuisine-Beef with Duck Liver Recipe, 454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD050AM", productName:"Herz Premium Canine Cuisine – Venison with Duck Liver Recipe, 454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD060AM", productName:"Herz Premium Canine Cuisine - Chicken with Duck Liver Recipe, 454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
-
-  // 2磅裝 (J系列)
-  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD011J", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD021J", productName:"Herz Grain-Free Australian Lamb Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD041J", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD051J", productName:"Herz Grain-Free New Zealand Venison Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"2磅裝", series:"EZD系列", productCode:"EZD061J", productName:"Herz Grain-Free U.S.A. Chicken Recipe (908g/Pk)", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-
-  // 100克3包組 (J-3系列)
-  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD010J-3", productName:"Herz Grain-Free U.S.A. Turkey Breast Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD020J-3", productName:"Herz Grain-Free Australian Lamb Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD040J-3", productName:"Herz Grain-Free New Zealand Grass-Fed Beef Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD050J-3", productName:"Herz Grain-Free New Zealand Venison Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"100克3包組", series:"EZD系列", productCode:"EZD060J-3", productName:"Herz Grain-Free U.S.A. Chicken Recipe (100g/Pk)", boxSize:"B", perCarton:30, perPack:3, perPallet:36, country:"TW"},
-
-  // 1公斤 (J系列)
-  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD011J", productName:"Herz Premium Canine Cuisine – Turkey with Duck Liver Recipe, 1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD021J", productName:"Premium Canine Cuisine-Lamb with Duck Liver Recipe-1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD041J", productName:"Premium Canine Cuisine-Beef with Duck Liver Recipe-1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"1公斤", series:"EPD系列", productCode:"EPD061J", productName:"Premium Canine Cuisine-Chicken with Duck Liver Recipe-1kg", boxSize:"B", perCarton:18, perPallet:36, country:"TW"},
-
-  // 454克 (J系列)
-  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD010J", productName:"Premium Canine Cuisine – Turkey with Duck Liver Recipe-454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD020J", productName:"Premium Canine Cuisine-Lamb with Duck Liver Recipe-454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD040J", productName:"Premium Canine Cuisine-Beef with Duck Liver Recipe-454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
-  {brand:"Herz", spec:"454克", series:"EPD系列", productCode:"EPD060J", productName:"Premium Canine Cuisine-Chicken with Duck Liver Recipe-454g", boxSize:"B", perCarton:30, perPallet:36, country:"TW"},
+  {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA11AM", productName:"AFreschi-Classic Turkey Tendon Thin Stick (100g /pk)；AFK package (120 units /CTN)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA12AM", productName:"AFreschi-Classic Turkey Tendon Braided Stick(100g /pk)；AFK package (120 units /CTN)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA13AM", productName:"AFreschi-Classic Turkey Tendon Slice (100g /pk)；AFK package (100 units /CTN)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA14AM", productName:"AFreschi-Classic Turkey Tendon Flake(100g /pk)；AFK package (80 units /CTN)", boxSize:"A", perCarton:80, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA21AM", productName:"AFreschi-Soft Turkey Tendon & Pumpkin strip (100g /pk)；AFK package (120 units /CTN)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA22AM", productName:"AFreschi-Soft Turkey Tendon Strip (100g /pk)；AFK package (120 units /CTN)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA31AM", productName:"AFreschi-Wrapped Turkey Tendon with Chicken Stick (100g /pk)；AFK package (100 units /CTN)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA32AM", productName:"AFreschi-Wrapped Turkey Tendon with Brown Rice Stick(100g /pk)；AFK package (100 units /CTN)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA25AM", productName:"AFreschi-Classic Turkey Tendon Coil-L(85g /pk)；AFK package (70 units /CTN)", boxSize:"A", perCarton:70, perPack:null, perBox:null, perPallet:43, country:"VN"},
+  {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA135AM", productName:"AFreschi-Classic Turkey Tendon Coil-S(85g /pk)；AFK package (70 units /CTN)", boxSize:"A", perCarton:70, perPack:null, perBox:null, perPallet:44, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTS", productCode:"GTS01", productName:"Gootoe - Turkey Tendon Strip (85g x 100)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTR", productCode:"GTR01", productName:"Gootoe - Turkey Tendon Ring_S(72g x 100)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTB", productCode:"GTB01", productName:"Gootoe - Turkey Tendon Bone_S(72g x 100)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTP", productCode:"GTP01", productName:"Gootoe - Turkey Tendon Rope_S(72g x 100)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTZ", productCode:"GTZ01", productName:"Gootoe - Turkey Tendon Pretzel_S(72g x 100)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTA", productCode:"GTA01", productName:"Gootoe - Turkey Tendon Braid_S(90g x 120)", boxSize:"B", perCarton:120, perPack:null, perBox:null, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTC", productCode:"GTC01", productName:"Gootoe - Sliced Turkey Tendon (85g x 120)", boxSize:"B", perCarton:120, perPack:null, perBox:null, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTR", productCode:"GTR03", productName:"Gootoe - Turkey Tendon Ring_M(90g x 100)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTB", productCode:"GTB03", productName:"Gootoe - Turkey Tendon Bone_M(90g x 100)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTP", productCode:"GTP03", productName:"Gootoe - Turkey Tendon Rope_M(90g x 100)", boxSize:"B", perCarton:100, perPack:null, perBox:null, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTS", productCode:"GTS03", productName:"Gootoe - Turkey Tendon Stick_M(90g x 100)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTZ", productCode:"GTZ03", productName:"Gootoe - Turkey Tendon Pretzel_M(90g x 120)", boxSize:"B", perCarton:120, perPack:null, perBox:null, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTB", productCode:"GTB05", productName:"Gootoe - Turkey Tendon Bone_L(100g x 100)", boxSize:"B", perCarton:100, perPack:null, perBox:null, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTP", productCode:"GTP05", productName:"Gootoe - Turkey Tendon Rope_L(100g x 100)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTB", productCode:"GTB07", productName:"Gootoe - Turkey tendon lolipop 15g x 5pcs (75g x 100)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GSF", productCode:"GSF01", productName:"Soft Turkey Tendon Strip with Pumpkin (85g x 150)", boxSize:"A", perCarton:150, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GSF", productCode:"GSF02", productName:"Soft Turkey Tendon Strip (85g x 150)", boxSize:"A", perCarton:150, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GTSL", productCode:"GTSL01", productName:"Gootoe - Turkey Tendon Strip (454g x 30)", boxSize:"C", perCarton:30, perPack:null, perBox:null, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GTRL", productCode:"GTRL01", productName:"Gootoe - Turkey Tendon Ring_S (454g x 24)", boxSize:"C", perCarton:24, perPack:null, perBox:null, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GTPL", productCode:"GTPL01", productName:"Gootoe - Turkey Tendon Rope_S (454g x 30)", boxSize:"C", perCarton:30, perPack:null, perBox:null, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GTBL", productCode:"GTBL01", productName:"Gootoe - Turkey Tendon Bone_S (454g x 30)", boxSize:"C", perCarton:30, perPack:null, perBox:null, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GTAL", productCode:"GTAL01", productName:"Gootoe - Turkey Tendon Braid_S (454g x 38)", boxSize:"C", perCarton:38, perPack:null, perBox:null, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GTCL", productCode:"GTCL01", productName:"Gootoe - Turkey Tendon Sliced (454g x 30)", boxSize:"C", perCarton:30, perPack:null, perBox:null, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GTRL", productCode:"GTRL03", productName:"Gootoe - Turkey Tendon Ring_M (454g x 30)", boxSize:"C", perCarton:30, perPack:null, perBox:null, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GTPL", productCode:"GTPL03", productName:"Gootoe - Turkey Tendon Rope_M (454g x 30)", boxSize:"C", perCarton:30, perPack:null, perBox:null, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GTBL", productCode:"GTBL03", productName:"Gootoe - Turkey Tendon Bone_M (454g x 30)", boxSize:"C", perCarton:30, perPack:null, perBox:null, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GTZL", productCode:"GTZL03", productName:"Gootoe - Turkey Tendon Pretzel_M (454g x 30)", boxSize:"C", perCarton:30, perPack:null, perBox:null, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GTPL", productCode:"GTPL05", productName:"Gootoe - Turkey Tendon Rope_L (454g x 30)", boxSize:"C", perCarton:30, perPack:null, perBox:null, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GTBL", productCode:"GTBL05", productName:"Gootoe - Turkey Tendon Bone_L(454g x 30)", boxSize:"C", perCarton:30, perPack:null, perBox:null, perPallet:30, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GSFL", productCode:"GSFL01", productName:"Soft Turkey Tendon Strip with Pumpkin (454g x 38)", boxSize:"A", perCarton:38, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-量販包", series:"GSFL", productCode:"GSFL02", productName:"Soft Turkey Tendon Strip (454g x 38)", boxSize:"A", perCarton:38, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-普通包", series:"ATP", productCode:"ATS01AM", productName:"Natural Turkey Tendon Strip (100g)", boxSize:"A", perCarton:90, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-普通包", series:"ATZ", productCode:"ATB01AM", productName:"Afreschi srl - Natural Turkey Tendon Bone_S(72g)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-普通包", series:"ATA", productCode:"ATR01AM", productName:"Afreschi srl - Natural Turkey Tendon Ring_S(72g)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-普通包", series:"ATB", productCode:"ATP01AM", productName:"Afreschi srl - Natural Turkey Tendon Rope_S(72g)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-普通包", series:"ATR", productCode:"ATZ01AM", productName:"Afreschi srl - Natural Turkey Tendon Pretzel_S(72g)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-普通包", series:"ATP", productCode:"ATA01AM", productName:"Afreschi srl - Natural Turkey Tendon Braid(90g)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-普通包", series:"ATZ", productCode:"ATB03AM", productName:"Afreschi srl - Natural Turkey Tendon Bone_M(90g)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-普通包", series:"ATB", productCode:"ATR03AM", productName:"Afreschi srl - Natural Turkey Tendon Ring_M(90g)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-普通包", series:"ATP", productCode:"ATP03AM", productName:"Afreschi srl - Natural Turkey Tendon Rope_M(90g)", boxSize:"A", perCarton:90, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-普通包", series:"ATZ", productCode:"ATZ03AM", productName:"Afreschi srl - Natural Turkey Tendon Pretzel_M(90g)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-普通包", series:"ATB", productCode:"ATB05AM", productName:"Afreschi srl - Natural Turkey Tendon Bone_L(100g)", boxSize:"A", perCarton:90, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-普通包", series:"ATP", productCode:"ATP05AM", productName:"Afreschi srl- Natural Turkey Tendon Rope_L(100g)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-量販包", series:"ATAL", productCode:"ATAL01", productName:"Afreschi Natural Turkey Tendon Braid 8oz (GTA01:227g x 42)", boxSize:"A", perCarton:42, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"KTB", productCode:"KTB01AM", productName:"Natural Turkey Tendon Bone_S (40 units；8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:40, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"TRP", productCode:"TRP01AM", productName:"Natural Turkey Tendon Rope_S (40 units；8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:40, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"TTR", productCode:"TTR01AM", productName:"Natural Turkey Tendon Ring_S (40 units /box ; 8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:40, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"TPZ", productCode:"TPZ01AM", productName:"Natural Turkey Tendon Pretzel_S (40 units /box ; 8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:40, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"KTB", productCode:"KTB03AM", productName:"Natural Turkey Tendon Bone_M (20 units /box ; 8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:20, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"TRP", productCode:"TRP03AM", productName:"Natural Turkey Tendon Rope_M (20 units /box ; 8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:20, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"TTR", productCode:"TTR03AM", productName:"Natural Turkey Tendon Ring_M (20 units；8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:20, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"TPZ", productCode:"TPZ03AM", productName:"Natural Turkey Tendon Pretzel-M (20 units /box ; 8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:20, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"TRP", productCode:"TRP05AM", productName:"Natural Turkey Tendon Rope_L (10 units /box ; 8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:10, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"KTB", productCode:"KTB05AM", productName:"Natural Turkey Tendon Bone_L (10 units；8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:10, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"TTR", productCode:"TTR05AM", productName:"Natural Turkey Tendon Ring_L (10 units；8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:10, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"TPZ", productCode:"TPZ05AM", productName:"Natural Turkey Tendon Pretzel_L (10 units；8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:10, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"TTS", productCode:"TTS05AM", productName:"Natural Turkey Tendon Strip (10 units /box ; 8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:10, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-盒裝", series:"KTB", productCode:"KTB06AM", productName:"Natural Turkey Tendon Lollipop (40 units；8 boxes /CTN)", boxSize:"B", perCarton:8, perPack:null, perBox:40, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"KTB", productCode:"KTB01AM-4", productName:"Natural Turkey Tendon Bone_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"TTR", productCode:"TTR01AM-4", productName:"Natural Turkey Tendon Ring_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"TRP", productCode:"TRP01AM-4", productName:"Natural Turkey Tendon Rope_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"TPZ", productCode:"TPZ01AM-4", productName:"Natural Turkey Tendon Pretzel_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"KTB", productCode:"KTB03AM-2", productName:"Natural Turkey Tendon Bone_M (80 units /CTN)", boxSize:"A", perCarton:80, perPack:2, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"TRP", productCode:"TRP03AM-2", productName:"Natural Turkey Tendon Rope_M (90 units /CTN)", boxSize:"A", perCarton:90, perPack:2, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"TTR", productCode:"TTR03AM-2", productName:"Natural Turkey Tendon Ring_M (80 units /CTN)", boxSize:"A", perCarton:80, perPack:2, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"TPZ", productCode:"TPZ03AM-2", productName:"Natural Turkey Tendon Pretzel_M (90 units /CTN)", boxSize:"A", perCarton:90, perPack:2, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"KTB", productCode:"KTB05AM-1", productName:"Natural Turkey Tendon Bone_L (90 units /CTN)", boxSize:"A", perCarton:90, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"TRP", productCode:"TRP05AM-1", productName:"Natural Turkey Tendon Rope_L (90 units /CTN)", boxSize:"A", perCarton:90, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"TTR", productCode:"TTR05AM-1", productName:"Natural Turkey Tendon Ring_L (120 units /CTN)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"TPZ", productCode:"TPZ05AM-1", productName:"Natural Turkey Tendon Pretzel_L (120 units /CTN)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"TTS", productCode:"TTS05AM-1", productName:"Natural Turkey Tendon Strip (100 units /CTN)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-袋裝", series:"KTB", productCode:"KTB06AM-4", productName:"Natural Turkey Tendon Lollipop (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-家庭包", series:"KTBL", productCode:"KTBL01", productName:"Afreschi Natural Turkey Tendon Bone 8oz_S-15g (227g x 36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-家庭包", series:"TTRL", productCode:"TTRL01", productName:"Afreschi Natural Turkey Tendon Ring 8oz_S-12g (227g x 36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-家庭包", series:"TPZL", productCode:"TPZL01", productName:"Afreschi Natural Turkey Tendon Pretzel 8oz_S-12g (227g x 36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-家庭包", series:"TRPL", productCode:"TRPL01", productName:"Afreschi Natural Turkey Tendon Rope 8oz_S-12g (227g x 36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-家庭包", series:"KTBL", productCode:"KTBL03", productName:"Afreschi Natural Turkey Tendon Bone 10oz_M-36g (285g x 36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-家庭包", series:"TTRL", productCode:"TTRL03", productName:"Afreschi Natural Turkey Tendon Ring 10oz_M-36g (285g x 36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-家庭包", series:"TPZL", productCode:"TPZL03", productName:"Afreschi Natural Turkey Tendon Pretzel 10oz_M-36g (285g x 36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-家庭包", series:"TRPL", productCode:"TRPL03", productName:"Afreschi Natural Turkey Tendon Rope 10oz_M-36g (285g x 36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-家庭包", series:"TTRL", productCode:"TTRL05", productName:"Afreschi Natural Turkey Tendon Ring 10oz_L-72g (285g x 36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-家庭包", series:"TRPL", productCode:"TRPL05", productName:"Afreschi Natural Turkey Tendon Rope 10oz_L-72g (285g x 36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-家庭包", series:"TPZL", productCode:"TPZL05", productName:"Afreschi Natural Turkey Tendon Pretzel 10oz_L-72g (285g x 36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-家庭包", series:"KTBL", productCode:"KTBL05", productName:"Afreschi Natural Turkey Tendon Bone 10oz_L-72g (285g x 30)", boxSize:"A", perCarton:30, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-家庭包", series:"TTSL", productCode:"TTSL05", productName:"Afreschi Natural Turkey Tendon Strip 10oz (285g x 30)", boxSize:"A", perCarton:30, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-混合包", series:"AFML", productCode:"AFML01", productName:"AFreschi Turkey Tendon Variety Pack 8oz_Small (227gx36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-混合包", series:"AFML", productCode:"AFML03", productName:"AFreschi Turkey Tendon Variety Pack 10oz_Medium (285gx36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞筋-混合包", series:"AFML", productCode:"AFML05", productName:"AFreschi Turkey Tendon Variety Pack 10oz_Large (285gx36)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉-普通包", series:"ASF", productCode:"ASF01", productName:"A Freschi Srl – Natural Turkey Treats Soft Sticks (170g x 100)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉-普通包", series:"ABM", productCode:"ABM01", productName:"A Freschi Srl – Natural Turkey Treats Sticks_β-Carotene added (170g x 110)", boxSize:"A", perCarton:110, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉-普通包", series:"ATN", productCode:"ATN01", productName:"A Freschi Srl – Natural Turkey Treats Star Bites (170g x 80)", boxSize:"A", perCarton:80, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉-普通包", series:"ASA", productCode:"ASA01", productName:"A Freschi Srl – Natural Turkey Treats Mini Bars (170g x 80)", boxSize:"A", perCarton:80, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉-潔牙骨", series:"ADT", productCode:"ADT03", productName:"Natural Dental Treats-Real Turkey Meat (1kg x20 units /CTN)", boxSize:"A", perCarton:20, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉-普通包", series:"ATJ", productCode:"ATJ01", productName:"Afreschi - Natural Turkey Jerky 4oz (113gx110)", boxSize:"A", perCarton:110, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTT", productCode:"GTT01", productName:"Gootoe Turkey Tendon Twists 5oz_Small (142g*120)", boxSize:"B", perCarton:120, perPack:null, perBox:null, perPallet:36, country:"VN"},
+  {brand:"GooToE", spec:"火雞筋-普通包", series:"GTT", productCode:"GTT03", productName:"Gootoe Turkey Tendon Twists 5oz_Medium (142g*120)", boxSize:"B", perCarton:120, perPack:null, perBox:null, perPallet:36, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉-量販包", series:"ASFL", productCode:"ASFL01", productName:"A Freschi Srl – Natural Turkey Treats Soft Sticks (454g)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉-量販包", series:"ABML", productCode:"ABML01", productName:"A Freschi Srl – Natural Turkey Treats Sticks_β-Carotene added (454g)", boxSize:"A", perCarton:42, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉-量販包", series:"ATNL", productCode:"ATNL01", productName:"A Freschi Srl – Natural Turkey Treats Star Bites (454g)", boxSize:"A", perCarton:42, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉-量販包", series:"ASAL", productCode:"ASAL01", productName:"A Freschi Srl – Natural Turkey Treats Mini Bars (454g)", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"火雞肉-量販包", series:"ATJL", productCode:"ATJL01", productName:"A Freschi Srl – Natural Turkey Jerky (12oz-340g)", boxSize:"A", perCarton:42, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GCBL", productCode:"GCBL01", productName:"Gootoe - Chicken Fillet Jerky 454gx30", boxSize:"A", perCarton:30, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GCBL", productCode:"GCBL02", productName:"Gootoe - Chicken Jerky Breast 454gx36", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GCBL", productCode:"GCBL03", productName:"Gootoe - Chicken Chips 454gx28", boxSize:"A", perCarton:28, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GSCL", productCode:"GSCL01", productName:"Gootoe - Soft Chicken Breast Strips 454gx36", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GSCL", productCode:"GSCL02", productName:"Gootoe - Soft Chicken Sticks 454gx36", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GSCL", productCode:"GSCL03", productName:"Gootoe - Soft Chicken Dental Chews with Chlorophyll, 1.5lb (681gx28)", boxSize:"A", perCarton:28, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GSCL", productCode:"GSCL04", productName:"Gootoe - Soft Chicken Knots 454gx30", boxSize:"A", perCarton:30, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GSCL", productCode:"GSCL05", productName:"Gootoe - Soft Chicken Jerky Cuts 454gx36", boxSize:"A", perCarton:36, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GCTL", productCode:"GCTL01", productName:"Gootoe - Chicken Sticks 1.5lb-681gx28", boxSize:"A", perCarton:28, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GCTL", productCode:"GCTL02", productName:"Gootoe - Chicken Sticks With Chicken Liver 1.5lb-681gx28", boxSize:"A", perCarton:28, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GCTL", productCode:"GCTL03", productName:"Gootoe - Chicken Sticks With Sweet Potato 1.5lb-681gx28", boxSize:"A", perCarton:28, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GCTL", productCode:"GCTL04", productName:"Gootoe - Chicken Mini Sticks 1.5lb-681gx22", boxSize:"A", perCarton:22, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GCTL", productCode:"GCTL05", productName:"Gootoe - Chicken Roll 12oz-340gx24", boxSize:"A", perCarton:24, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"雞肉零食", series:"GCTL", productCode:"GCTL06", productName:"Gootoe - Chicken Dipped Sticks 1.5lb-681gx28", boxSize:"A", perCarton:28, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"牛肉零食-普通包", series:"GBS", productCode:"GBS01", productName:"Gootoe - Buffalo Bites Stick _S (70units /CTN)", boxSize:"A", perCarton:70, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"牛肉零食-普通包", series:"GBS", productCode:"GBS03", productName:"Gootoe - Buffalo Bites Stick _L (70 units /CTN)", boxSize:"A", perCarton:70, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"牛肉零食-普通包", series:"GBB", productCode:"GBB01", productName:"Gootoe - Buffalo Bites Bone Shaped (60 units /CTN)", boxSize:"A", perCarton:60, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"牛肉零食-量販包", series:"GBS", productCode:"GBSL01", productName:"Gootoe - Buffalo Bites Stick (small) (S) 1.5lb-681g", boxSize:"A", perCarton:28, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"牛肉零食-量販包", series:"GBS", productCode:"GBSL03", productName:"Gootoe - Buffalo Bites Stick (Large) (L) 1.5lb-681g", boxSize:"A", perCarton:28, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"GooToE", spec:"牛肉零食-量販包", series:"GBB", productCode:"GBBL01", productName:"Gootoe - Buffalo Bites Bone Shaped 1.5lb-681g", boxSize:"A", perCarton:28, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"乾糧", series:"AWD", productCode:"AWD010", productName:"AFreschi Air-Dried Dog Food - USA Turkey Recipe(W-shaped)-454g", boxSize:"A", perCarton:38, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"乾糧", series:"AWD", productCode:"AWD011", productName:"AFreschi Air-Dried Dog Food - USA Turkey Recipe(W-shaped)-1kg", boxSize:"A", perCarton:20, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"乾糧", series:"AWD", productCode:"AWD070", productName:"AFreschi Air - Dried Dog Food - Turkey & Salmon Recipe(W-shaped)-454g", boxSize:"A", perCarton:38, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"A Freschi srl", spec:"乾糧", series:"AWD", productCode:"AWD071", productName:"AFreschi Air - Dried Dog Food - Turkey & Salmon Recipe(W-shaped)-1kg", boxSize:"A", perCarton:20, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"Vitaday", spec:"火雞筋-袋裝", series:"VTS", productCode:"VTS01-1", productName:"Turkey Tendon Strip (100 units /CTN)", boxSize:"A", perCarton:100, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"Vitaday", spec:"火雞筋-袋裝", series:"VTB", productCode:"VTB01-4", productName:"Turkey Tendon Bone_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perBox:null, perPallet:42, country:"VN"},
+  {brand:"Vitaday", spec:"火雞筋-袋裝", series:"VTR", productCode:"VTR01-4", productName:"Turkey Tendon Ring_S (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perBox:null, perPallet:42, country:"VN"},
+  {brand:"Vitaday", spec:"火雞筋-袋裝", series:"VTB", productCode:"VTB05-1", productName:"Turkey Tendon Bone_L (120 units /CTN)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"Vitaday", spec:"火雞筋-袋裝", series:"VTB", productCode:"VTB06-4", productName:"Turkey Tendon Lollipop (90 units /CTN)", boxSize:"A", perCarton:90, perPack:4, perBox:null, perPallet:42, country:"VN"},
+  {brand:"Herz", spec:"半筋半肉-普通包", series:"HDR", productCode:"HDR01AM", productName:"Herz_ Turkey Tendon_Duo-Protein_Ring (S) (85g)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"Herz", spec:"半筋半肉-普通包", series:"HDP", productCode:"HDP01AM", productName:"Herz_ Turkey Tendon_Duo-Protein_Rope(S)(85g)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"},
+  {brand:"Herz", spec:"半筋半肉-普通包", series:"HDS", productCode:"HDS03AM", productName:"Herz_ Turkey Tendon_Duo-Protein_Strip(85g)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"}
 ];
-
 
     const boxSizePalletMap = {
         A: 42,

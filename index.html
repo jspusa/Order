@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>訂單產生器</title>
     <style>
-        /* =================== [CSS樣式略，同前] =================== */
         body {
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
@@ -271,6 +270,7 @@
             z-index: 2000;
         }
     </style>
+    <!-- 匯出 Excel 需要 xlsx.min.js 或 xlsx.full.min.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 </head>
 
@@ -340,7 +340,6 @@
             A 規格棧板數: <span id="countA">0</span> |
             B 規格棧板數: <span id="countB">0</span> |
             C 規格棧板數: <span id="countC">0</span>
-            <!-- 若需要 D: <span id="countD">0</span> -->
         </div>
     </div>
 
@@ -356,10 +355,10 @@
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal()">&times;</span>
         <h2>紙箱規格尺寸</h2>
-        <p>A：50cm × 40cm × 30cm</p>
-        <p>B：58.5cm × 34.5cm × 35cm</p>
-        <p>C：50cm × 40cm × 40cm</p>
-        <p>D：48cm × 38cm × 28cm <strong>(中三箱)</strong></p>
+        <p>A：50cm × 40cm × 30cm（20*16*12)</p>
+        <p>B：58.5cm × 34.5cm × 35cm (23*14*14)</p>
+        <p>C：50cm × 40cm × 40cm (20*16*16)</p>
+        <p>D：48cm × 38cm × 28cm <strong>(中三箱)</strong> (19*15*11)</p>
     </div>
 </div>
 
@@ -440,9 +439,8 @@
 
 <script>
     // ============================================
-    // 新版本：allProducts + country欄位
+    // 新版本：allProducts + country欄位 (示範1筆)
     // ============================================
-    // 僅供示範 (目前先空陣列)
 const allProducts = [
   {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA11AM", productName:"AFreschi-Classic Turkey Tendon Thin Stick (100g /pk)；AFK package (120 units /CTN)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"},
   {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA12AM", productName:"AFreschi-Classic Turkey Tendon Braided Stick(100g /pk)；AFK package (120 units /CTN)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"},
@@ -604,6 +602,7 @@ const allProducts = [
   {brand:"Herz", spec:"乾糧", series:"EPD", productCode:"EPD060J", productName:"Premium Canine Cuisine–Chicken with Duck Liver Ricipe-454g", boxSize:"D", perCarton:30, perPack:null, perBox:null, perPallet:36, country:"TW"}
 ];
 
+    // 紙箱規格對應棧板 (範例)
     const boxSizePalletMap = {
         A: 42,
         B: 36,
@@ -614,178 +613,184 @@ const allProducts = [
     let currentCountry = 'VN';  // radio 預設選 VN
 
     function getFilteredProducts(){
-        // 若選 Others, 就挑出 country ≠ 'VN' & ≠ 'TW'
-        if(currentCountry==='Others') return allProducts.filter(p=>p.country!=='VN' && p.country!=='TW');
-        // 否則只顯示 country === currentCountry
-        return allProducts.filter(p=>p.country===currentCountry);
+        // 若選 Others => 篩出 country 不是 VN/TW
+        if(currentCountry === 'Others'){
+            return allProducts.filter(p => p.country !== 'VN' && p.country !== 'TW');
+        }
+        // 否則只顯示該 country
+        return allProducts.filter(p => p.country === currentCountry);
     }
 
     // ============================================
     // 頁面初始化
     // ============================================
-    let selectedBrand='';
-    let selectedSpec='';
-    let selectedSeries='';
+    let selectedBrand = '';
+    let selectedSpec = '';
+    let selectedSeries = '';
 
-    window.addEventListener('DOMContentLoaded',()=>{
-        // 國家切換
-        document.querySelectorAll('[name="countrySelect"]').forEach(radio=>{
-            radio.addEventListener('change', e=>{
-                currentCountry=e.target.value;
+    window.addEventListener('DOMContentLoaded', () => {
+        // 監聽國家切換
+        document.querySelectorAll('[name="countrySelect"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                currentCountry = e.target.value;
                 reloadData();
             });
         });
 
         reloadData();
 
-        // 新品產生器
+        // 新品產生器初始化
         initNewItemModal();
         packagingTypeChanged();
         boxSizeChanged();
     });
 
     function reloadData(){
-        selectedBrand='';
-        selectedSpec='';
-        selectedSeries='';
-        document.getElementById('searchInput').value='';
-        document.getElementById('searchResults').innerHTML='';
-        document.getElementById('searchResults').style.display='none';
+        selectedBrand = '';
+        selectedSpec = '';
+        selectedSeries = '';
+        document.getElementById('searchInput').value = '';
+        document.getElementById('searchResults').innerHTML = '';
+        document.getElementById('searchResults').style.display = 'none';
 
         initBrandButtons();
-        document.getElementById('seriesSelect').innerHTML='<option value="">請先選擇規格</option>';
-        document.getElementById('productButtons').innerHTML='';
+        document.getElementById('seriesSelect').innerHTML = '<option value="">請先選擇規格</option>';
+        document.getElementById('productButtons').innerHTML = '';
         clearTable();
         updateTotals();
     }
 
     function clearTable(){
-        document.querySelector('#productTable tbody').innerHTML='';
+        document.querySelector('#productTable tbody').innerHTML = '';
     }
 
     // ============================================
     // 品牌按鈕
     // ============================================
     function initBrandButtons(){
-        const brandDiv=document.getElementById('brandButtons');
-        brandDiv.innerHTML='<label>選擇品牌：</label>';
+        const brandDiv = document.getElementById('brandButtons');
+        brandDiv.innerHTML = '<label>選擇品牌：</label>';
         const filtered = getFilteredProducts();
-        const brandSet=[...new Set(filtered.map(p=>p.brand))];
-        brandSet.forEach(b=>{
-            const btn=document.createElement('button');
-            btn.className='brand-button';
-            btn.textContent=b;
-            btn.onclick=()=>selectBrand(b);
+        const brandSet = [...new Set(filtered.map(p => p.brand))];
+        brandSet.forEach(b => {
+            const btn = document.createElement('button');
+            btn.className = 'brand-button';
+            btn.textContent = b;
+            btn.onclick = () => selectBrand(b);
             brandDiv.appendChild(btn);
         });
     }
 
     function selectBrand(brand){
-        selectedBrand=brand;
-        selectedSpec='';
+        selectedBrand = brand;
+        selectedSpec = '';
         toggleActiveButton('.brand-button', brand);
         updateSpecButtons();
         resetSeriesAndProducts();
     }
 
     function toggleActiveButton(selector, text){
-        const btns=document.querySelectorAll(selector);
-        btns.forEach(b=>{
-            b.classList.toggle('active',b.textContent===text);
+        const btns = document.querySelectorAll(selector);
+        btns.forEach(b => {
+            b.classList.toggle('active', b.textContent === text);
         });
     }
 
     function updateSpecButtons(){
-        const specDiv=document.getElementById('specButtons');
-        specDiv.innerHTML='';
+        const specDiv = document.getElementById('specButtons');
+        specDiv.innerHTML = '';
         if(selectedBrand){
-            const fProds=getFilteredProducts().filter(p=>p.brand===selectedBrand);
-            const specs=[...new Set(fProds.map(p=>p.spec))];
-            if(specs.length>0){
-                specDiv.style.display='block';
-                specDiv.innerHTML='<label>選擇規格：</label>';
-                specs.forEach(sp=>{
-                    const btn=document.createElement('button');
-                    btn.textContent=sp;
-                    btn.className='spec-button';
-                    btn.onclick=()=>selectSpec(sp);
+            const fProds = getFilteredProducts().filter(p => p.brand === selectedBrand);
+            const specs = [...new Set(fProds.map(p => p.spec))];
+            if(specs.length > 0){
+                specDiv.style.display = 'block';
+                specDiv.innerHTML = '<label>選擇規格：</label>';
+                specs.forEach(sp => {
+                    const btn = document.createElement('button');
+                    btn.textContent = sp;
+                    btn.className = 'spec-button';
+                    btn.onclick = () => selectSpec(sp);
                     specDiv.appendChild(btn);
                 });
-            }else{
-                specDiv.style.display='none';
+            } else {
+                specDiv.style.display = 'none';
             }
-        }else{
-            specDiv.style.display='none';
+        } else {
+            specDiv.style.display = 'none';
         }
     }
 
     function selectSpec(spec){
-        selectedSpec=spec;
+        selectedSpec = spec;
         toggleActiveButton('.spec-button', spec);
         updateSeriesOptions();
     }
 
     function updateSeriesOptions(){
-        const sel=document.getElementById('seriesSelect');
-        sel.innerHTML='<option value="">請選擇系列</option>';
+        const sel = document.getElementById('seriesSelect');
+        sel.innerHTML = '<option value="">請選擇系列</option>';
         if(selectedBrand && selectedSpec){
-            const filtered=getFilteredProducts().filter(p=>p.brand===selectedBrand && p.spec===selectedSpec);
-            const seriesList=[...new Set(filtered.map(p=>p.series))];
-            seriesList.forEach(s=>{
-                sel.innerHTML+=`<option value="${s}">${s}</option>`;
+            const filtered = getFilteredProducts().filter(p => p.brand === selectedBrand && p.spec === selectedSpec);
+            const seriesList = [...new Set(filtered.map(p => p.series))];
+            seriesList.forEach(s => {
+                sel.innerHTML += `<option value="${s}">${s}</option>`;
             });
-        }else{
-            sel.innerHTML='<option value="">請先選擇規格</option>';
+        } else {
+            sel.innerHTML = '<option value="">請先選擇規格</option>';
         }
-        document.getElementById('productButtons').innerHTML='';
+        document.getElementById('productButtons').innerHTML = '';
     }
 
     function resetSeriesAndProducts(){
-        document.getElementById('seriesSelect').innerHTML='<option value="">請先選擇規格</option>';
-        document.getElementById('productButtons').innerHTML='';
+        document.getElementById('seriesSelect').innerHTML = '<option value="">請先選擇規格</option>';
+        document.getElementById('productButtons').innerHTML = '';
     }
 
     function updateProductOptions(){
-        selectedSeries=document.getElementById('seriesSelect').value;
-        const btnDiv=document.getElementById('productButtons');
-        btnDiv.innerHTML='';
+        selectedSeries = document.getElementById('seriesSelect').value;
+        const btnDiv = document.getElementById('productButtons');
+        btnDiv.innerHTML = '';
         if(selectedBrand && selectedSpec && selectedSeries){
-            const prods=getFilteredProducts().filter(p=>p.brand===selectedBrand && p.spec===selectedSpec && p.series===selectedSeries);
-            prods.forEach(prod=>{
-                const btn=document.createElement('button');
-                btn.className='product-button';
-                btn.textContent=prod.productCode;
-                btn.onclick=()=>addProduct(prod);
+            const prods = getFilteredProducts().filter(p =>
+                p.brand === selectedBrand &&
+                p.spec === selectedSpec &&
+                p.series === selectedSeries
+            );
+            prods.forEach(prod => {
+                const btn = document.createElement('button');
+                btn.className = 'product-button';
+                btn.textContent = prod.productCode;
+                btn.onclick = () => addProduct(prod);
                 btnDiv.appendChild(btn);
             });
-        }else{
-            btnDiv.innerHTML='請先選擇系列';
+        } else {
+            btnDiv.innerHTML = '請先選擇系列';
         }
     }
 
     // ============================================
-    // 新增產品
+    // 新增產品到表格
     // ============================================
     function addProduct(prod){
-        const tbody=document.querySelector('#productTable tbody');
-        if(Array.from(tbody.querySelectorAll('tr')).some(r=>r.cells[1].textContent===prod.productCode)){
+        const tbody = document.querySelector('#productTable tbody');
+        // 避免重複新增
+        if(Array.from(tbody.querySelectorAll('tr')).some(r => r.cells[1].textContent === prod.productCode)){
             alert('該產品已添加');
             return;
         }
-        const rowIndex=tbody.children.length+1;
-
+        const rowIndex = tbody.children.length + 1;
         const {hasPack, hasBox} = checkPackageType(prod);
 
-        let packOrBoxInput='-';
+        let packOrBoxInput = '-';
         if(hasPack){
-            packOrBoxInput=`<input type="number" class="edit-pack-input" placeholder="袋數" oninput="updateFields(this,'${prod.productCode}')">`;
-        }else if(hasBox){
-            packOrBoxInput=`<input type="number" class="edit-box-input" placeholder="盒數" oninput="updateFields(this,'${prod.productCode}')">`;
+            packOrBoxInput = `<input type="number" class="edit-pack-input" placeholder="袋數" oninput="updateFields(this,'${prod.productCode}')">`;
+        } else if(hasBox){
+            packOrBoxInput = `<input type="number" class="edit-box-input" placeholder="盒數" oninput="updateFields(this,'${prod.productCode}')">`;
         }
 
-        const targetPlaceholder= hasPack?'目標袋數':(hasBox?'目標盒數':'目標包數');
+        const targetPlaceholder = hasPack ? '目標袋數' : (hasBox ? '目標盒數' : '目標包數');
 
-        const rowHTML=`
+        const rowHTML = `
         <tr data-product="${prod.productCode}">
             <td>${rowIndex}</td>
             <td>${prod.productCode}</td>
@@ -804,104 +809,107 @@ const allProducts = [
                 <button type="button" class="remove-button" onclick="removeRow(this)">刪除</button>
             </td>
         </tr>`;
+
         tbody.insertAdjacentHTML('beforeend', rowHTML);
         updateRowNumbers();
     }
 
     function checkPackageType(prod){
-        // is bag => if (prod.perPack)
-        // is box => if (prod.perBox && no perPack)
-        const hasPack = (typeof prod.perPack!=='undefined' && prod.perPack>0);
-        const hasBox = (typeof prod.perBox!=='undefined' && prod.perBox>0 && !hasPack);
+        const hasPack = (typeof prod.perPack !== 'undefined' && prod.perPack > 0);
+        const hasBox = (typeof prod.perBox !== 'undefined' && prod.perBox > 0 && !hasPack);
         return {hasPack, hasBox};
     }
 
     function getProductSpecByCode(code){
-        return allProducts.find(p=>p.productCode===code)||null;
+        return allProducts.find(p => p.productCode === code) || null;
     }
 
     // ============================================
-    // 欄位更新
+    // 欄位變動、重新計算
     // ============================================
-    function updateFields(input,productCode){
-        const row=input.closest('tr');
-        const prod=getProductSpecByCode(productCode);
-        if(!prod)return;
-        let {quantity, units, cartons, pallets}=getCurrentValues(row);
+    function updateFields(input, productCode){
+        const row = input.closest('tr');
+        const prod = getProductSpecByCode(productCode);
+        if(!prod) return;
 
+        let {quantity, units, cartons, pallets} = getCurrentValues(row);
         const {perPack=0, perBox=0, perCarton=1, perPallet=1} = prod;
         const changedField = getChangedField(input);
 
-        ({quantity, units, cartons, pallets}=recalcValues(changedField,{
-            quantity,units,cartons,pallets,
-            perPack,perBox,perCarton,perPallet
+        ({quantity, units, cartons, pallets} = recalcValues(changedField, {
+            quantity, units, cartons, pallets,
+            perPack, perBox, perCarton, perPallet
         }));
 
-        // update UI
-        if(changedField!=='quantity' && row.querySelector('.edit-quantity-input')){
-            row.querySelector('.edit-quantity-input').value=quantity.toFixed(0);
+        // 更新 UI
+        if(changedField !== 'quantity' && row.querySelector('.edit-quantity-input')){
+            row.querySelector('.edit-quantity-input').value = quantity.toFixed(0);
         }
-        const packInput=row.querySelector('.edit-pack-input')||row.querySelector('.edit-box-input');
-        if(packInput && changedField!=='units'){
-            packInput.value=units.toFixed(2);
+        const packInput = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
+        if(packInput && changedField !== 'units'){
+            packInput.value = units.toFixed(2);
         }
-        if(changedField!=='cartons' && row.querySelector('.edit-cartons-input')){
-            row.querySelector('.edit-cartons-input').value=cartons.toFixed(2);
+        if(changedField !== 'cartons' && row.querySelector('.edit-cartons-input')){
+            row.querySelector('.edit-cartons-input').value = cartons.toFixed(2);
         }
-        if(changedField!=='pallets' && row.querySelector('.edit-pallets-input')){
-            row.querySelector('.edit-pallets-input').value=pallets.toFixed(2);
+        if(changedField !== 'pallets' && row.querySelector('.edit-pallets-input')){
+            row.querySelector('.edit-pallets-input').value = pallets.toFixed(2);
         }
-        const target=row.querySelector('.target-input');
+
+        const target = row.querySelector('.target-input');
         if(target) checkTarget(target);
+
         updateTotals();
     }
 
     function getChangedField(input){
-        if(input.classList.contains('edit-quantity-input'))return 'quantity';
-        if(input.classList.contains('edit-pack-input')||input.classList.contains('edit-box-input'))return 'units';
-        if(input.classList.contains('edit-cartons-input'))return 'cartons';
-        if(input.classList.contains('edit-pallets-input'))return 'pallets';
+        if(input.classList.contains('edit-quantity-input')) return 'quantity';
+        if(input.classList.contains('edit-pack-input') || input.classList.contains('edit-box-input')) return 'units';
+        if(input.classList.contains('edit-cartons-input')) return 'cartons';
+        if(input.classList.contains('edit-pallets-input')) return 'pallets';
         return '';
     }
 
     function getCurrentValues(row){
-        const quantity=parseFloat(row.querySelector('.edit-quantity-input')?.value)||0;
-        let units=0;
-        const packOrBox=row.querySelector('.edit-pack-input')||row.querySelector('.edit-box-input');
-        if(packOrBox) units=parseFloat(packOrBox.value)||0;
-        const cartons=parseFloat(row.querySelector('.edit-cartons-input')?.value)||0;
-        const pallets=parseFloat(row.querySelector('.edit-pallets-input')?.value)||0;
-        return {quantity,units,cartons,pallets};
+        const quantity = parseFloat(row.querySelector('.edit-quantity-input')?.value) || 0;
+        let units = 0;
+        const packOrBox = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
+        if(packOrBox){
+            units = parseFloat(packOrBox.value) || 0;
+        }
+        const cartons = parseFloat(row.querySelector('.edit-cartons-input')?.value) || 0;
+        const pallets = parseFloat(row.querySelector('.edit-pallets-input')?.value) || 0;
+        return {quantity, units, cartons, pallets};
     }
 
-    function recalcValues(changedField,vals){
-        let {quantity,units,cartons,pallets,perPack,perBox,perCarton,perPallet}=vals;
-        const isBag=(perPack>0);
-        const isBox=(perBox>0 && !isBag);
-        const isSingle=(!isBag && !isBox);
+    function recalcValues(changedField, vals){
+        let {quantity, units, cartons, pallets, perPack, perBox, perCarton, perPallet} = vals;
+        const isBag = (perPack > 0);
+        const isBox = (perBox > 0 && !isBag);
+        const isSingle = (!isBag && !isBox);
 
         // 袋裝 => perPack+perCarton
         if(isBag){
             switch(changedField){
                 case 'quantity':
-                    units=quantity/perPack;
-                    cartons=units/perCarton;
-                    pallets=cartons/perPallet;
+                    units = quantity / perPack;
+                    cartons = units / perCarton;
+                    pallets = cartons / perPallet;
                     break;
                 case 'units':
-                    quantity=units*perPack;
-                    cartons=units/perCarton;
-                    pallets=cartons/perPallet;
+                    quantity = units * perPack;
+                    cartons = units / perCarton;
+                    pallets = cartons / perPallet;
                     break;
                 case 'cartons':
-                    units=cartons*perCarton;
-                    quantity=units*perPack;
-                    pallets=cartons/perPallet;
+                    units = cartons * perCarton;
+                    quantity = units * perPack;
+                    pallets = cartons / perPallet;
                     break;
                 case 'pallets':
-                    cartons=pallets*perPallet;
-                    units=cartons*perCarton;
-                    quantity=units*perPack;
+                    cartons = pallets * perPallet;
+                    units = cartons * perCarton;
+                    quantity = units * perPack;
                     break;
             }
         }
@@ -909,24 +917,24 @@ const allProducts = [
         else if(isBox){
             switch(changedField){
                 case 'quantity':
-                    units=quantity/perBox;
-                    cartons=units/perCarton;
-                    pallets=cartons/perPallet;
+                    units = quantity / perBox;
+                    cartons = units / perCarton;
+                    pallets = cartons / perPallet;
                     break;
                 case 'units':
-                    quantity=units*perBox;
-                    cartons=units/perCarton;
-                    pallets=cartons/perPallet;
+                    quantity = units * perBox;
+                    cartons = units / perCarton;
+                    pallets = cartons / perPallet;
                     break;
                 case 'cartons':
-                    units=cartons*perCarton;
-                    quantity=units*perBox;
-                    pallets=cartons/perPallet;
+                    units = cartons * perCarton;
+                    quantity = units * perBox;
+                    pallets = cartons / perPallet;
                     break;
                 case 'pallets':
-                    cartons=pallets*perPallet;
-                    units=cartons*perCarton;
-                    quantity=units*perBox;
+                    cartons = pallets * perPallet;
+                    units = cartons * perCarton;
+                    quantity = units * perBox;
                     break;
             }
         }
@@ -934,38 +942,38 @@ const allProducts = [
         else if(isSingle){
             switch(changedField){
                 case 'quantity':
-                    cartons=quantity/perCarton;
-                    pallets=cartons/perPallet;
+                    cartons = quantity / perCarton;
+                    pallets = cartons / perPallet;
                     break;
                 case 'cartons':
-                    quantity=cartons*perCarton;
-                    pallets=cartons/perPallet;
+                    quantity = cartons * perCarton;
+                    pallets = cartons / perPallet;
                     break;
                 case 'pallets':
-                    cartons=pallets*perPallet;
-                    quantity=cartons*perCarton;
+                    cartons = pallets * perPallet;
+                    quantity = cartons * perCarton;
                     break;
             }
         }
-        return {quantity,units,cartons,pallets};
+        return {quantity, units, cartons, pallets};
     }
 
     function checkTarget(targetInput){
-        const row=targetInput.closest('tr');
-        let currentVal=0;
-        const packOrBox=row.querySelector('.edit-pack-input')||row.querySelector('.edit-box-input');
+        const row = targetInput.closest('tr');
+        let currentVal = 0;
+        const packOrBox = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
         if(packOrBox){
-            currentVal=parseFloat(packOrBox.value)||0;
-        }else{
-            currentVal=parseFloat(row.querySelector('.edit-quantity-input').value)||0;
+            currentVal = parseFloat(packOrBox.value) || 0;
+        } else {
+            currentVal = parseFloat(row.querySelector('.edit-quantity-input').value) || 0;
         }
-        const tVal=parseFloat(targetInput.value)||0;
-        if(tVal>0 && currentVal>=tVal){
-            targetInput.style.backgroundColor='#28a745';
-            targetInput.style.color='#fff';
-        }else{
-            targetInput.style.backgroundColor='#dc3545';
-            targetInput.style.color='#fff';
+        const tVal = parseFloat(targetInput.value) || 0;
+        if(tVal > 0 && currentVal >= tVal){
+            targetInput.style.backgroundColor = '#28a745';
+            targetInput.style.color = '#fff';
+        } else {
+            targetInput.style.backgroundColor = '#dc3545';
+            targetInput.style.color = '#fff';
         }
     }
 
@@ -973,11 +981,11 @@ const allProducts = [
     // 鎖定/刪除/上下移
     // ============================================
     function toggleLock(btn){
-        const row=btn.closest('tr');
-        const isLocked=row.classList.contains('locked');
-        row.querySelectorAll('input').forEach(inp=>inp.disabled=!isLocked);
-        row.classList.toggle('locked',!isLocked);
-        btn.textContent=isLocked?'鎖定':'解鎖';
+        const row = btn.closest('tr');
+        const isLocked = row.classList.contains('locked');
+        row.querySelectorAll('input').forEach(inp => inp.disabled = !isLocked);
+        row.classList.toggle('locked', !isLocked);
+        btn.textContent = isLocked ? '鎖定' : '解鎖';
     }
 
     function removeRow(btn){
@@ -986,22 +994,22 @@ const allProducts = [
         updateTotals();
     }
     function moveUp(btn){
-        const tr=btn.closest('tr');
-        const prev=tr.previousElementSibling;
-        if(prev) tr.parentNode.insertBefore(tr,prev);
+        const tr = btn.closest('tr');
+        const prev = tr.previousElementSibling;
+        if(prev) tr.parentNode.insertBefore(tr, prev);
         updateRowNumbers();
     }
     function moveDown(btn){
-        const tr=btn.closest('tr');
-        const next=tr.nextElementSibling;
-        if(next) tr.parentNode.insertBefore(next,tr);
+        const tr = btn.closest('tr');
+        const next = tr.nextElementSibling;
+        if(next) tr.parentNode.insertBefore(next, tr);
         updateRowNumbers();
     }
 
     function updateRowNumbers(){
-        const rows=document.querySelectorAll('#productTable tbody tr');
-        rows.forEach((r,i)=>{
-            r.cells[0].textContent=i+1;
+        const rows = document.querySelectorAll('#productTable tbody tr');
+        rows.forEach((r, i) => {
+            r.cells[0].textContent = i + 1;
         });
     }
 
@@ -1009,156 +1017,218 @@ const allProducts = [
     // 計算總計
     // ============================================
     function updateTotals(){
-        let totalQuantity=0, totalCartons=0, totalPallets=0;
-        const palletCounts={A:0,B:0,C:0,D:0};
+        let totalQuantity = 0, totalCartons = 0, totalPallets = 0;
+        const palletCounts = { A:0, B:0, C:0, D:0 };
 
-        document.querySelectorAll('.edit-quantity-input').forEach(i=>{
-            totalQuantity += parseFloat(i.value)||0;
+        document.querySelectorAll('.edit-quantity-input').forEach(i => {
+            totalQuantity += parseFloat(i.value) || 0;
         });
-        document.querySelectorAll('.edit-cartons-input').forEach(i=>{
-            totalCartons += parseFloat(i.value)||0;
+        document.querySelectorAll('.edit-cartons-input').forEach(i => {
+            totalCartons += parseFloat(i.value) || 0;
         });
 
-        const rows=document.querySelectorAll('#productTable tbody tr');
-        rows.forEach(row=>{
-            const pVal=parseFloat(row.querySelector('.edit-pallets-input').value)||0;
-            const bSize=row.cells[7].textContent.trim();
+        const rows = document.querySelectorAll('#productTable tbody tr');
+        rows.forEach(row => {
+            const pVal = parseFloat(row.querySelector('.edit-pallets-input').value) || 0;
+            const bSize = row.cells[7].textContent.trim();
             if(palletCounts.hasOwnProperty(bSize)){
-                palletCounts[bSize]+=pVal;
+                palletCounts[bSize] += pVal;
             }
         });
 
-        totalPallets=palletCounts.A+palletCounts.B+palletCounts.C+palletCounts.D;
+        totalPallets = palletCounts.A + palletCounts.B + palletCounts.C + palletCounts.D;
 
-        document.getElementById('totalQuantity').textContent=totalQuantity.toFixed(0);
-        document.getElementById('totalCartons').textContent=totalCartons.toFixed(2);
-        document.getElementById('totalPallets').textContent=totalPallets.toFixed(2);
+        document.getElementById('totalQuantity').textContent = totalQuantity.toFixed(0);
+        document.getElementById('totalCartons').textContent = totalCartons.toFixed(2);
+        document.getElementById('totalPallets').textContent = totalPallets.toFixed(2);
 
-        document.getElementById('countA').textContent=palletCounts.A.toFixed(2);
-        document.getElementById('countB').textContent=palletCounts.B.toFixed(2);
-        document.getElementById('countC').textContent=palletCounts.C.toFixed(2);
+        document.getElementById('countA').textContent = palletCounts.A.toFixed(2);
+        document.getElementById('countB').textContent = palletCounts.B.toFixed(2);
+        document.getElementById('countC').textContent = palletCounts.C.toFixed(2);
 
         updateContainerInfo(totalPallets);
     }
 
     // ============================================
-    // 貨櫃資訊
+    // 貨櫃資訊 (示例)
     // ============================================
     function updateContainerInfo(totalPallets){
-        const infoDiv=document.getElementById('containerInfo');
-        infoDiv.innerHTML='';
-        let remaining=totalPallets;
-        let containerCount=1;
+        const infoDiv = document.getElementById('containerInfo');
+        infoDiv.innerHTML = '';
+        let remaining = totalPallets;
+        let containerCount = 1;
 
-        while(remaining>0){
-            let type,cap;
-            if(remaining<=10){type='20 尺貨櫃'; cap=10;}
-            else{type='40 尺貨櫃'; cap=20;}
-            let use=Math.min(remaining,cap);
-            let fillRate=(use/cap)*100;
+        while(remaining > 0){
+            let type, cap;
+            if(remaining <= 10){
+                type = '20 尺貨櫃';
+                cap = 10;
+            } else {
+                type = '40 尺貨櫃';
+                cap = 20;
+            }
+            let use = Math.min(remaining, cap);
+            let fillRate = (use/cap)*100;
 
-            let cDiv=document.createElement('div');
-            cDiv.innerHTML=`<strong>貨櫃 ${containerCount}：${type}（${fillRate.toFixed(0)}%）</strong>`;
+            let cDiv = document.createElement('div');
+            cDiv.innerHTML = `<strong>貨櫃 ${containerCount}：${type}（${fillRate.toFixed(0)}%）</strong>`;
 
-            let pc=document.createElement('div');
-            pc.className='progress-container';
-            let pb=document.createElement('div');
-            pb.className='progress-bar';
-            pb.style.width=fillRate+'%';
-            pb.textContent=`${use} / ${cap} 棧板`;
+            let pc = document.createElement('div');
+            pc.className = 'progress-container';
+            let pb = document.createElement('div');
+            pb.className = 'progress-bar';
+            pb.style.width = fillRate + '%';
+            pb.textContent = `${use} / ${cap} 棧板`;
 
             pc.appendChild(pb);
             cDiv.appendChild(pc);
             infoDiv.appendChild(cDiv);
 
-            remaining-=use;
+            remaining -= use;
             containerCount++;
         }
     }
 
     // ============================================
-    // 匯出
+    // 匯出 Excel：含「訂單」 & 「詳情」 Sheet
     // ============================================
-    function exportToExcel(){
-        const wb=XLSX.utils.book_new();
-        const wsData=[];
-        const header=["序號","品號","名稱","每箱","包裝類型","箱數","單位","棧板數","單位"];
-        wsData.push(header);
+    function exportToExcel() {
+        // 建立工作簿
+        const wb = XLSX.utils.book_new();
 
-        const rows=document.querySelectorAll('#productTable tbody tr');
-        rows.forEach(r=>{
-            const idx=r.cells[0].textContent;
-            const code=r.cells[1].textContent;
-            const prod=allProducts.find(p=>p.productCode===code);
-            if(!prod)return;
-            const name=prod.productName||'';
+        // 1) 第一個工作表：「訂單」
+        const orderSheetData = [];
+        const orderHeader = ["序號","品號","名稱","每箱","包裝類型","箱數","單位","棧板數","單位"];
+        orderSheetData.push(orderHeader);
 
-            const eachCarton=prod.perCarton||1;
-            let pkgType='單包';
-            if(prod.perPack && prod.perPack>0) pkgType='袋裝';
-            else if(prod.perBox && prod.perBox>0) pkgType='盒裝';
+        const rows = document.querySelectorAll('#productTable tbody tr');
+        rows.forEach(row => {
+            const idx = row.cells[0].textContent;
+            const code = row.cells[1].textContent;
+            const prod = allProducts.find(p => p.productCode === code);
+            if(!prod) return;
 
-            const cVal=parseFloat(r.cells[5].querySelector('input').value)||0;
-            const pVal=parseFloat(r.cells[6].querySelector('input').value)||0;
+            const name = prod.productName || '';
+            const eachCarton = prod.perCarton || 1;
 
-            wsData.push([idx,code,name,eachCarton,pkgType,cVal,"箱",pVal,"棧板"]);
+            let pkgType = '單包';
+            if(prod.perPack && prod.perPack > 0) pkgType = '袋裝';
+            else if(prod.perBox && prod.perBox > 0) pkgType = '盒裝';
+
+            const cVal = parseFloat(row.querySelector('.edit-cartons-input')?.value) || 0;
+            const pVal = parseFloat(row.querySelector('.edit-pallets-input')?.value) || 0;
+
+            orderSheetData.push([
+                idx,               // 序號
+                code,              // 品號
+                name,              // 名稱
+                eachCarton,        // 每箱
+                pkgType,           // 包裝類型
+                cVal,              // 箱數
+                "箱",
+                pVal,              // 棧板數
+                "棧板"
+            ]);
         });
+        const wsOrder = XLSX.utils.aoa_to_sheet(orderSheetData);
+        XLSX.utils.book_append_sheet(wb, wsOrder, "訂單");
 
-        const ws=XLSX.utils.aoa_to_sheet(wsData);
-        XLSX.utils.book_append_sheet(wb, ws,"訂單");
+        // 2) 第二個工作表：「詳情」
+        const detailSheetData = [];
+        const detailHeader = ["序號","品號","名稱","包數","袋數/盒數","箱數","棧板數","紙箱規格"];
+        detailSheetData.push(detailHeader);
 
-        const dateStr=getTodayString();
-        XLSX.writeFile(wb,`訂單${currentCountry}_${dateStr}.xlsx`);
+        rows.forEach(row => {
+            const idx = row.cells[0].textContent;
+            const code = row.cells[1].textContent;
+            const prod = allProducts.find(p => p.productCode === code);
+            if(!prod) return;
+            const name = prod.productName || '';
+
+            // 包數
+            const quantity = parseFloat(row.querySelector('.edit-quantity-input')?.value) || 0;
+
+            // 袋數/盒數：如果沒有或是 0 => 顯示 "—"
+            let packOrBoxVal = '—';
+            const packOrBoxInput = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
+            if (packOrBoxInput) {
+                const val = parseFloat(packOrBoxInput.value);
+                if (val && !isNaN(val)) {
+                    packOrBoxVal = val;  
+                }
+            }
+
+            const cartons = parseFloat(row.querySelector('.edit-cartons-input')?.value) || 0;
+            const pallets = parseFloat(row.querySelector('.edit-pallets-input')?.value) || 0;
+            const boxSize = row.cells[7].textContent.trim();  // 紙箱規格 (A/B/C/D)
+
+            detailSheetData.push([
+                idx,            // 序號
+                code,           // 品號
+                name,           // 名稱
+                quantity,       // 包數
+                packOrBoxVal,   // 袋數/盒數 (沒有則顯示 "—")
+                cartons,        // 箱數
+                pallets,        // 棧板數
+                boxSize         // 紙箱規格
+            ]);
+        });
+        const wsDetail = XLSX.utils.aoa_to_sheet(detailSheetData);
+        XLSX.utils.book_append_sheet(wb, wsDetail, "詳情");
+
+        // 寫檔
+        const dateStr = getTodayString();
+        XLSX.writeFile(wb, `訂單${currentCountry}_${dateStr}.xlsx`);
     }
 
     function getTodayString(){
-        const now=new Date();
-        let mm=String(now.getMonth()+1).padStart(2,"0");
-        let dd=String(now.getDate()).padStart(2,"0");
-        return mm+dd;
+        const now = new Date();
+        let mm = String(now.getMonth() + 1).padStart(2, "0");
+        let dd = String(now.getDate()).padStart(2, "0");
+        return mm + dd;
     }
 
     // ============================================
-    // Modal
+    // Modal：紙箱規格
     // ============================================
     function openModal(){
-        document.getElementById('boxSizeModal').style.display='block';
+        document.getElementById('boxSizeModal').style.display = 'block';
     }
     function closeModal(){
-        document.getElementById('boxSizeModal').style.display='none';
+        document.getElementById('boxSizeModal').style.display = 'none';
     }
-    window.onclick=(e)=>{
-        if(e.target===document.getElementById('boxSizeModal')) closeModal();
-        if(e.target===document.getElementById('newItemModal')) closeNewItemModal();
+    window.onclick = (e) => {
+        if(e.target === document.getElementById('boxSizeModal')) closeModal();
+        if(e.target === document.getElementById('newItemModal')) closeNewItemModal();
     }
 
     // ============================================
-    // 搜尋
+    // 搜尋功能
     // ============================================
     function searchProduct(){
-        const val=document.getElementById('searchInput').value.trim().toUpperCase();
-        const res=document.getElementById('searchResults');
-        res.innerHTML='';
+        const val = document.getElementById('searchInput').value.trim().toUpperCase();
+        const res = document.getElementById('searchResults');
+        res.innerHTML = '';
         if(!val){
             res.style.display='none';
             return;
         }
-        const matched=getFilteredProducts().filter(p=>p.productCode.toUpperCase().includes(val));
-        if(matched.length>0){
+        const matched = getFilteredProducts().filter(p => p.productCode.toUpperCase().includes(val));
+        if(matched.length > 0){
             res.style.display='block';
             matched.forEach(prod=>{
-                const item=document.createElement('div');
-                item.className='search-result-item';
-                item.textContent=`${prod.productCode} - ${prod.productName}`;
-                item.onclick=()=>{
+                const item = document.createElement('div');
+                item.className = 'search-result-item';
+                item.textContent = `${prod.productCode} - ${prod.productName}`;
+                item.onclick = () => {
                     addProduct(prod);
-                    document.getElementById('searchInput').value='';
-                    res.innerHTML='';
-                    res.style.display='none';
+                    document.getElementById('searchInput').value = '';
+                    res.innerHTML = '';
+                    res.style.display = 'none';
                 };
                 res.appendChild(item);
             });
-        }else{
+        } else {
             res.style.display='none';
         }
     }
@@ -1166,173 +1236,221 @@ const allProducts = [
     // ============================================
     // 新品產生器
     // ============================================
-    document.getElementById('newItemGeneratorBtn').addEventListener('click',openNewItemModal);
+    document.getElementById('newItemGeneratorBtn').addEventListener('click', openNewItemModal);
     function openNewItemModal(){
-        document.getElementById('newItemModal').style.display='block';
+        document.getElementById('newItemModal').style.display = 'block';
     }
     function closeNewItemModal(){
-        document.getElementById('newItemModal').style.display='none';
+        document.getElementById('newItemModal').style.display = 'none';
     }
 
     function initNewItemModal(){
-        const brandSel=document.getElementById('newItemBrandSelect');
-        brandSel.innerHTML='<option value="">請選擇品牌</option>';
-        // 從所有產品拿品牌 => 之後再 filter?
-        const brandSet=[...new Set(allProducts.map(p=>p.brand))];
-        brandSet.forEach(b=>{
-            brandSel.innerHTML+=`<option value="${b}">${b}</option>`;
+        const brandSel = document.getElementById('newItemBrandSelect');
+        brandSel.innerHTML = '<option value="">請選擇品牌</option>';
+        const brandSet = [...new Set(allProducts.map(p => p.brand))];
+        brandSet.forEach(b => {
+            brandSel.innerHTML += `<option value="${b}">${b}</option>`;
         });
-        brandSel.innerHTML+='<option value="other">其他（手動輸入）</option>';
+        brandSel.innerHTML += '<option value="other">其他（手動輸入）</option>';
     }
+
     function newItemBrandChanged(){
-        const val=document.getElementById('newItemBrandSelect').value;
-        const inp=document.getElementById('newItemBrandInput');
-        if(val==='other') inp.style.display='block'; else {inp.style.display='none';inp.value='';}
+        const val = document.getElementById('newItemBrandSelect').value;
+        const inp = document.getElementById('newItemBrandInput');
+        if(val === 'other'){
+            inp.style.display = 'block';
+        } else {
+            inp.style.display = 'none';
+            inp.value = '';
+        }
         updateNewItemSpecOptions();
     }
+
     function getNewItemBrand(){
-        const val=document.getElementById('newItemBrandSelect').value;
-        return val==='other'?document.getElementById('newItemBrandInput').value.trim():val;
+        const val = document.getElementById('newItemBrandSelect').value;
+        return val === 'other' ? document.getElementById('newItemBrandInput').value.trim() : val;
     }
 
     function updateNewItemSpecOptions(){
-        const brand=getNewItemBrand();
-        const specSel=document.getElementById('newItemSpecSelect');
-        specSel.innerHTML='<option value="">請選擇規格</option>';
+        const brand = getNewItemBrand();
+        const specSel = document.getElementById('newItemSpecSelect');
+        specSel.innerHTML = '<option value="">請選擇規格</option>';
         if(brand){
-            const specs=[...new Set(allProducts.filter(p=>p.brand===brand).map(p=>p.spec))];
-            specs.forEach(s=>{
-                specSel.innerHTML+=`<option value="${s}">${s}</option>`;
+            const specs = [...new Set(allProducts.filter(p => p.brand === brand).map(p => p.spec))];
+            specs.forEach(s => {
+                specSel.innerHTML += `<option value="${s}">${s}</option>`;
             });
         }
-        specSel.innerHTML+='<option value="other">其他（手動輸入）</option>';
+        specSel.innerHTML += '<option value="other">其他（手動輸入）</option>';
     }
+
     function newItemSpecChanged(){
-        const val=document.getElementById('newItemSpecSelect').value;
-        const inp=document.getElementById('newItemSpecInput');
-        if(val==='other') inp.style.display='block'; else {inp.style.display='none';inp.value='';}
+        const val = document.getElementById('newItemSpecSelect').value;
+        const inp = document.getElementById('newItemSpecInput');
+        if(val === 'other'){
+            inp.style.display='block';
+        } else {
+            inp.style.display='none';
+            inp.value='';
+        }
         updateNewItemSeriesOptions();
     }
+
     function getNewItemSpec(){
-        const val=document.getElementById('newItemSpecSelect').value;
-        return val==='other'?document.getElementById('newItemSpecInput').value.trim():val;
+        const val = document.getElementById('newItemSpecSelect').value;
+        return val === 'other' ? document.getElementById('newItemSpecInput').value.trim() : val;
     }
 
     function updateNewItemSeriesOptions(){
-        const brand=getNewItemBrand();
-        const spec=getNewItemSpec();
-        const serSel=document.getElementById('newItemSeriesSelect');
-        serSel.innerHTML='<option value="">請選擇系列</option>';
+        const brand = getNewItemBrand();
+        const spec = getNewItemSpec();
+        const serSel = document.getElementById('newItemSeriesSelect');
+        serSel.innerHTML = '<option value="">請選擇系列</option>';
         if(brand && spec){
-            const sList=[...new Set(allProducts.filter(p=>p.brand===brand && p.spec===spec).map(p=>p.series))];
-            sList.forEach(s=>{
-                serSel.innerHTML+=`<option value="${s}">${s}</option>`;
+            const sList = [...new Set(
+                allProducts.filter(p => p.brand === brand && p.spec === spec)
+                          .map(p => p.series)
+            )];
+            sList.forEach(s => {
+                serSel.innerHTML += `<option value="${s}">${s}</option>`;
             });
         }
-        serSel.innerHTML+='<option value="other">其他（手動輸入）</option>';
+        serSel.innerHTML += '<option value="other">其他（手動輸入）</option>';
     }
+
     function newItemSeriesChanged(){
-        const val=document.getElementById('newItemSeriesSelect').value;
-        const inp=document.getElementById('newItemSeriesInput');
-        if(val==='other') inp.style.display='block'; else {inp.style.display='none';inp.value='';}
+        const val = document.getElementById('newItemSeriesSelect').value;
+        const inp = document.getElementById('newItemSeriesInput');
+        if(val === 'other'){
+            inp.style.display='block';
+        } else {
+            inp.style.display='none';
+            inp.value='';
+        }
     }
+
     function getNewItemSeries(){
-        const val=document.getElementById('newItemSeriesSelect').value;
-        return val==='other'?document.getElementById('newItemSeriesInput').value.trim():val;
+        const val = document.getElementById('newItemSeriesSelect').value;
+        return val === 'other' ? document.getElementById('newItemSeriesInput').value.trim() : val;
     }
 
     function boxSizeChanged(){
-        const val=document.getElementById('newItemBoxSize').value;
-        document.getElementById('newItemPallet').value = boxSizePalletMap[val]||42;
+        const val = document.getElementById('newItemBoxSize').value;
+        document.getElementById('newItemPallet').value = boxSizePalletMap[val] || 42;
     }
 
     function packagingTypeChanged(){
-        const type=document.getElementById('newItemPackagingType').value;
-        const container=document.getElementById('packagingFields');
-        container.innerHTML='';
-        if(type==='bag'){
-            container.innerHTML+='<label>每箱袋數 (perCarton)：<input type="number" id="newItemPerCartonBag" placeholder="必填"></label>';
-            container.innerHTML+='<label>每袋幾入 (perPack)：<input type="number" id="newItemPerPack" placeholder="必填"></label>';
-        }else if(type==='box'){
-            container.innerHTML+='<label>每箱盒數 (perCarton)：<input type="number" id="newItemPerCartonBox" placeholder="必填"></label>';
-            container.innerHTML+='<label>每盒幾入 (perBox)：<input type="number" id="newItemPerBoxBox" placeholder="必填"></label>';
-        }else{
-            container.innerHTML+='<label>每箱包數 (perCarton)：<input type="number" id="newItemPerCartonSingle" placeholder="必填"></label>';
+        const type = document.getElementById('newItemPackagingType').value;
+        const container = document.getElementById('packagingFields');
+        container.innerHTML = '';
+        if(type === 'bag'){
+            container.innerHTML +=
+              '<label>每箱袋數 (perCarton)：<input type="number" id="newItemPerCartonBag" placeholder="必填"></label>';
+            container.innerHTML +=
+              '<label>每袋幾入 (perPack)：<input type="number" id="newItemPerPack" placeholder="必填"></label>';
+        } else if(type === 'box'){
+            container.innerHTML +=
+              '<label>每箱盒數 (perCarton)：<input type="number" id="newItemPerCartonBox" placeholder="必填"></label>';
+            container.innerHTML +=
+              '<label>每盒幾入 (perBox)：<input type="number" id="newItemPerBoxBox" placeholder="必填"></label>';
+        } else {
+            container.innerHTML +=
+              '<label>每箱包數 (perCarton)：<input type="number" id="newItemPerCartonSingle" placeholder="必填"></label>';
         }
     }
 
     function addNewItemLine(){
-        const brand=getNewItemBrand();
-        const spec=getNewItemSpec();
-        const series=getNewItemSeries();
-        const code=document.getElementById('newItemCode').value.trim();
-        const name=document.getElementById('newItemName').value.trim();
-        const boxSize=document.getElementById('newItemBoxSize').value;
-        const pal=document.getElementById('newItemPallet').value.trim();
-        const countryVal=document.getElementById('newItemCountry').value;
-        const pkgType=document.getElementById('newItemPackagingType').value;
+        const brand = getNewItemBrand();
+        const spec = getNewItemSpec();
+        const series = getNewItemSeries();
+        const code = document.getElementById('newItemCode').value.trim();
+        const name = document.getElementById('newItemName').value.trim();
+        const boxSize = document.getElementById('newItemBoxSize').value;
+        const pal = document.getElementById('newItemPallet').value.trim();
+        const countryVal = document.getElementById('newItemCountry').value;
+        const pkgType = document.getElementById('newItemPackagingType').value;
 
-        if(!brand||!spec||!series||!code||!name||!pal){
+        if(!brand || !spec || !series || !code || !name || !pal){
             alert("請填完整品牌/規格/系列/品號/品名及棧板數");
             return;
         }
 
-        let itemStr=`{brand:"${brand}", spec:"${spec}", series:"${series}", productCode:"${code}", productName:"${name}", boxSize:"${boxSize}", perPallet:${pal}, country:"${countryVal}"`;
+        let itemStr = `{brand:"${brand}", spec:"${spec}", series:"${series}", productCode:"${code}", productName:"${name}", boxSize:"${boxSize}", perPallet:${pal}, country:"${countryVal}"`;
 
-        if(pkgType==='bag'){
-            const cBag=document.getElementById('newItemPerCartonBag').value.trim();
-            const pack=document.getElementById('newItemPerPack').value.trim();
-            if(!cBag||!pack){alert("袋裝需: perCarton(每箱袋數), perPack(每袋幾入)");return;}
-            itemStr+=`, perCarton:${cBag}, perPack:${pack}`;
-        }else if(pkgType==='box'){
-            const cBox=document.getElementById('newItemPerCartonBox').value.trim();
-            const bBox=document.getElementById('newItemPerBoxBox').value.trim();
-            if(!cBox||!bBox){alert("盒裝需: perCarton(每箱盒數), perBox(每盒幾入)");return;}
-            itemStr+=`, perCarton:${cBox}, perBox:${bBox}`;
-        }else{
-            const single=document.getElementById('newItemPerCartonSingle').value.trim();
-            if(!single){alert("單包需: perCarton(每箱包數)");return;}
-            itemStr+=`, perCarton:${single}`;
+        if(pkgType === 'bag'){
+            const cBag = document.getElementById('newItemPerCartonBag').value.trim();
+            const pack = document.getElementById('newItemPerPack').value.trim();
+            if(!cBag || !pack){
+                alert("袋裝需: perCarton(每箱袋數), perPack(每袋幾入)");
+                return;
+            }
+            itemStr += `, perCarton:${cBag}, perPack:${pack}`;
+        } else if(pkgType === 'box'){
+            const cBox = document.getElementById('newItemPerCartonBox').value.trim();
+            const bBox = document.getElementById('newItemPerBoxBox').value.trim();
+            if(!cBox || !bBox){
+                alert("盒裝需: perCarton(每箱盒數), perBox(每盒幾入)");
+                return;
+            }
+            itemStr += `, perCarton:${cBox}, perBox:${bBox}`;
+        } else {
+            const single = document.getElementById('newItemPerCartonSingle').value.trim();
+            if(!single){
+                alert("單包需: perCarton(每箱包數)");
+                return;
+            }
+            itemStr += `, perCarton:${single}`;
         }
 
-        itemStr+='},';
+        itemStr += '},';
 
-        const area=document.getElementById('newItemResult');
-        const currVal=area.value.trim();
-        area.value=currVal?(currVal+' '+itemStr):itemStr;
+        const area = document.getElementById('newItemResult');
+        const currVal = area.value.trim();
+        area.value = currVal ? (currVal + ' ' + itemStr) : itemStr;
 
         resetNewItemForm();
     }
 
     function resetNewItemForm(){
-        document.getElementById('newItemBrandSelect').value='';
-        document.getElementById('newItemBrandInput').value='';
+        document.getElementById('newItemBrandSelect').value = '';
+        document.getElementById('newItemBrandInput').value = '';
         document.getElementById('newItemBrandInput').style.display='none';
 
-        document.getElementById('newItemSpecSelect').innerHTML='<option value="">請選擇規格</option><option value="other">其他（手動輸入）</option>';
-        document.getElementById('newItemSpecInput').value='';
+        document.getElementById('newItemSpecSelect').innerHTML =
+          '<option value="">請選擇規格</option><option value="other">其他（手動輸入）</option>';
+        document.getElementById('newItemSpecInput').value = '';
         document.getElementById('newItemSpecInput').style.display='none';
 
-        document.getElementById('newItemSeriesSelect').innerHTML='<option value="">請選擇系列</option><option value="other">其他（手動輸入）</option>';
-        document.getElementById('newItemSeriesInput').value='';
+        document.getElementById('newItemSeriesSelect').innerHTML =
+          '<option value="">請選擇系列</option><option value="other">其他（手動輸入）</option>';
+        document.getElementById('newItemSeriesInput').value = '';
         document.getElementById('newItemSeriesInput').style.display='none';
 
-        document.getElementById('newItemCode').value='';
-        document.getElementById('newItemName').value='';
-        document.getElementById('newItemBoxSize').value='A';
+        document.getElementById('newItemCode').value = '';
+        document.getElementById('newItemName').value = '';
+        document.getElementById('newItemBoxSize').value = 'A';
         boxSizeChanged();
-        document.getElementById('newItemCountry').value='VN';
-        document.getElementById('newItemPackagingType').value='single';
+        document.getElementById('newItemCountry').value = 'VN';
+        document.getElementById('newItemPackagingType').value = 'single';
         packagingTypeChanged();
-        document.getElementById('newItemPallet').value=boxSizePalletMap['A'];
+        document.getElementById('newItemPallet').value = boxSizePalletMap['A'];
     }
 
     function copyNewItems(){
-        const area=document.getElementById('newItemResult');
-        area.select();
-        area.setSelectionRange(0,99999);
-        document.execCommand("copy");
-        alert("已複製結果");
+        const area = document.getElementById('newItemResult');
+        if(navigator.clipboard && window.isSecureContext){
+            // 現代瀏覽器
+            navigator.clipboard.writeText(area.value).then(()=>{
+                alert("已複製結果");
+            },()=>{
+                alert("複製失敗，請手動選取文字複製。");
+            });
+        } else {
+            // 相容舊瀏覽器(或非HTTPS)
+            area.select();
+            document.execCommand("copy");
+            alert("已複製結果");
+        }
     }
 </script>
 </body>

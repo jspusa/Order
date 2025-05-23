@@ -1,446 +1,430 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <title>訂單產生器</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0; 
-            padding: 20px;
-        }
-        .container {
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-sizing: border-box;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 90%;
-            max-width: 1200px;
-        }
-        .header-bar {
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            margin-bottom: 20px;
-        }
-        .factory-switch {
-            background-color: #eee;
-            padding: 10px 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: background-color 0.3s, box-shadow 0.3s;
-        }
-        .factory-switch:hover {
-            background-color: #ddd;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        .factory-switch label {
-            margin-right: 10px;
-            font-weight: bold;
-            color: #333;
-        }
-        .factory-switch input[type="radio"] {
-            margin-right: 5px;
-        }
-        .header-bar h1 {
-            margin: 10px 20px;
-            color: #333;
-            flex-grow: 1;
-            text-align: center;
-        }
-        .box-size-button {
-            background-color: transparent;
-            color: #007bff;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            text-decoration: underline;
-            position: relative; 
-            margin-right: 10px;
-        }
-        .box-size-button:hover {
-            color: #0069d9;
-            background-color: #e2e6ea;
-            text-decoration: underline;
-        }
-        h1 { color: #333; }
-        label { display: block; margin-bottom: 10px; font-weight: bold; }
-        select, input[type="number"], input[type="text"] {
-            width: 100%; padding: 8px; margin-bottom: 20px; font-size: 16px;
-            border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box;
-        }
-        button {
-            padding: 10px 15px; background-color: #007bff; color: white; border: none;
-            border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .product-button {
-            padding: 10px 15px; background-color: #28a745; color: white; border: none;
-            border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;
-        }
-        .product-button:hover {
-            background-color: #218838;
-        }
-        .product-buttons-container {
-            display: flex; flex-wrap: wrap; margin-bottom: 20px;
-        }
-        table {
-            width: 100%; margin-top: 20px; border-collapse: collapse; table-layout: fixed;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-            box-sizing: border-box;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-        .action-button, .remove-button {
-            background-color: #6c757d; color: white;
-            padding: 4px 8px; margin: 2px;
-            border: none; border-radius: 5px; cursor: pointer;
-            font-size: 14px; display: inline-block;
-        }
-        .remove-button {
-            background-color: #dc3545;
-        }
-        .total {
-            margin-top: 20px; font-weight: bold; font-size: 18px; text-align: right;
-        }
-        .totals-container {
-            text-align: right; margin-top: 20px;
-        }
-        table input[type="number"] { width: 100%; box-sizing: border-box; }
-        td { overflow: hidden; }
-        .action-button-group {
-            display: flex; justify-content: center; align-items: center;
-        }
-        .action-button-group button { margin: 0 2px; }
-        .export-button {
-            background-color: #17a2b8; color: white; padding: 10px 15px;
-            border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;
-        }
-        .export-button:hover {
-            background-color: #117a8b;
-        }
-        .brand-button, .spec-button {
-            padding: 10px 15px; background-color: #6c757d; color: white; border: none;
-            border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;
-        }
-        .brand-button.active, .spec-button.active {
-            background-color: #007bff;
-        }
-        .progress-container {
-            width: 100%; background-color: #e0e0e0; border-radius: 5px; margin: 10px 0;
-            position: relative; height: 25px;
-        }
-        .progress-bar {
-            height: 100%; border-radius: 5px; width: 0%; text-align: center;
-            color: white; line-height: 25px; font-weight: bold; background-color: #007bff;
-        }
-        .container-info { margin-bottom: 20px; }
-        .box-size-A { color: #28a745; }
-        .box-size-B { color: #007bff; }
-        .box-size-C { color: #fd7e14; }
-        .box-size-D { color: #6f42c1; }
-        .box-size-icon {
-            display: inline-block; width: 12px; height: 12px; margin-right: 5px;
-            vertical-align: middle; border-radius: 50%;
-        }
-        .box-size-icon-A { background-color: #28a745; }
-        .box-size-icon-B { background-color: #007bff; }
-        .box-size-icon-C { background-color: #fd7e14; }
-        .box-size-icon-D { background-color: #6f42c1; }
-        .modal {
-            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
-            width: 100%; height: 100%; overflow: auto;
-            background-color: rgba(0,0,0,0.5);
-        }
-        .modal-content {
-            background-color: #fff; margin: 10% auto; padding: 20px; border-radius: 5px;
-            width: 80%; max-width: 500px; position: relative;
-        }
-        .close-modal {
-            color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;
-            position: absolute; right: 10px; top: 5px;
-        }
-        .close-modal:hover, .close-modal:focus {
-            color: black; text-decoration: none; cursor: pointer;
-        }
-        .modal-content p { margin: 10px 0; }
-        .search-container { position: relative; margin-bottom: 20px; }
-        .search-input {
-            width: 100%; padding: 8px; font-size: 16px; box-sizing: border-box;
-            border-radius: 5px; border: 1px solid #ccc;
-        }
-        .search-results {
-            position: absolute; top: 45px; left: 0; width: 100%; background-color: #fff;
-            border: 1px solid #ccc; border-top: none; max-height: 200px;
-            overflow-y: auto; z-index: 100;
-        }
-        .search-result-item {
-            padding: 8px; cursor: pointer;
-        }
-        .search-result-item:hover {
-            background-color: #f1f1f1;
-        }
-        .box-counts {
-            margin-top: 10px; font-size: 16px; text-align: right;
-        }
-        .lock-button {
-            background-color: #ffc107; color: white; padding: 4px 8px; margin: 2px;
-            border: none; border-radius: 5px; cursor: pointer; font-size: 14px;
-            display: inline-block;
-        }
-        .lock-button:hover {
-            background-color: #e0a800;
-        }
-        .locked {
-            background-color: #f0f0f0;
-        }
-        .target-input {
-            width: 100%; box-sizing: border-box;
-        }
-        table th:first-child, table td:first-child { width: 5%; }
-        table th:nth-child(2), table td:nth-child(2) { width: 10%; }
-        table th:nth-child(3), table td:nth-child(3) { width: 12%; }
-        table th:nth-child(4), table td:nth-child(4) { width: 12%; }
-        table th:nth-child(5), table td:nth-child(5) { width: 12%; }
-        table th:nth-child(6), table td:nth-child(6) { width: 10%; }
-        table th:nth-child(7), table td:nth-child(7) { width: 10%; }
-        table th:nth-child(8), table td:nth-child(8) { width: 10%; }
-        table th:nth-child(9), table td:nth-child(9) { width: auto; }
-        @media (max-width: 1200px) {
-            table th:first-child, table td:first-child { width: 6%; }
-            table th:nth-child(3), table td:nth-child(3),
-            table th:nth-child(4), table td:nth-child(4),
-            table th:nth-child(6), table td:nth-child(6),
-            table th:nth-child(7), table td:nth-child(7),
-            table th:nth-child(8), table td:nth-child(8) {
-                width: 12%;
-            }
-            table th:nth-child(2), table td:nth-child(2),
-            table th:nth-child(5), table td:nth-child(5),
-            table th:nth-child(9), table td:nth-child(9) {
-                width: auto;
-            }
-        }
-        @media (max-width: 768px) {
-            table th:nth-child(4), table td:nth-child(4),
-            table th:nth-child(6), table td:nth-child(6),
-            table th:nth-child(7), table td:nth-child(7) {
-                display: none;
-            }
-            table th:first-child, table td:first-child {
-                width: 10%;
-            }
-            table th:nth-child(3), table td:nth-child(3),
-            table th:nth-child(8), table td:nth-child(8) {
-                width: 20%;
-            }
-            table th:nth-child(2), table td:nth-child(2),
-            table th:nth-child(5), table td:nth-child(5),
-            table th:nth-child(9), table td:nth-child(9) {
-                width: auto;
-            }
-        }
-        #newItemGeneratorBtn {
-            position: fixed; 
-            top: 20px; 
-            right: 20px; 
-            background-color: #ccc; 
-            color: #333; 
-            border: none; 
-            border-radius: 50%; 
-            width: 30px; 
-            height: 30px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            font-size: 20px; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-    </style>
-    <!-- 匯出 Excel 需要 xlsx.min.js 或 xlsx.full.min.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+  <meta charset="UTF-8">
+  <title>訂單產生器 Order Generator</title>
+  <meta name="viewport" content="width=1050">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Noto Sans TC', Arial, sans-serif;
+      background: linear-gradient(120deg, #f6f7fb 0%, #e9f0ff 100%);
+      padding: 0; margin: 0;
+      color: #273042;
+    }
+    .container {
+      margin: 36px auto 48px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 40px rgba(40,60,140,0.12);
+      max-width: 1050px;
+      padding: 40px 34px 30px 34px;
+      position: relative;
+      overflow: visible;
+    }
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 34px;
+      position: relative;
+    }
+    .header-bar h1 {
+      color: #2c3e50;
+      font-size: 2.1rem;
+      font-weight: 800;
+      flex: 1;
+      text-align: center;
+      letter-spacing: 1.2px;
+      margin: 0;
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px;
+    }
+    .header-bar .fa-cube { color: #68a0fa; }
+    .factory-switch {
+      background-color: #f3f7fa;
+      padding: 9px 19px;
+      border-radius: 9px;
+      box-shadow: 0 2px 8px #e5eaf1;
+      display: flex; gap: 14px;
+      align-items: center;
+      font-size: 1rem;
+    }
+    .factory-switch label {
+      margin: 0;
+      color: #5682c2;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex; align-items: center;
+    }
+    .factory-switch input[type="radio"] { accent-color: #3b79d5; margin-right: 5px; }
+
+    .box-size-button {
+      background: #e9f0ff;
+      color: #5682c2;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 7px;
+      padding: 9px 20px;
+      font-weight: 600;
+      box-shadow: 0 2px 10px #dde8f9;
+      transition: background 0.19s, color 0.19s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .box-size-button:hover { background: #d7e3fa; color: #3364ad;}
+    .export-button {
+      background: #10b7e8;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 11px 24px;
+      font-size: 1.08rem;
+      margin: 28px 0 0 0;
+      font-weight: 700;
+      box-shadow: 0 2px 16px #bee4f4c4;
+      transition: background 0.19s;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .export-button:hover { background: #0993b9;}
+
+    label { font-weight: 600; margin-bottom: 9px; color: #405581;}
+    select, input[type="number"], input[type="text"] {
+      width: 100%; padding: 9px 14px; margin-bottom: 16px; font-size: 1.03rem;
+      border-radius: 7px; border: 1px solid #d3d9e7; box-sizing: border-box;
+      transition: border .2s, box-shadow .2s;
+    }
+    select:focus, input[type="number"]:focus, input[type="text"]:focus {
+      border-color: #68a0fa;
+      box-shadow: 0 0 7px #97c7f799;
+      outline: none;
+    }
+
+    .brand-button, .spec-button, .product-button {
+      padding: 8px 18px;
+      background: #f1f6fd;
+      color: #3372c2;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin: 0 9px 9px 0;
+      font-weight: 600;
+      box-shadow: 0 1px 8px #dbe7f3;
+      transition: background 0.2s, color 0.2s;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .brand-button.active, .spec-button.active {
+      background: #3577ef;
+      color: #fff;
+      font-weight: 700;
+    }
+    .product-button {
+      background: #68a0fa;
+      color: #fff;
+    }
+    .product-button:hover { background: #376fd7; }
+
+    .product-buttons-container { display: flex; flex-wrap: wrap; gap: 2px; margin-bottom: 18px; }
+
+    .search-container { position: relative; margin-bottom: 22px; }
+    .search-input {
+      width: 100%; padding: 10px 14px; font-size: 1rem; box-sizing: border-box;
+      border-radius: 7px; border: 1.5px solid #c2d7ef; margin-bottom: 0;
+    }
+    .search-results {
+      position: absolute; top: 45px; left: 0; width: 100%; background-color: #fff;
+      border: 1px solid #c9d8ef; border-top: none; max-height: 180px;
+      overflow-y: auto; z-index: 100;
+      border-radius: 0 0 7px 7px;
+      box-shadow: 0 8px 16px #97b5e733;
+    }
+    .search-result-item {
+      padding: 9px 14px; cursor: pointer; font-size: 1rem; color: #304976;
+      transition: background 0.15s;
+    }
+    .search-result-item:hover {
+      background: #eef4fd;
+      color: #1b2f50;
+    }
+    .table-responsive { overflow-x: auto; }
+    table {
+      width: 100%; margin-top: 12px; border-collapse: separate; border-spacing: 0;
+      background: #fafdff;
+      border-radius: 12px;
+      box-shadow: 0 1px 16px #dbe8fa60;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 14px 8px;
+      border-bottom: 1px solid #e3e8f0;
+      font-size: 1.01rem;
+    }
+    th {
+      background: #eaf1fc;
+      color: #375a7f;
+      font-weight: 700;
+      border-bottom: 2px solid #b7d2f6;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f0f5fe; }
+    .action-button, .remove-button, .lock-button {
+      background: #e0e7f3; color: #5c6f8f;
+      padding: 5px 9px; margin: 2px 1px;
+      border: none; border-radius: 6px; cursor: pointer;
+      font-size: 15px; font-weight: bold;
+      transition: background 0.2s;
+    }
+    .action-button:hover { background: #b0c9e7;}
+    .remove-button { background: #fa7878; color: #fff;}
+    .remove-button:hover { background: #e84242;}
+    .lock-button { background: #ffd76b; color: #925700;}
+    .lock-button:hover { background: #ffe091;}
+    .locked td { background: #f7f7fa; }
+    .box-size-A { color: #23a363; font-weight: bold;}
+    .box-size-B { color: #2984d6; font-weight: bold;}
+    .box-size-C { color: #fd7e14; font-weight: bold;}
+    .box-size-D { color: #8c4acf; font-weight: bold;}
+    .box-size-icon {
+      display: inline-block; width: 14px; height: 14px; margin-right: 5px;
+      vertical-align: middle; border-radius: 50%;
+    }
+    .box-size-icon-A { background-color: #23a363; }
+    .box-size-icon-B { background-color: #2984d6; }
+    .box-size-icon-C { background-color: #fd7e14; }
+    .box-size-icon-D { background-color: #8c4acf; }
+    .totals-container { text-align: right; margin-top: 24px;}
+    .total {
+      font-weight: 700; font-size: 1.08rem; margin-bottom: 2px;
+    }
+    .box-counts { margin-top: 3px; font-size: 1rem; color: #6679a8;}
+    .container-info { margin: 22px 0 12px 0; }
+    .progress-container {
+      width: 100%; background: #e3eaf8; border-radius: 8px; margin: 10px 0;
+      position: relative; height: 23px;
+    }
+    .progress-bar {
+      height: 100%; border-radius: 8px; width: 0%; text-align: center;
+      color: white; line-height: 23px; font-weight: bold; background: linear-gradient(90deg,#3fb7fd 40%,#5ccfb1 100%);
+      transition: width 0.35s;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+    }
+    /* 彈窗 */
+    .modal {
+      display: none; position: fixed; z-index: 2000; left: 0; top: 0;
+      width: 100%; height: 100%; overflow: auto;
+      background: rgba(0,0,0,0.16);
+      animation: fadeIn .3s;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;} to {opacity: 1;}
+    }
+    .modal-content {
+      background: #fff; margin: 6% auto; padding: 30px 26px; border-radius: 16px;
+      width: 92%; max-width: 470px; position: relative;
+      box-shadow: 0 12px 48px #5664ff40;
+      animation: modalPopIn .34s;
+    }
+    @keyframes modalPopIn {
+      from {transform: scale(0.9);}
+      to {transform: scale(1);}
+    }
+    .close-modal {
+      color: #aab2c6; font-size: 32px; font-weight: bold; cursor: pointer;
+      position: absolute; right: 20px; top: 10px;
+      transition: color 0.18s;
+    }
+    .close-modal:hover, .close-modal:focus { color: #222; }
+    .modal-content p { margin: 12px 0 6px 0; }
+    /* 新品產生器浮動鈕 */
+    #newItemGeneratorBtn {
+      position: fixed; top: 22px; right: 30px;
+      background: linear-gradient(120deg,#10b7e8 60%,#7ad0e0 100%);
+      color: #fff; border: none; border-radius: 50%; width: 45px; height: 45px;
+      cursor: pointer; font-weight: bold; font-size: 2rem;
+      box-shadow: 0 2px 14px #13e6f442;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2100;
+      transition: box-shadow 0.2s, background 0.2s;
+    }
+    #newItemGeneratorBtn:hover { box-shadow: 0 4px 24px #23baff74; background: #0aa2c3; }
+    /* user-tip提示 */
+    .user-tip {
+      position: fixed; left: 50%; bottom: 44px; transform: translateX(-50%);
+      background: #384b65d7; color: #fff; padding: 17px 36px;
+      border-radius: 13px; font-size: 1.08rem; z-index: 3500;
+      box-shadow: 0 2px 16px #0002; opacity: 1; transition: opacity 0.4s;
+    }
+    .user-tip.error { background: #e63946d7;}
+    .user-tip.success { background: #37be6dd7;}
+    /* 響應式 */
+    @media (max-width: 1150px) {
+      .container { padding: 22px 8px;}
+    }
+    @media (max-width: 600px) {
+      .container {padding: 9px;}
+      .header-bar h1 { font-size: 1.1rem;}
+      .modal-content {padding: 14px 6px;}
+      .brand-button,.spec-button,.product-button{font-size: .9rem;}
+    }
+  </style>
 </head>
-
 <body>
-<div class="container">
-    <!-- 頂部區：左(國家切換)-中(標題)-右(紙箱規格按鈕) -->
+  <div class="container">
     <div class="header-bar">
-        <!-- 左：country 切換 (VN / TW / Others) -->
-        <div class="factory-switch">
-            <label><input type="radio" name="countrySelect" value="VN" checked> 越南廠</label>
-            <label><input type="radio" name="countrySelect" value="TW"> 台灣廠</label>
-            <label><input type="radio" name="countrySelect" value="Others"> 其他</label>
-        </div>
-        <h1>訂單產生器</h1>
-        <button class="box-size-button" onclick="openModal()">紙箱規格尺寸</button>
+      <div class="factory-switch">
+        <label><input type="radio" name="countrySelect" value="VN" checked> 越南廠</label>
+        <label><input type="radio" name="countrySelect" value="TW"> 台灣廠</label>
+        <label><input type="radio" name="countrySelect" value="Others"> 其他</label>
+      </div>
+      <h1>
+        <i class="fa-solid fa-cube"></i> 訂單產生器
+        <span style="font-size: 1rem; color:#8ab2e0; margin-left:12px;font-weight:400;">Order Generator</span>
+      </h1>
+      <button class="box-size-button" onclick="openModal()">
+        <i class="fa-solid fa-ruler-combined"></i> 紙箱尺寸
+      </button>
     </div>
-
-    <!-- 品牌按鈕區 -->
     <div id="brandButtons">
-        <label>選擇品牌：</label>
+      <label>選擇品牌：</label>
     </div>
-
-    <!-- 規格按鈕區 -->
     <div id="specButtons" style="display:none;">
-        <label>選擇規格：</label>
+      <label>選擇規格：</label>
     </div>
-
-    <!-- 系列下拉 -->
     <label for="seriesSelect">選擇系列：</label>
     <select id="seriesSelect" onchange="updateProductOptions()"></select>
-
-    <!-- 產品按鈕區 -->
     <div id="productButtons" class="product-buttons-container"></div>
-
-    <!-- 搜尋區 -->
     <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="輸入品號" oninput="searchProduct()">
-        <div id="searchResults" class="search-results"></div>
+      <input type="text" id="searchInput" class="search-input" placeholder="🔎 以品號搜尋/快速加入" oninput="searchProduct()">
+      <div id="searchResults" class="search-results"></div>
     </div>
-
-    <!-- 產品表格 -->
-    <table id="productTable">
+    <div class="table-responsive">
+      <table id="productTable">
         <thead>
-            <tr>
-                <th>序號</th>
-                <th>品號</th>
-                <th>包數</th>
-                <th>袋數/盒數</th>
-                <th>目標數量</th>
-                <th>箱數</th>
-                <th>棧板數</th>
-                <th>紙箱規格</th>
-                <th>操作</th>
-            </tr>
+          <tr>
+            <th>序號</th>
+            <th>品號</th>
+            <th>包數</th>
+            <th>袋數/盒數</th>
+            <th>目標數量</th>
+            <th>箱數</th>
+            <th>棧板數</th>
+            <th>紙箱</th>
+            <th>操作</th>
+          </tr>
         </thead>
         <tbody></tbody>
-    </table>
-
-    <!-- 統計區 -->
+      </table>
+    </div>
     <div class="totals-container">
-        <div class="total">
-            總包數: <span id="totalQuantity">0</span> |
-            總箱數: <span id="totalCartons">0</span> |
-            總棧板數: <span id="totalPallets">0</span>
-        </div>
-        <div class="box-counts">
-            A 規格棧板數: <span id="countA">0</span> |
-            B 規格棧板數: <span id="countB">0</span> |
-            C 規格棧板數: <span id="countC">0</span>
-        </div>
+      <div class="total">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        總包數: <span id="totalQuantity">0</span> |
+        總箱數: <span id="totalCartons">0</span> |
+        總棧板數: <span id="totalPallets">0</span>
+      </div>
+      <div class="box-counts">
+        <span class="box-size-icon box-size-icon-A"></span>A棧板: <span id="countA">0</span> |
+        <span class="box-size-icon box-size-icon-B"></span>B棧板: <span id="countB">0</span> |
+        <span class="box-size-icon box-size-icon-C"></span>C棧板: <span id="countC">0</span>
+      </div>
     </div>
-
-    <!-- 貨櫃資訊 -->
     <div id="containerInfo" class="container-info"></div>
+    <button class="export-button" onclick="exportToExcel()">
+      <i class="fa-solid fa-file-arrow-down"></i> 匯出 Excel
+    </button>
+  </div>
 
-    <!-- 匯出按鈕 -->
-    <button class="export-button" onclick="exportToExcel()">匯出為 Excel</button>
-</div>
-
-<!-- Modal：紙箱規格 -->
-<div id="boxSizeModal" class="modal">
+  <!-- 紙箱規格 Modal -->
+  <div id="boxSizeModal" class="modal">
     <div class="modal-content">
-        <span class="close-modal" onclick="closeModal()">&times;</span>
-        <h2>紙箱規格尺寸</h2>
-        <p>A：50cm × 40cm × 30cm（20*16*12)</p>
-        <p>B：58.5cm × 34.5cm × 35cm (23*14*14)</p>
-        <p>C：50cm × 40cm × 40cm (20*16*16)</p>
-        <p>D：48cm × 38cm × 28cm <strong>(中三箱)</strong> (19*15*11)</p>
+      <span class="close-modal" onclick="closeModal()">&times;</span>
+      <h2 style="color:#3777eb;font-size:1.25rem;margin-bottom:16px;">
+        <i class="fa-solid fa-ruler-combined"></i> 紙箱規格尺寸
+      </h2>
+      <div style="font-size:1.06rem;line-height:1.8;">
+        <p><span class="box-size-icon box-size-icon-A"></span> <b>A</b>：50×40×30cm（20×16×12）</p>
+        <p><span class="box-size-icon box-size-icon-B"></span> <b>B</b>：58.5×34.5×35cm（23×14×14）</p>
+        <p><span class="box-size-icon box-size-icon-C"></span> <b>C</b>：50×40×40cm（20×16×16）</p>
+        <p><span class="box-size-icon box-size-icon-D"></span> <b>D</b>：48×38×28cm（19×15×11）<strong> (中三箱)</strong></p>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- 新品產生器按鈕：固定在右上 -->
-<button id="newItemGeneratorBtn">＋</button>
-
-<!-- 新品產生器 Modal -->
-<div id="newItemModal" class="modal">
+  <!-- 新品產生器浮動按鈕 -->
+  <button id="newItemGeneratorBtn" title="新品產生器">
+    <i class="fa-solid fa-plus"></i>
+  </button>
+  <!-- 新品產生器 Modal -->
+  <div id="newItemModal" class="modal">
     <div class="modal-content">
-        <span class="close-modal" onclick="closeNewItemModal()">&times;</span>
-        <h2>新品產生器</h2>
-        <p>依序選擇或輸入新商品資訊。</p>
-
-        <!-- 品牌下拉+輸入 -->
-        <label>品牌（brand）： 
-            <select id="newItemBrandSelect" onchange="newItemBrandChanged()"></select>
-            <input type="text" id="newItemBrandInput" placeholder="自行輸入新品牌" style="display:none;">
-        </label>
-
-        <!-- 規格下拉+輸入 -->
-        <label>規格（spec）：
-            <select id="newItemSpecSelect" onchange="newItemSpecChanged()"></select>
-            <input type="text" id="newItemSpecInput" placeholder="自行輸入新規格" style="display:none;">
-        </label>
-
-        <!-- 系列下拉+輸入 -->
-        <label>系列（series）：
-            <select id="newItemSeriesSelect" onchange="newItemSeriesChanged()"></select>
-            <input type="text" id="newItemSeriesInput" placeholder="自行輸入新系列" style="display:none;">
-        </label>
-
-        <!-- 基本資訊 -->
-        <label>品號（productCode）：<input type="text" id="newItemCode" placeholder="必填"></label>
-        <label>品名（productName）：<input type="text" id="newItemName" placeholder="必填"></label>
-
-        <!-- 紙箱規格 -->
-        <label>紙箱規格（boxSize）： 
-            <select id="newItemBoxSize" onchange="boxSizeChanged()">
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
-            </select>
-        </label>
-
-        <!-- 棧板箱數 -->
-        <label>棧板箱數（perPallet）：<input type="number" id="newItemPallet" placeholder="選箱規後自動帶入，可手改"></label>
-
-        <!-- country (VN / TW / Others) -->
-        <label>生產國別 / Country：
-            <select id="newItemCountry">
-                <option value="VN">VN (越南)</option>
-                <option value="TW">TW (台灣)</option>
-                <option value="Others">Others</option>
-            </select>
-        </label>
-
-        <!-- 包裝類型 -->
-        <label>包裝類型：
-            <select id="newItemPackagingType" onchange="packagingTypeChanged()">
-                <option value="single">單包</option>
-                <option value="bag">袋裝</option>
-                <option value="box">盒裝</option>
-            </select>
-        </label>
-
-        <!-- 動態顯示：每箱幾入(perCarton) + 盒裝(perBox) / 袋裝(perPack) -->
-        <div id="packagingFields"></div>
-
-        <!-- 新增按鈕 -->
-        <button class="product-button" style="background-color:#6c757d;" onclick="addNewItemLine()">加入</button>
-        <hr>
-        <p>結果：</p>
-        <textarea id="newItemResult" style="width:100%;height:100px;"></textarea>
-        <button class="product-button" style="background-color:#28a745;" onclick="copyNewItems()">複製結果</button>
+      <span class="close-modal" onclick="closeNewItemModal()">&times;</span>
+      <h2 style="color:#3376ed"><i class="fa-solid fa-cube"></i> 新品產生器</h2>
+      <div style="font-size:0.97rem;color:#3d5c90;margin-bottom:12px;">
+        依序輸入新商品資訊，<span style="color:#eb3d3d;">* 必填</span>
+      </div>
+      <label>品牌 <span style="color:#eb3d3d">*</span>
+        <select id="newItemBrandSelect" onchange="newItemBrandChanged()"></select>
+        <input type="text" id="newItemBrandInput" placeholder="自行輸入新品牌" style="display:none;">
+      </label>
+      <label>規格 <span style="color:#eb3d3d">*</span>
+        <select id="newItemSpecSelect" onchange="newItemSpecChanged()"></select>
+        <input type="text" id="newItemSpecInput" placeholder="自行輸入新規格" style="display:none;">
+      </label>
+      <label>系列 <span style="color:#eb3d3d">*</span>
+        <select id="newItemSeriesSelect" onchange="newItemSeriesChanged()"></select>
+        <input type="text" id="newItemSeriesInput" placeholder="自行輸入新系列" style="display:none;">
+      </label>
+      <label>品號 <span style="color:#eb3d3d">*</span>
+        <input type="text" id="newItemCode" placeholder="必填 (如 AFA11AM)">
+      </label>
+      <label>品名 <span style="color:#eb3d3d">*</span>
+        <input type="text" id="newItemName" placeholder="必填">
+      </label>
+      <label>紙箱規格 <span style="color:#eb3d3d">*</span>
+        <select id="newItemBoxSize" onchange="boxSizeChanged()">
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+        </select>
+      </label>
+      <label>棧板箱數 <span style="color:#eb3d3d">*</span>
+        <input type="number" id="newItemPallet" placeholder="自動帶入，可修改">
+      </label>
+      <label>生產國別
+        <select id="newItemCountry">
+          <option value="VN">VN (越南)</option>
+          <option value="TW">TW (台灣)</option>
+          <option value="Others">Others</option>
+        </select>
+      </label>
+      <label>包裝類型
+        <select id="newItemPackagingType" onchange="packagingTypeChanged()">
+          <option value="single">單包</option>
+          <option value="bag">袋裝</option>
+          <option value="box">盒裝</option>
+        </select>
+      </label>
+      <div id="packagingFields"></div>
+      <button class="product-button" style="background:#3a7afe;" onclick="addNewItemLine()">
+        <i class="fa-solid fa-cart-plus"></i> 加入
+      </button>
+      <hr>
+      <div style="font-size:.95rem;color:#8895b1;margin-bottom:6px;">結果（可複製給工程師）：</div>
+      <textarea id="newItemResult" style="width:100%;height:80px;background:#f6f7fa;border-radius:8px;border:1px solid #d1dae4;padding:8px 11px;font-size:.96rem;"></textarea>
+      <button class="product-button" style="background:#23c87d;" onclick="copyNewItems()">
+        <i class="fa-solid fa-copy"></i> 複製結果
+      </button>
     </div>
-</div>
-
-<script>
-    // ============================================
-    // 新版本：allProducts + country欄位 (示範1筆)
-    // ============================================
+  </div>
+  <!-- xlsx -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+  <!-- 原JS全部照用，但加上友善提示與動畫 -->
+  <script>
+    // --- 你的 allProducts 資料
 const allProducts = [
   {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA11AM", productName:"AFreschi-Classic Turkey Tendon Thin Stick (100g /pk)；AFK package (120 units /CTN)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"},
   {brand:"A Freschi srl", spec:"AFA", series:"AFA", productCode:"AFA12AM", productName:"AFreschi-Classic Turkey Tendon Braided Stick(100g /pk)；AFK package (120 units /CTN)", boxSize:"A", perCarton:120, perPack:null, perBox:null, perPallet:42, country:"VN"},
@@ -694,857 +678,662 @@ const allProducts = [
   {brand:"A Freschi srl", spec:"牛肋條", series:"ART", productCode:"ART01AM", productName:"Afreschi - Turkey Tendon Wrapped Veal Rib Bone, 85g", boxSize:"D", perCarton:130, perPack:null, perBox:null, perPallet:36, country:"TW"},
   {brand:"A Freschi srl", spec:"牛肋條", series:"ART", productCode:"ART01J", productName:"Afreschi - Turkey Tendon Wrapped Veal Rib Bone, 85g", boxSize:"D", perCarton:130, perPack:null, perBox:null, perPallet:21, country:"TW"}
 ];
-
-    // 紙箱規格對應棧板 (範例)
-    const boxSizePalletMap = {
-        A: 42,
-        B: 36,
-        C: 30,
-        D: 36 
-    };
-
-    let currentCountry = 'VN';  // radio 預設選 VN
-
-    function getFilteredProducts(){
-        // 若選 Others => 篩出 country 不是 VN/TW
-        if(currentCountry === 'Others'){
-            return allProducts.filter(p => p.country !== 'VN' && p.country !== 'TW');
-        }
-        // 否則只顯示該 country
-        return allProducts.filter(p => p.country === currentCountry);
-    }
-
-    // ============================================
-    // 頁面初始化
-    // ============================================
+    const boxSizePalletMap = {A: 42, B: 36, C: 30, D: 36};
+    let currentCountry = 'VN';
     let selectedBrand = '';
     let selectedSpec = '';
     let selectedSeries = '';
 
+    function showTip(msg, type="info") {
+      let tip = document.createElement('div');
+      tip.className = 'user-tip ' + type;
+      tip.innerText = msg;
+      document.body.appendChild(tip);
+      setTimeout(()=>{ tip.style.opacity=0; setTimeout(()=>tip.remove(),450); }, 1800);
+    }
+
+    function getFilteredProducts(){
+      if(currentCountry === 'Others'){
+        return allProducts.filter(p => p.country !== 'VN' && p.country !== 'TW');
+      }
+      return allProducts.filter(p => p.country === currentCountry);
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
-        // 監聽國家切換
-        document.querySelectorAll('[name="countrySelect"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                currentCountry = e.target.value;
-                reloadData();
-            });
+      document.querySelectorAll('[name="countrySelect"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          currentCountry = e.target.value;
+          reloadData();
         });
-
-        reloadData();
-
-        // 新品產生器初始化
-        initNewItemModal();
-        packagingTypeChanged();
-        boxSizeChanged();
+      });
+      reloadData();
+      initNewItemModal();
+      packagingTypeChanged();
+      boxSizeChanged();
     });
 
     function reloadData(){
-        selectedBrand = '';
-        selectedSpec = '';
-        selectedSeries = '';
-        document.getElementById('searchInput').value = '';
-        document.getElementById('searchResults').innerHTML = '';
-        document.getElementById('searchResults').style.display = 'none';
-
-        initBrandButtons();
-        document.getElementById('seriesSelect').innerHTML = '<option value="">請先選擇規格</option>';
-        document.getElementById('productButtons').innerHTML = '';
-        clearTable();
-        updateTotals();
+      selectedBrand = '';
+      selectedSpec = '';
+      selectedSeries = '';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('searchResults').innerHTML = '';
+      document.getElementById('searchResults').style.display = 'none';
+      initBrandButtons();
+      document.getElementById('seriesSelect').innerHTML = '<option value="">請先選擇規格</option>';
+      document.getElementById('productButtons').innerHTML = '';
+      clearTable();
+      updateTotals();
     }
-
     function clearTable(){
-        document.querySelector('#productTable tbody').innerHTML = '';
+      document.querySelector('#productTable tbody').innerHTML = '';
     }
-
-    // ============================================
-    // 品牌按鈕
-    // ============================================
     function initBrandButtons(){
-        const brandDiv = document.getElementById('brandButtons');
-        brandDiv.innerHTML = '<label>選擇品牌：</label>';
-        const filtered = getFilteredProducts();
-        const brandSet = [...new Set(filtered.map(p => p.brand))];
-        brandSet.forEach(b => {
-            const btn = document.createElement('button');
-            btn.className = 'brand-button';
-            btn.textContent = b;
-            btn.onclick = () => selectBrand(b);
-            brandDiv.appendChild(btn);
-        });
+      const brandDiv = document.getElementById('brandButtons');
+      brandDiv.innerHTML = '<label>選擇品牌：</label>';
+      const filtered = getFilteredProducts();
+      const brandSet = [...new Set(filtered.map(p => p.brand))];
+      brandSet.forEach(b => {
+        const btn = document.createElement('button');
+        btn.className = 'brand-button';
+        btn.textContent = b;
+        btn.onclick = () => selectBrand(b);
+        brandDiv.appendChild(btn);
+      });
     }
-
     function selectBrand(brand){
-        selectedBrand = brand;
-        selectedSpec = '';
-        toggleActiveButton('.brand-button', brand);
-        updateSpecButtons();
-        resetSeriesAndProducts();
+      selectedBrand = brand;
+      selectedSpec = '';
+      toggleActiveButton('.brand-button', brand);
+      updateSpecButtons();
+      resetSeriesAndProducts();
     }
-
     function toggleActiveButton(selector, text){
-        const btns = document.querySelectorAll(selector);
-        btns.forEach(b => {
-            b.classList.toggle('active', b.textContent === text);
-        });
+      const btns = document.querySelectorAll(selector);
+      btns.forEach(b => {
+        b.classList.toggle('active', b.textContent === text);
+      });
     }
-
     function updateSpecButtons(){
-        const specDiv = document.getElementById('specButtons');
-        specDiv.innerHTML = '';
-        if(selectedBrand){
-            const fProds = getFilteredProducts().filter(p => p.brand === selectedBrand);
-            const specs = [...new Set(fProds.map(p => p.spec))];
-            if(specs.length > 0){
-                specDiv.style.display = 'block';
-                specDiv.innerHTML = '<label>選擇規格：</label>';
-                specs.forEach(sp => {
-                    const btn = document.createElement('button');
-                    btn.textContent = sp;
-                    btn.className = 'spec-button';
-                    btn.onclick = () => selectSpec(sp);
-                    specDiv.appendChild(btn);
-                });
-            } else {
-                specDiv.style.display = 'none';
-            }
+      const specDiv = document.getElementById('specButtons');
+      specDiv.innerHTML = '';
+      if(selectedBrand){
+        const fProds = getFilteredProducts().filter(p => p.brand === selectedBrand);
+        const specs = [...new Set(fProds.map(p => p.spec))];
+        if(specs.length > 0){
+          specDiv.style.display = 'block';
+          specDiv.innerHTML = '<label>選擇規格：</label>';
+          specs.forEach(sp => {
+            const btn = document.createElement('button');
+            btn.textContent = sp;
+            btn.className = 'spec-button';
+            btn.onclick = () => selectSpec(sp);
+            specDiv.appendChild(btn);
+          });
         } else {
-            specDiv.style.display = 'none';
+          specDiv.style.display = 'none';
         }
+      } else {
+        specDiv.style.display = 'none';
+      }
     }
-
     function selectSpec(spec){
-        selectedSpec = spec;
-        toggleActiveButton('.spec-button', spec);
-        updateSeriesOptions();
+      selectedSpec = spec;
+      toggleActiveButton('.spec-button', spec);
+      updateSeriesOptions();
     }
-
     function updateSeriesOptions(){
-        const sel = document.getElementById('seriesSelect');
-        sel.innerHTML = '<option value="">請選擇系列</option>';
-        if(selectedBrand && selectedSpec){
-            const filtered = getFilteredProducts().filter(p => p.brand === selectedBrand && p.spec === selectedSpec);
-            const seriesList = [...new Set(filtered.map(p => p.series))];
-            seriesList.forEach(s => {
-                sel.innerHTML += `<option value="${s}">${s}</option>`;
-            });
-        } else {
-            sel.innerHTML = '<option value="">請先選擇規格</option>';
-        }
-        document.getElementById('productButtons').innerHTML = '';
+      const sel = document.getElementById('seriesSelect');
+      sel.innerHTML = '<option value="">請選擇系列</option>';
+      if(selectedBrand && selectedSpec){
+        const filtered = getFilteredProducts().filter(p => p.brand === selectedBrand && p.spec === selectedSpec);
+        const seriesList = [...new Set(filtered.map(p => p.series))];
+        seriesList.forEach(s => {
+          sel.innerHTML += `<option value="${s}">${s}</option>`;
+        });
+      } else {
+        sel.innerHTML = '<option value="">請先選擇規格</option>';
+      }
+      document.getElementById('productButtons').innerHTML = '';
     }
-
     function resetSeriesAndProducts(){
-        document.getElementById('seriesSelect').innerHTML = '<option value="">請先選擇規格</option>';
-        document.getElementById('productButtons').innerHTML = '';
+      document.getElementById('seriesSelect').innerHTML = '<option value="">請先選擇規格</option>';
+      document.getElementById('productButtons').innerHTML = '';
     }
-
     function updateProductOptions(){
-        selectedSeries = document.getElementById('seriesSelect').value;
-        const btnDiv = document.getElementById('productButtons');
-        btnDiv.innerHTML = '';
-        if(selectedBrand && selectedSpec && selectedSeries){
-            const prods = getFilteredProducts().filter(p =>
-                p.brand === selectedBrand &&
-                p.spec === selectedSpec &&
-                p.series === selectedSeries
-            );
-            prods.forEach(prod => {
-                const btn = document.createElement('button');
-                btn.className = 'product-button';
-                btn.textContent = prod.productCode;
-                btn.onclick = () => addProduct(prod);
-                btnDiv.appendChild(btn);
-            });
-        } else {
-            btnDiv.innerHTML = '請先選擇系列';
-        }
+      selectedSeries = document.getElementById('seriesSelect').value;
+      const btnDiv = document.getElementById('productButtons');
+      btnDiv.innerHTML = '';
+      if(selectedBrand && selectedSpec && selectedSeries){
+        const prods = getFilteredProducts().filter(p =>
+          p.brand === selectedBrand && p.spec === selectedSpec && p.series === selectedSeries
+        );
+        prods.forEach(prod => {
+          const btn = document.createElement('button');
+          btn.className = 'product-button';
+          btn.textContent = prod.productCode;
+          btn.onclick = () => addProduct(prod);
+          btnDiv.appendChild(btn);
+        });
+      } else {
+        btnDiv.innerHTML = '<span style="color:#b4bdd2;">請先選擇系列</span>';
+      }
     }
-
-    // ============================================
-    // 新增產品到表格
-    // ============================================
     function addProduct(prod){
-        const tbody = document.querySelector('#productTable tbody');
-        // 避免重複新增
-        if(Array.from(tbody.querySelectorAll('tr')).some(r => r.cells[1].textContent === prod.productCode)){
-            alert('該產品已添加');
-            return;
-        }
-        const rowIndex = tbody.children.length + 1;
-        const {hasPack, hasBox} = checkPackageType(prod);
-
-        let packOrBoxInput = '-';
-        if(hasPack){
-            packOrBoxInput = `<input type="number" class="edit-pack-input" placeholder="袋數" oninput="updateFields(this,'${prod.productCode}')">`;
-        } else if(hasBox){
-            packOrBoxInput = `<input type="number" class="edit-box-input" placeholder="盒數" oninput="updateFields(this,'${prod.productCode}')">`;
-        }
-
-        const targetPlaceholder = hasPack ? '目標袋數' : (hasBox ? '目標盒數' : '目標包數');
-
-        const rowHTML = `
-        <tr data-product="${prod.productCode}">
-            <td>${rowIndex}</td>
-            <td>${prod.productCode}</td>
-            <td><input type="number" class="edit-quantity-input" placeholder="包數" oninput="updateFields(this,'${prod.productCode}')"></td>
-            <td>${packOrBoxInput}</td>
-            <td><input type="number" class="target-input" placeholder="${targetPlaceholder}" oninput="checkTarget(this)"></td>
-            <td><input type="number" class="edit-cartons-input" placeholder="箱數" oninput="updateFields(this,'${prod.productCode}')"></td>
-            <td><input type="number" class="edit-pallets-input" placeholder="棧板數" oninput="updateFields(this,'${prod.productCode}')"></td>
-            <td class="box-size-${prod.boxSize}">
-                <span class="box-size-icon box-size-icon-${prod.boxSize}"></span>${prod.boxSize}
-            </td>
-            <td class="action-button-group">
-                <button type="button" class="action-button" onclick="moveUp(this)">↑</button>
-                <button type="button" class="action-button" onclick="moveDown(this)">↓</button>
-                <button type="button" class="lock-button" onclick="toggleLock(this)">鎖定</button>
-                <button type="button" class="remove-button" onclick="removeRow(this)">刪除</button>
-            </td>
-        </tr>`;
-
-        tbody.insertAdjacentHTML('beforeend', rowHTML);
-        updateRowNumbers();
+      const tbody = document.querySelector('#productTable tbody');
+      if(Array.from(tbody.querySelectorAll('tr')).some(r => r.cells[1].textContent === prod.productCode)){
+        showTip('該產品已在列表', 'error');
+        return;
+      }
+      const rowIndex = tbody.children.length + 1;
+      const {hasPack, hasBox} = checkPackageType(prod);
+      let packOrBoxInput = '-';
+      if(hasPack){
+        packOrBoxInput = `<input type="number" class="edit-pack-input" placeholder="袋數" oninput="updateFields(this,'${prod.productCode}')">`;
+      } else if(hasBox){
+        packOrBoxInput = `<input type="number" class="edit-box-input" placeholder="盒數" oninput="updateFields(this,'${prod.productCode}')">`;
+      }
+      const targetPlaceholder = hasPack ? '目標袋數' : (hasBox ? '目標盒數' : '目標包數');
+      const rowHTML = `
+      <tr data-product="${prod.productCode}">
+        <td>${rowIndex}</td>
+        <td>${prod.productCode}</td>
+        <td><input type="number" class="edit-quantity-input" placeholder="包數" oninput="updateFields(this,'${prod.productCode}')"></td>
+        <td>${packOrBoxInput}</td>
+        <td><input type="number" class="target-input" placeholder="${targetPlaceholder}" oninput="checkTarget(this)"></td>
+        <td><input type="number" class="edit-cartons-input" placeholder="箱數" oninput="updateFields(this,'${prod.productCode}')"></td>
+        <td><input type="number" class="edit-pallets-input" placeholder="棧板數" oninput="updateFields(this,'${prod.productCode}')"></td>
+        <td class="box-size-${prod.boxSize}">
+          <span class="box-size-icon box-size-icon-${prod.boxSize}"></span>${prod.boxSize}
+        </td>
+        <td class="action-button-group">
+          <button type="button" class="action-button" onclick="moveUp(this)" title="上移"><i class="fa-solid fa-arrow-up"></i></button>
+          <button type="button" class="action-button" onclick="moveDown(this)" title="下移"><i class="fa-solid fa-arrow-down"></i></button>
+          <button type="button" class="lock-button" onclick="toggleLock(this)" title="鎖定/解鎖"><i class="fa-solid fa-lock"></i></button>
+          <button type="button" class="remove-button" onclick="removeRow(this)" title="刪除"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>`;
+      tbody.insertAdjacentHTML('beforeend', rowHTML);
+      updateRowNumbers();
+      showTip('已加入產品', 'success');
     }
-
     function checkPackageType(prod){
-        const hasPack = (typeof prod.perPack !== 'undefined' && prod.perPack > 0);
-        const hasBox = (typeof prod.perBox !== 'undefined' && prod.perBox > 0 && !hasPack);
-        return {hasPack, hasBox};
+      const hasPack = (typeof prod.perPack !== 'undefined' && prod.perPack > 0);
+      const hasBox = (typeof prod.perBox !== 'undefined' && prod.perBox > 0 && !hasPack);
+      return {hasPack, hasBox};
     }
-
     function getProductSpecByCode(code){
-        return allProducts.find(p => p.productCode === code) || null;
+      return allProducts.find(p => p.productCode === code) || null;
     }
-
-    // ============================================
-    // 欄位變動、重新計算
-    // ============================================
     function updateFields(input, productCode){
-        const row = input.closest('tr');
-        const prod = getProductSpecByCode(productCode);
-        if(!prod) return;
-
-        let {quantity, units, cartons, pallets} = getCurrentValues(row);
-        const {perPack=0, perBox=0, perCarton=1, perPallet=1} = prod;
-        const changedField = getChangedField(input);
-
-        ({quantity, units, cartons, pallets} = recalcValues(changedField, {
-            quantity, units, cartons, pallets,
-            perPack, perBox, perCarton, perPallet
-        }));
-
-        // 更新 UI
-        if(changedField !== 'quantity' && row.querySelector('.edit-quantity-input')){
-            row.querySelector('.edit-quantity-input').value = quantity.toFixed(0);
-        }
-        const packInput = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
-        if(packInput && changedField !== 'units'){
-            packInput.value = units.toFixed(2);
-        }
-        if(changedField !== 'cartons' && row.querySelector('.edit-cartons-input')){
-            row.querySelector('.edit-cartons-input').value = cartons.toFixed(2);
-        }
-        if(changedField !== 'pallets' && row.querySelector('.edit-pallets-input')){
-            row.querySelector('.edit-pallets-input').value = pallets.toFixed(2);
-        }
-
-        const target = row.querySelector('.target-input');
-        if(target) checkTarget(target);
-
-        updateTotals();
+      const row = input.closest('tr');
+      const prod = getProductSpecByCode(productCode);
+      if(!prod) return;
+      let {quantity, units, cartons, pallets} = getCurrentValues(row);
+      const {perPack=0, perBox=0, perCarton=1, perPallet=1} = prod;
+      const changedField = getChangedField(input);
+      ({quantity, units, cartons, pallets} = recalcValues(changedField, {quantity, units, cartons, pallets, perPack, perBox, perCarton, perPallet}));
+      if(changedField !== 'quantity' && row.querySelector('.edit-quantity-input')){
+        row.querySelector('.edit-quantity-input').value = quantity.toFixed(0);
+      }
+      const packInput = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
+      if(packInput && changedField !== 'units'){
+        packInput.value = units.toFixed(2);
+      }
+      if(changedField !== 'cartons' && row.querySelector('.edit-cartons-input')){
+        row.querySelector('.edit-cartons-input').value = cartons.toFixed(2);
+      }
+      if(changedField !== 'pallets' && row.querySelector('.edit-pallets-input')){
+        row.querySelector('.edit-pallets-input').value = pallets.toFixed(2);
+      }
+      const target = row.querySelector('.target-input');
+      if(target) checkTarget(target);
+      updateTotals();
     }
-
     function getChangedField(input){
-        if(input.classList.contains('edit-quantity-input')) return 'quantity';
-        if(input.classList.contains('edit-pack-input') || input.classList.contains('edit-box-input')) return 'units';
-        if(input.classList.contains('edit-cartons-input')) return 'cartons';
-        if(input.classList.contains('edit-pallets-input')) return 'pallets';
-        return '';
+      if(input.classList.contains('edit-quantity-input')) return 'quantity';
+      if(input.classList.contains('edit-pack-input') || input.classList.contains('edit-box-input')) return 'units';
+      if(input.classList.contains('edit-cartons-input')) return 'cartons';
+      if(input.classList.contains('edit-pallets-input')) return 'pallets';
+      return '';
     }
-
     function getCurrentValues(row){
+      const quantity = parseFloat(row.querySelector('.edit-quantity-input')?.value) || 0;
+      let units = 0;
+      const packOrBox = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
+      if(packOrBox){
+        units = parseFloat(packOrBox.value) || 0;
+      }
+      const cartons = parseFloat(row.querySelector('.edit-cartons-input')?.value) || 0;
+      const pallets = parseFloat(row.querySelector('.edit-pallets-input')?.value) || 0;
+      return {quantity, units, cartons, pallets};
+    }
+    function recalcValues(changedField, vals){
+      let {quantity, units, cartons, pallets, perPack, perBox, perCarton, perPallet} = vals;
+      const isBag = (perPack > 0);
+      const isBox = (perBox > 0 && !isBag);
+      const isSingle = (!isBag && !isBox);
+      if(isBag){
+        switch(changedField){
+          case 'quantity': units = quantity / perPack; cartons = units / perCarton; pallets = cartons / perPallet; break;
+          case 'units': quantity = units * perPack; cartons = units / perCarton; pallets = cartons / perPallet; break;
+          case 'cartons': units = cartons * perCarton; quantity = units * perPack; pallets = cartons / perPallet; break;
+          case 'pallets': cartons = pallets * perPallet; units = cartons * perCarton; quantity = units * perPack; break;
+        }
+      }
+      else if(isBox){
+        switch(changedField){
+          case 'quantity': units = quantity / perBox; cartons = units / perCarton; pallets = cartons / perPallet; break;
+          case 'units': quantity = units * perBox; cartons = units / perCarton; pallets = cartons / perPallet; break;
+          case 'cartons': units = cartons * perCarton; quantity = units * perBox; pallets = cartons / perPallet; break;
+          case 'pallets': cartons = pallets * perPallet; units = cartons * perCarton; quantity = units * perBox; break;
+        }
+      }
+      else if(isSingle){
+        switch(changedField){
+          case 'quantity': cartons = quantity / perCarton; pallets = cartons / perPallet; break;
+          case 'cartons': quantity = cartons * perCarton; pallets = cartons / perPallet; break;
+          case 'pallets': cartons = pallets * perPallet; quantity = cartons * perCarton; break;
+        }
+      }
+      return {quantity, units, cartons, pallets};
+    }
+    function checkTarget(targetInput){
+      const row = targetInput.closest('tr');
+      let currentVal = 0;
+      const packOrBox = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
+      if(packOrBox){
+        currentVal = parseFloat(packOrBox.value) || 0;
+      } else {
+        currentVal = parseFloat(row.querySelector('.edit-quantity-input').value) || 0;
+      }
+      const tVal = parseFloat(targetInput.value) || 0;
+      if(tVal > 0 && currentVal >= tVal){
+        targetInput.style.backgroundColor = '#23c87d';
+        targetInput.style.color = '#fff';
+      } else if (tVal > 0) {
+        targetInput.style.backgroundColor = '#fa5353';
+        targetInput.style.color = '#fff';
+      } else {
+        targetInput.style.backgroundColor = '';
+        targetInput.style.color = '';
+      }
+    }
+    function toggleLock(btn){
+      const row = btn.closest('tr');
+      const isLocked = row.classList.contains('locked');
+      row.querySelectorAll('input').forEach(inp => inp.disabled = !isLocked);
+      row.classList.toggle('locked', !isLocked);
+      btn.innerHTML = isLocked ? '<i class="fa-solid fa-lock"></i>' : '<i class="fa-solid fa-lock-open"></i>';
+      showTip(isLocked ? '已解鎖此列' : '已鎖定此列', isLocked ? 'success' : 'info');
+    }
+    function removeRow(btn){
+      btn.closest('tr').remove();
+      updateRowNumbers();
+      updateTotals();
+      showTip('已刪除產品', 'success');
+    }
+    function moveUp(btn){
+      const tr = btn.closest('tr');
+      const prev = tr.previousElementSibling;
+      if(prev) tr.parentNode.insertBefore(tr, prev);
+      updateRowNumbers();
+    }
+    function moveDown(btn){
+      const tr = btn.closest('tr');
+      const next = tr.nextElementSibling;
+      if(next) tr.parentNode.insertBefore(next, tr);
+      updateRowNumbers();
+    }
+    function updateRowNumbers(){
+      const rows = document.querySelectorAll('#productTable tbody tr');
+      rows.forEach((r, i) => { r.cells[0].textContent = i + 1; });
+    }
+    function updateTotals(){
+      let totalQuantity = 0, totalCartons = 0, totalPallets = 0;
+      const palletCounts = { A:0, B:0, C:0, D:0 };
+      document.querySelectorAll('.edit-quantity-input').forEach(i => {
+        totalQuantity += parseFloat(i.value) || 0;
+      });
+      document.querySelectorAll('.edit-cartons-input').forEach(i => {
+        totalCartons += parseFloat(i.value) || 0;
+      });
+      const rows = document.querySelectorAll('#productTable tbody tr');
+      rows.forEach(row => {
+        const pVal = parseFloat(row.querySelector('.edit-pallets-input').value) || 0;
+        const bSize = row.cells[7].textContent.trim();
+        if(palletCounts.hasOwnProperty(bSize)){
+          palletCounts[bSize] += pVal;
+        }
+      });
+      totalPallets = palletCounts.A + palletCounts.B + palletCounts.C + palletCounts.D;
+      document.getElementById('totalQuantity').textContent = totalQuantity.toFixed(0);
+      document.getElementById('totalCartons').textContent = totalCartons.toFixed(2);
+      document.getElementById('totalPallets').textContent = totalPallets.toFixed(2);
+      document.getElementById('countA').textContent = palletCounts.A.toFixed(2);
+      document.getElementById('countB').textContent = palletCounts.B.toFixed(2);
+      document.getElementById('countC').textContent = palletCounts.C.toFixed(2);
+      updateContainerInfo(totalPallets);
+    }
+    function updateContainerInfo(totalPallets){
+      const infoDiv = document.getElementById('containerInfo');
+      infoDiv.innerHTML = '';
+      let remaining = totalPallets;
+      let containerCount = 1;
+      while(remaining > 0){
+        let type, cap;
+        if(remaining <= 10){
+          type = '20 尺貨櫃';
+          cap = 10;
+        } else {
+          type = '40 尺貨櫃';
+          cap = 20;
+        }
+        let use = Math.min(remaining, cap);
+        let fillRate = (use/cap)*100;
+        let cDiv = document.createElement('div');
+        cDiv.innerHTML = `<strong style="font-size:1.05rem;">貨櫃 ${containerCount}：${type}（${fillRate.toFixed(0)}%）</strong>`;
+        let pc = document.createElement('div');
+        pc.className = 'progress-container';
+        let pb = document.createElement('div');
+        pb.className = 'progress-bar';
+        pb.style.width = fillRate + '%';
+        pb.textContent = `${use} / ${cap} 棧板`;
+        pc.appendChild(pb);
+        cDiv.appendChild(pc);
+        infoDiv.appendChild(cDiv);
+        remaining -= use;
+        containerCount++;
+      }
+    }
+    function exportToExcel() {
+      const wb = XLSX.utils.book_new();
+      const orderSheetData = [];
+      const orderHeader = ["序號","品號","名稱","每箱","包裝類型","箱數","單位","棧板數","單位"];
+      orderSheetData.push(orderHeader);
+      const rows = document.querySelectorAll('#productTable tbody tr');
+      rows.forEach(row => {
+        const idx = row.cells[0].textContent;
+        const code = row.cells[1].textContent;
+        const prod = allProducts.find(p => p.productCode === code);
+        if(!prod) return;
+        const name = prod.productName || '';
+        const eachCarton = prod.perCarton || 1;
+        let pkgType = '單包';
+        if(prod.perPack && prod.perPack > 0) pkgType = '袋裝';
+        else if(prod.perBox && prod.perBox > 0) pkgType = '盒裝';
+        const cVal = parseFloat(row.querySelector('.edit-cartons-input')?.value) || 0;
+        const pVal = parseFloat(row.querySelector('.edit-pallets-input')?.value) || 0;
+        orderSheetData.push([
+          idx, code, name, eachCarton, pkgType, cVal, "箱", pVal, "棧板"
+        ]);
+      });
+      const wsOrder = XLSX.utils.aoa_to_sheet(orderSheetData);
+      XLSX.utils.book_append_sheet(wb, wsOrder, "訂單");
+      const detailSheetData = [];
+      const detailHeader = ["序號","品號","名稱","包數","袋數/盒數","箱數","棧板數","紙箱規格"];
+      detailSheetData.push(detailHeader);
+      rows.forEach(row => {
+        const idx = row.cells[0].textContent;
+        const code = row.cells[1].textContent;
+        const prod = allProducts.find(p => p.productCode === code);
+        if(!prod) return;
+        const name = prod.productName || '';
         const quantity = parseFloat(row.querySelector('.edit-quantity-input')?.value) || 0;
-        let units = 0;
-        const packOrBox = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
-        if(packOrBox){
-            units = parseFloat(packOrBox.value) || 0;
+        let packOrBoxVal = '—';
+        const packOrBoxInput = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
+        if (packOrBoxInput) {
+          const val = parseFloat(packOrBoxInput.value);
+          if (val && !isNaN(val)) packOrBoxVal = val;
         }
         const cartons = parseFloat(row.querySelector('.edit-cartons-input')?.value) || 0;
         const pallets = parseFloat(row.querySelector('.edit-pallets-input')?.value) || 0;
-        return {quantity, units, cartons, pallets};
+        const boxSize = row.cells[7].textContent.trim();
+        detailSheetData.push([
+          idx, code, name, quantity, packOrBoxVal, cartons, pallets, boxSize
+        ]);
+      });
+      const wsDetail = XLSX.utils.aoa_to_sheet(detailSheetData);
+      XLSX.utils.book_append_sheet(wb, wsDetail, "詳情");
+      const dateStr = getTodayString();
+      XLSX.writeFile(wb, `訂單${currentCountry}_${dateStr}.xlsx`);
+      showTip("已匯出 Excel", "success");
     }
-
-    function recalcValues(changedField, vals){
-        let {quantity, units, cartons, pallets, perPack, perBox, perCarton, perPallet} = vals;
-        const isBag = (perPack > 0);
-        const isBox = (perBox > 0 && !isBag);
-        const isSingle = (!isBag && !isBox);
-
-        // 袋裝 => perPack+perCarton
-        if(isBag){
-            switch(changedField){
-                case 'quantity':
-                    units = quantity / perPack;
-                    cartons = units / perCarton;
-                    pallets = cartons / perPallet;
-                    break;
-                case 'units':
-                    quantity = units * perPack;
-                    cartons = units / perCarton;
-                    pallets = cartons / perPallet;
-                    break;
-                case 'cartons':
-                    units = cartons * perCarton;
-                    quantity = units * perPack;
-                    pallets = cartons / perPallet;
-                    break;
-                case 'pallets':
-                    cartons = pallets * perPallet;
-                    units = cartons * perCarton;
-                    quantity = units * perPack;
-                    break;
-            }
-        }
-        // 盒裝 => perBox+perCarton
-        else if(isBox){
-            switch(changedField){
-                case 'quantity':
-                    units = quantity / perBox;
-                    cartons = units / perCarton;
-                    pallets = cartons / perPallet;
-                    break;
-                case 'units':
-                    quantity = units * perBox;
-                    cartons = units / perCarton;
-                    pallets = cartons / perPallet;
-                    break;
-                case 'cartons':
-                    units = cartons * perCarton;
-                    quantity = units * perBox;
-                    pallets = cartons / perPallet;
-                    break;
-                case 'pallets':
-                    cartons = pallets * perPallet;
-                    units = cartons * perCarton;
-                    quantity = units * perBox;
-                    break;
-            }
-        }
-        // 單包 => perCarton
-        else if(isSingle){
-            switch(changedField){
-                case 'quantity':
-                    cartons = quantity / perCarton;
-                    pallets = cartons / perPallet;
-                    break;
-                case 'cartons':
-                    quantity = cartons * perCarton;
-                    pallets = cartons / perPallet;
-                    break;
-                case 'pallets':
-                    cartons = pallets * perPallet;
-                    quantity = cartons * perCarton;
-                    break;
-            }
-        }
-        return {quantity, units, cartons, pallets};
-    }
-
-    function checkTarget(targetInput){
-        const row = targetInput.closest('tr');
-        let currentVal = 0;
-        const packOrBox = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
-        if(packOrBox){
-            currentVal = parseFloat(packOrBox.value) || 0;
-        } else {
-            currentVal = parseFloat(row.querySelector('.edit-quantity-input').value) || 0;
-        }
-        const tVal = parseFloat(targetInput.value) || 0;
-        if(tVal > 0 && currentVal >= tVal){
-            targetInput.style.backgroundColor = '#28a745';
-            targetInput.style.color = '#fff';
-        } else {
-            targetInput.style.backgroundColor = '#dc3545';
-            targetInput.style.color = '#fff';
-        }
-    }
-
-    // ============================================
-    // 鎖定/刪除/上下移
-    // ============================================
-    function toggleLock(btn){
-        const row = btn.closest('tr');
-        const isLocked = row.classList.contains('locked');
-        row.querySelectorAll('input').forEach(inp => inp.disabled = !isLocked);
-        row.classList.toggle('locked', !isLocked);
-        btn.textContent = isLocked ? '鎖定' : '解鎖';
-    }
-
-    function removeRow(btn){
-        btn.closest('tr').remove();
-        updateRowNumbers();
-        updateTotals();
-    }
-    function moveUp(btn){
-        const tr = btn.closest('tr');
-        const prev = tr.previousElementSibling;
-        if(prev) tr.parentNode.insertBefore(tr, prev);
-        updateRowNumbers();
-    }
-    function moveDown(btn){
-        const tr = btn.closest('tr');
-        const next = tr.nextElementSibling;
-        if(next) tr.parentNode.insertBefore(next, tr);
-        updateRowNumbers();
-    }
-
-    function updateRowNumbers(){
-        const rows = document.querySelectorAll('#productTable tbody tr');
-        rows.forEach((r, i) => {
-            r.cells[0].textContent = i + 1;
-        });
-    }
-
-    // ============================================
-    // 計算總計
-    // ============================================
-    function updateTotals(){
-        let totalQuantity = 0, totalCartons = 0, totalPallets = 0;
-        const palletCounts = { A:0, B:0, C:0, D:0 };
-
-        document.querySelectorAll('.edit-quantity-input').forEach(i => {
-            totalQuantity += parseFloat(i.value) || 0;
-        });
-        document.querySelectorAll('.edit-cartons-input').forEach(i => {
-            totalCartons += parseFloat(i.value) || 0;
-        });
-
-        const rows = document.querySelectorAll('#productTable tbody tr');
-        rows.forEach(row => {
-            const pVal = parseFloat(row.querySelector('.edit-pallets-input').value) || 0;
-            const bSize = row.cells[7].textContent.trim();
-            if(palletCounts.hasOwnProperty(bSize)){
-                palletCounts[bSize] += pVal;
-            }
-        });
-
-        totalPallets = palletCounts.A + palletCounts.B + palletCounts.C + palletCounts.D;
-
-        document.getElementById('totalQuantity').textContent = totalQuantity.toFixed(0);
-        document.getElementById('totalCartons').textContent = totalCartons.toFixed(2);
-        document.getElementById('totalPallets').textContent = totalPallets.toFixed(2);
-
-        document.getElementById('countA').textContent = palletCounts.A.toFixed(2);
-        document.getElementById('countB').textContent = palletCounts.B.toFixed(2);
-        document.getElementById('countC').textContent = palletCounts.C.toFixed(2);
-
-        updateContainerInfo(totalPallets);
-    }
-
-    // ============================================
-    // 貨櫃資訊 (示例)
-    // ============================================
-    function updateContainerInfo(totalPallets){
-        const infoDiv = document.getElementById('containerInfo');
-        infoDiv.innerHTML = '';
-        let remaining = totalPallets;
-        let containerCount = 1;
-
-        while(remaining > 0){
-            let type, cap;
-            if(remaining <= 10){
-                type = '20 尺貨櫃';
-                cap = 10;
-            } else {
-                type = '40 尺貨櫃';
-                cap = 20;
-            }
-            let use = Math.min(remaining, cap);
-            let fillRate = (use/cap)*100;
-
-            let cDiv = document.createElement('div');
-            cDiv.innerHTML = `<strong>貨櫃 ${containerCount}：${type}（${fillRate.toFixed(0)}%）</strong>`;
-
-            let pc = document.createElement('div');
-            pc.className = 'progress-container';
-            let pb = document.createElement('div');
-            pb.className = 'progress-bar';
-            pb.style.width = fillRate + '%';
-            pb.textContent = `${use} / ${cap} 棧板`;
-
-            pc.appendChild(pb);
-            cDiv.appendChild(pc);
-            infoDiv.appendChild(cDiv);
-
-            remaining -= use;
-            containerCount++;
-        }
-    }
-
-    // ============================================
-    // 匯出 Excel：含「訂單」 & 「詳情」 Sheet
-    // ============================================
-    function exportToExcel() {
-        // 建立工作簿
-        const wb = XLSX.utils.book_new();
-
-        // 1) 第一個工作表：「訂單」
-        const orderSheetData = [];
-        const orderHeader = ["序號","品號","名稱","每箱","包裝類型","箱數","單位","棧板數","單位"];
-        orderSheetData.push(orderHeader);
-
-        const rows = document.querySelectorAll('#productTable tbody tr');
-        rows.forEach(row => {
-            const idx = row.cells[0].textContent;
-            const code = row.cells[1].textContent;
-            const prod = allProducts.find(p => p.productCode === code);
-            if(!prod) return;
-
-            const name = prod.productName || '';
-            const eachCarton = prod.perCarton || 1;
-
-            let pkgType = '單包';
-            if(prod.perPack && prod.perPack > 0) pkgType = '袋裝';
-            else if(prod.perBox && prod.perBox > 0) pkgType = '盒裝';
-
-            const cVal = parseFloat(row.querySelector('.edit-cartons-input')?.value) || 0;
-            const pVal = parseFloat(row.querySelector('.edit-pallets-input')?.value) || 0;
-
-            orderSheetData.push([
-                idx,               // 序號
-                code,              // 品號
-                name,              // 名稱
-                eachCarton,        // 每箱
-                pkgType,           // 包裝類型
-                cVal,              // 箱數
-                "箱",
-                pVal,              // 棧板數
-                "棧板"
-            ]);
-        });
-        const wsOrder = XLSX.utils.aoa_to_sheet(orderSheetData);
-        XLSX.utils.book_append_sheet(wb, wsOrder, "訂單");
-
-        // 2) 第二個工作表：「詳情」
-        const detailSheetData = [];
-        const detailHeader = ["序號","品號","名稱","包數","袋數/盒數","箱數","棧板數","紙箱規格"];
-        detailSheetData.push(detailHeader);
-
-        rows.forEach(row => {
-            const idx = row.cells[0].textContent;
-            const code = row.cells[1].textContent;
-            const prod = allProducts.find(p => p.productCode === code);
-            if(!prod) return;
-            const name = prod.productName || '';
-
-            // 包數
-            const quantity = parseFloat(row.querySelector('.edit-quantity-input')?.value) || 0;
-
-            // 袋數/盒數：如果沒有或是 0 => 顯示 "—"
-            let packOrBoxVal = '—';
-            const packOrBoxInput = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
-            if (packOrBoxInput) {
-                const val = parseFloat(packOrBoxInput.value);
-                if (val && !isNaN(val)) {
-                    packOrBoxVal = val;  
-                }
-            }
-
-            const cartons = parseFloat(row.querySelector('.edit-cartons-input')?.value) || 0;
-            const pallets = parseFloat(row.querySelector('.edit-pallets-input')?.value) || 0;
-            const boxSize = row.cells[7].textContent.trim();  // 紙箱規格 (A/B/C/D)
-
-            detailSheetData.push([
-                idx,            // 序號
-                code,           // 品號
-                name,           // 名稱
-                quantity,       // 包數
-                packOrBoxVal,   // 袋數/盒數 (沒有則顯示 "—")
-                cartons,        // 箱數
-                pallets,        // 棧板數
-                boxSize         // 紙箱規格
-            ]);
-        });
-        const wsDetail = XLSX.utils.aoa_to_sheet(detailSheetData);
-        XLSX.utils.book_append_sheet(wb, wsDetail, "詳情");
-
-        // 寫檔
-        const dateStr = getTodayString();
-        XLSX.writeFile(wb, `訂單${currentCountry}_${dateStr}.xlsx`);
-    }
-
     function getTodayString(){
-        const now = new Date();
-        let mm = String(now.getMonth() + 1).padStart(2, "0");
-        let dd = String(now.getDate()).padStart(2, "0");
-        return mm + dd;
+      const now = new Date();
+      let mm = String(now.getMonth() + 1).padStart(2, "0");
+      let dd = String(now.getDate()).padStart(2, "0");
+      return mm + dd;
     }
-
-    // ============================================
-    // Modal：紙箱規格
-    // ============================================
     function openModal(){
-        document.getElementById('boxSizeModal').style.display = 'block';
+      document.getElementById('boxSizeModal').style.display = 'block';
     }
     function closeModal(){
-        document.getElementById('boxSizeModal').style.display = 'none';
+      document.getElementById('boxSizeModal').style.display = 'none';
     }
     window.onclick = (e) => {
-        if(e.target === document.getElementById('boxSizeModal')) closeModal();
-        if(e.target === document.getElementById('newItemModal')) closeNewItemModal();
+      if(e.target === document.getElementById('boxSizeModal')) closeModal();
+      if(e.target === document.getElementById('newItemModal')) closeNewItemModal();
     }
-
-    // ============================================
-    // 搜尋功能
-    // ============================================
     function searchProduct(){
-        const val = document.getElementById('searchInput').value.trim().toUpperCase();
-        const res = document.getElementById('searchResults');
-        res.innerHTML = '';
-        if(!val){
-            res.style.display='none';
-            return;
-        }
-        const matched = getFilteredProducts().filter(p => p.productCode.toUpperCase().includes(val));
-        if(matched.length > 0){
-            res.style.display='block';
-            matched.forEach(prod=>{
-                const item = document.createElement('div');
-                item.className = 'search-result-item';
-                item.textContent = `${prod.productCode} - ${prod.productName}`;
-                item.onclick = () => {
-                    addProduct(prod);
-                    document.getElementById('searchInput').value = '';
-                    res.innerHTML = '';
-                    res.style.display = 'none';
-                };
-                res.appendChild(item);
-            });
-        } else {
-            res.style.display='none';
-        }
+      const val = document.getElementById('searchInput').value.trim().toUpperCase();
+      const res = document.getElementById('searchResults');
+      res.innerHTML = '';
+      if(!val){
+        res.style.display='none';
+        return;
+      }
+      const matched = getFilteredProducts().filter(p => p.productCode.toUpperCase().includes(val));
+      if(matched.length > 0){
+        res.style.display='block';
+        matched.forEach(prod=>{
+          const item = document.createElement('div');
+          item.className = 'search-result-item';
+          item.textContent = `${prod.productCode} - ${prod.productName}`;
+          item.onclick = () => {
+            addProduct(prod);
+            document.getElementById('searchInput').value = '';
+            res.innerHTML = '';
+            res.style.display = 'none';
+          };
+          res.appendChild(item);
+        });
+      } else {
+        res.style.display='none';
+      }
     }
-
-    // ============================================
-    // 新品產生器
-    // ============================================
     document.getElementById('newItemGeneratorBtn').addEventListener('click', openNewItemModal);
     function openNewItemModal(){
-        document.getElementById('newItemModal').style.display = 'block';
+      document.getElementById('newItemModal').style.display = 'block';
     }
     function closeNewItemModal(){
-        document.getElementById('newItemModal').style.display = 'none';
+      document.getElementById('newItemModal').style.display = 'none';
     }
-
     function initNewItemModal(){
-        const brandSel = document.getElementById('newItemBrandSelect');
-        brandSel.innerHTML = '<option value="">請選擇品牌</option>';
-        const brandSet = [...new Set(allProducts.map(p => p.brand))];
-        brandSet.forEach(b => {
-            brandSel.innerHTML += `<option value="${b}">${b}</option>`;
-        });
-        brandSel.innerHTML += '<option value="other">其他（手動輸入）</option>';
+      const brandSel = document.getElementById('newItemBrandSelect');
+      brandSel.innerHTML = '<option value="">請選擇品牌</option>';
+      const brandSet = [...new Set(allProducts.map(p => p.brand))];
+      brandSet.forEach(b => {
+        brandSel.innerHTML += `<option value="${b}">${b}</option>`;
+      });
+      brandSel.innerHTML += '<option value="other">其他（手動輸入）</option>';
     }
-
     function newItemBrandChanged(){
-        const val = document.getElementById('newItemBrandSelect').value;
-        const inp = document.getElementById('newItemBrandInput');
-        if(val === 'other'){
-            inp.style.display = 'block';
-        } else {
-            inp.style.display = 'none';
-            inp.value = '';
-        }
-        updateNewItemSpecOptions();
+      const val = document.getElementById('newItemBrandSelect').value;
+      const inp = document.getElementById('newItemBrandInput');
+      if(val === 'other'){
+        inp.style.display = 'block';
+      } else {
+        inp.style.display = 'none';
+        inp.value = '';
+      }
+      updateNewItemSpecOptions();
     }
-
     function getNewItemBrand(){
-        const val = document.getElementById('newItemBrandSelect').value;
-        return val === 'other' ? document.getElementById('newItemBrandInput').value.trim() : val;
+      const val = document.getElementById('newItemBrandSelect').value;
+      return val === 'other' ? document.getElementById('newItemBrandInput').value.trim() : val;
     }
-
     function updateNewItemSpecOptions(){
-        const brand = getNewItemBrand();
-        const specSel = document.getElementById('newItemSpecSelect');
-        specSel.innerHTML = '<option value="">請選擇規格</option>';
-        if(brand){
-            const specs = [...new Set(allProducts.filter(p => p.brand === brand).map(p => p.spec))];
-            specs.forEach(s => {
-                specSel.innerHTML += `<option value="${s}">${s}</option>`;
-            });
-        }
-        specSel.innerHTML += '<option value="other">其他（手動輸入）</option>';
+      const brand = getNewItemBrand();
+      const specSel = document.getElementById('newItemSpecSelect');
+      specSel.innerHTML = '<option value="">請選擇規格</option>';
+      if(brand){
+        const specs = [...new Set(allProducts.filter(p => p.brand === brand).map(p => p.spec))];
+        specs.forEach(s => {
+          specSel.innerHTML += `<option value="${s}">${s}</option>`;
+        });
+      }
+      specSel.innerHTML += '<option value="other">其他（手動輸入）</option>';
     }
-
     function newItemSpecChanged(){
-        const val = document.getElementById('newItemSpecSelect').value;
-        const inp = document.getElementById('newItemSpecInput');
-        if(val === 'other'){
-            inp.style.display='block';
-        } else {
-            inp.style.display='none';
-            inp.value='';
-        }
-        updateNewItemSeriesOptions();
+      const val = document.getElementById('newItemSpecSelect').value;
+      const inp = document.getElementById('newItemSpecInput');
+      if(val === 'other'){
+        inp.style.display='block';
+      } else {
+        inp.style.display='none';
+        inp.value='';
+      }
+      updateNewItemSeriesOptions();
     }
-
     function getNewItemSpec(){
-        const val = document.getElementById('newItemSpecSelect').value;
-        return val === 'other' ? document.getElementById('newItemSpecInput').value.trim() : val;
+      const val = document.getElementById('newItemSpecSelect').value;
+      return val === 'other' ? document.getElementById('newItemSpecInput').value.trim() : val;
     }
-
     function updateNewItemSeriesOptions(){
-        const brand = getNewItemBrand();
-        const spec = getNewItemSpec();
-        const serSel = document.getElementById('newItemSeriesSelect');
-        serSel.innerHTML = '<option value="">請選擇系列</option>';
-        if(brand && spec){
-            const sList = [...new Set(
-                allProducts.filter(p => p.brand === brand && p.spec === spec)
-                          .map(p => p.series)
-            )];
-            sList.forEach(s => {
-                serSel.innerHTML += `<option value="${s}">${s}</option>`;
-            });
-        }
-        serSel.innerHTML += '<option value="other">其他（手動輸入）</option>';
+      const brand = getNewItemBrand();
+      const spec = getNewItemSpec();
+      const serSel = document.getElementById('newItemSeriesSelect');
+      serSel.innerHTML = '<option value="">請選擇系列</option>';
+      if(brand && spec){
+        const sList = [...new Set(
+          allProducts.filter(p => p.brand === brand && p.spec === spec)
+          .map(p => p.series)
+        )];
+        sList.forEach(s => {
+          serSel.innerHTML += `<option value="${s}">${s}</option>`;
+        });
+      }
+      serSel.innerHTML += '<option value="other">其他（手動輸入）</option>';
     }
-
     function newItemSeriesChanged(){
-        const val = document.getElementById('newItemSeriesSelect').value;
-        const inp = document.getElementById('newItemSeriesInput');
-        if(val === 'other'){
-            inp.style.display='block';
-        } else {
-            inp.style.display='none';
-            inp.value='';
-        }
+      const val = document.getElementById('newItemSeriesSelect').value;
+      const inp = document.getElementById('newItemSeriesInput');
+      if(val === 'other'){
+        inp.style.display='block';
+      } else {
+        inp.style.display='none';
+        inp.value='';
+      }
     }
-
     function getNewItemSeries(){
-        const val = document.getElementById('newItemSeriesSelect').value;
-        return val === 'other' ? document.getElementById('newItemSeriesInput').value.trim() : val;
+      const val = document.getElementById('newItemSeriesSelect').value;
+      return val === 'other' ? document.getElementById('newItemSeriesInput').value.trim() : val;
     }
-
     function boxSizeChanged(){
-        const val = document.getElementById('newItemBoxSize').value;
-        document.getElementById('newItemPallet').value = boxSizePalletMap[val] || 42;
+      const val = document.getElementById('newItemBoxSize').value;
+      document.getElementById('newItemPallet').value = boxSizePalletMap[val] || 42;
     }
-
     function packagingTypeChanged(){
-        const type = document.getElementById('newItemPackagingType').value;
-        const container = document.getElementById('packagingFields');
-        container.innerHTML = '';
-        if(type === 'bag'){
-            container.innerHTML +=
-              '<label>每箱袋數 (perCarton)：<input type="number" id="newItemPerCartonBag" placeholder="必填"></label>';
-            container.innerHTML +=
-              '<label>每袋幾入 (perPack)：<input type="number" id="newItemPerPack" placeholder="必填"></label>';
-        } else if(type === 'box'){
-            container.innerHTML +=
-              '<label>每箱盒數 (perCarton)：<input type="number" id="newItemPerCartonBox" placeholder="必填"></label>';
-            container.innerHTML +=
-              '<label>每盒幾入 (perBox)：<input type="number" id="newItemPerBoxBox" placeholder="必填"></label>';
-        } else {
-            container.innerHTML +=
-              '<label>每箱包數 (perCarton)：<input type="number" id="newItemPerCartonSingle" placeholder="必填"></label>';
-        }
+      const type = document.getElementById('newItemPackagingType').value;
+      const container = document.getElementById('packagingFields');
+      container.innerHTML = '';
+      if(type === 'bag'){
+        container.innerHTML +=
+          '<label>每箱袋數 <span style="color:#eb3d3d">*</span><input type="number" id="newItemPerCartonBag" placeholder="必填"></label>';
+        container.innerHTML +=
+          '<label>每袋幾入 <span style="color:#eb3d3d">*</span><input type="number" id="newItemPerPack" placeholder="必填"></label>';
+      } else if(type === 'box'){
+        container.innerHTML +=
+          '<label>每箱盒數 <span style="color:#eb3d3d">*</span><input type="number" id="newItemPerCartonBox" placeholder="必填"></label>';
+        container.innerHTML +=
+          '<label>每盒幾入 <span style="color:#eb3d3d">*</span><input type="number" id="newItemPerBoxBox" placeholder="必填"></label>';
+      } else {
+        container.innerHTML +=
+          '<label>每箱包數 <span style="color:#eb3d3d">*</span><input type="number" id="newItemPerCartonSingle" placeholder="必填"></label>';
+      }
     }
-
     function addNewItemLine(){
-        const brand = getNewItemBrand();
-        const spec = getNewItemSpec();
-        const series = getNewItemSeries();
-        const code = document.getElementById('newItemCode').value.trim();
-        const name = document.getElementById('newItemName').value.trim();
-        const boxSize = document.getElementById('newItemBoxSize').value;
-        const pal = document.getElementById('newItemPallet').value.trim();
-        const countryVal = document.getElementById('newItemCountry').value;
-        const pkgType = document.getElementById('newItemPackagingType').value;
-
-        if(!brand || !spec || !series || !code || !name || !pal){
-            alert("請填完整品牌/規格/系列/品號/品名及棧板數");
-            return;
+      const brand = getNewItemBrand();
+      const spec = getNewItemSpec();
+      const series = getNewItemSeries();
+      const code = document.getElementById('newItemCode').value.trim();
+      const name = document.getElementById('newItemName').value.trim();
+      const boxSize = document.getElementById('newItemBoxSize').value;
+      const pal = document.getElementById('newItemPallet').value.trim();
+      const countryVal = document.getElementById('newItemCountry').value;
+      const pkgType = document.getElementById('newItemPackagingType').value;
+      if(!brand || !spec || !series || !code || !name || !pal){
+        showTip("請填完整品牌/規格/系列/品號/品名及棧板數", "error");
+        return;
+      }
+      let itemStr = `{brand:"${brand}", spec:"${spec}", series:"${series}", productCode:"${code}", productName:"${name}", boxSize:"${boxSize}", perPallet:${pal}, country:"${countryVal}"`;
+      if(pkgType === 'bag'){
+        const cBag = document.getElementById('newItemPerCartonBag').value.trim();
+        const pack = document.getElementById('newItemPerPack').value.trim();
+        if(!cBag || !pack){
+          showTip("袋裝需填每箱袋數、每袋幾入", "error");
+          return;
         }
-
-        let itemStr = `{brand:"${brand}", spec:"${spec}", series:"${series}", productCode:"${code}", productName:"${name}", boxSize:"${boxSize}", perPallet:${pal}, country:"${countryVal}"`;
-
-        if(pkgType === 'bag'){
-            const cBag = document.getElementById('newItemPerCartonBag').value.trim();
-            const pack = document.getElementById('newItemPerPack').value.trim();
-            if(!cBag || !pack){
-                alert("袋裝需: perCarton(每箱袋數), perPack(每袋幾入)");
-                return;
-            }
-            itemStr += `, perCarton:${cBag}, perPack:${pack}`;
-        } else if(pkgType === 'box'){
-            const cBox = document.getElementById('newItemPerCartonBox').value.trim();
-            const bBox = document.getElementById('newItemPerBoxBox').value.trim();
-            if(!cBox || !bBox){
-                alert("盒裝需: perCarton(每箱盒數), perBox(每盒幾入)");
-                return;
-            }
-            itemStr += `, perCarton:${cBox}, perBox:${bBox}`;
-        } else {
-            const single = document.getElementById('newItemPerCartonSingle').value.trim();
-            if(!single){
-                alert("單包需: perCarton(每箱包數)");
-                return;
-            }
-            itemStr += `, perCarton:${single}`;
+        itemStr += `, perCarton:${cBag}, perPack:${pack}`;
+      } else if(pkgType === 'box'){
+        const cBox = document.getElementById('newItemPerCartonBox').value.trim();
+        const bBox = document.getElementById('newItemPerBoxBox').value.trim();
+        if(!cBox || !bBox){
+          showTip("盒裝需填每箱盒數、每盒幾入", "error");
+          return;
         }
-
-        itemStr += '},';
-
-        const area = document.getElementById('newItemResult');
-        const currVal = area.value.trim();
-        area.value = currVal ? (currVal + ' ' + itemStr) : itemStr;
-
-        resetNewItemForm();
+        itemStr += `, perCarton:${cBox}, perBox:${bBox}`;
+      } else {
+        const single = document.getElementById('newItemPerCartonSingle').value.trim();
+        if(!single){
+          showTip("單包需填每箱包數", "error");
+          return;
+        }
+        itemStr += `, perCarton:${single}`;
+      }
+      itemStr += '},';
+      const area = document.getElementById('newItemResult');
+      const currVal = area.value.trim();
+      area.value = currVal ? (currVal + ' ' + itemStr) : itemStr;
+      resetNewItemForm();
+      showTip('已產生新商品資訊', 'success');
     }
-
     function resetNewItemForm(){
-        document.getElementById('newItemBrandSelect').value = '';
-        document.getElementById('newItemBrandInput').value = '';
-        document.getElementById('newItemBrandInput').style.display='none';
-
-        document.getElementById('newItemSpecSelect').innerHTML =
-          '<option value="">請選擇規格</option><option value="other">其他（手動輸入）</option>';
-        document.getElementById('newItemSpecInput').value = '';
-        document.getElementById('newItemSpecInput').style.display='none';
-
-        document.getElementById('newItemSeriesSelect').innerHTML =
-          '<option value="">請選擇系列</option><option value="other">其他（手動輸入）</option>';
-        document.getElementById('newItemSeriesInput').value = '';
-        document.getElementById('newItemSeriesInput').style.display='none';
-
-        document.getElementById('newItemCode').value = '';
-        document.getElementById('newItemName').value = '';
-        document.getElementById('newItemBoxSize').value = 'A';
-        boxSizeChanged();
-        document.getElementById('newItemCountry').value = 'VN';
-        document.getElementById('newItemPackagingType').value = 'single';
-        packagingTypeChanged();
-        document.getElementById('newItemPallet').value = boxSizePalletMap['A'];
+      document.getElementById('newItemBrandSelect').value = '';
+      document.getElementById('newItemBrandInput').value = '';
+      document.getElementById('newItemBrandInput').style.display='none';
+      document.getElementById('newItemSpecSelect').innerHTML =
+        '<option value="">請選擇規格</option><option value="other">其他（手動輸入）</option>';
+      document.getElementById('newItemSpecInput').value = '';
+      document.getElementById('newItemSpecInput').style.display='none';
+      document.getElementById('newItemSeriesSelect').innerHTML =
+        '<option value="">請選擇系列</option><option value="other">其他（手動輸入）</option>';
+      document.getElementById('newItemSeriesInput').value = '';
+      document.getElementById('newItemSeriesInput').style.display='none';
+      document.getElementById('newItemCode').value = '';
+      document.getElementById('newItemName').value = '';
+      document.getElementById('newItemBoxSize').value = 'A';
+      boxSizeChanged();
+      document.getElementById('newItemCountry').value = 'VN';
+      document.getElementById('newItemPackagingType').value = 'single';
+      packagingTypeChanged();
+      document.getElementById('newItemPallet').value = boxSizePalletMap['A'];
     }
-
     function copyNewItems(){
-        const area = document.getElementById('newItemResult');
-        if(navigator.clipboard && window.isSecureContext){
-            // 現代瀏覽器
-            navigator.clipboard.writeText(area.value).then(()=>{
-                alert("已複製結果");
-            },()=>{
-                alert("複製失敗，請手動選取文字複製。");
-            });
-        } else {
-            // 相容舊瀏覽器(或非HTTPS)
-            area.select();
-            document.execCommand("copy");
-            alert("已複製結果");
-        }
+      const area = document.getElementById('newItemResult');
+      if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(area.value).then(()=>{
+          showTip("已複製結果", "success");
+        },()=>{
+          showTip("複製失敗，請手動複製。", "error");
+        });
+      } else {
+        area.select();
+        document.execCommand("copy");
+        showTip("已複製結果", "success");
+      }
     }
-</script>
+  </script>
 </body>
 </html>

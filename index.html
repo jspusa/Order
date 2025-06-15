@@ -1,308 +1,93 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <title>訂單產生器</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0; 
-            padding: 20px;
-        }
-        .container {
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-sizing: border-box;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 90%;
-            max-width: 1200px;
-        }
-        .header-bar {
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            margin-bottom: 20px;
-        }
-        .factory-switch {
-            background-color: #eee;
-            padding: 10px 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: background-color 0.3s, box-shadow 0.3s;
-        }
-        .factory-switch:hover {
-            background-color: #ddd;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        .factory-switch label {
-            margin-right: 10px;
-            font-weight: bold;
-            color: #333;
-        }
-        .factory-switch input[type="radio"] {
-            margin-right: 5px;
-        }
-        .header-bar h1 {
-            margin: 10px 20px;
-            color: #333;
-            flex-grow: 1;
-            text-align: center;
-        }
-        .box-size-button {
-            background-color: transparent;
-            color: #007bff;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            text-decoration: underline;
-            position: relative; 
-            margin-right: 10px;
-        }
-        .box-size-button:hover {
-            color: #0069d9;
-            background-color: #e2e6ea;
-            text-decoration: underline;
-        }
-        h1 { color: #333; }
-        label { display: block; margin-bottom: 10px; font-weight: bold; }
-        select, input[type="number"], input[type="text"] {
-            width: 100%; padding: 8px; margin-bottom: 20px; font-size: 16px;
-            border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box;
-        }
-        button {
-            padding: 10px 15px; background-color: #007bff; color: white; border: none;
-            border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .product-button {
-            padding: 10px 15px; background-color: #28a745; color: white; border: none;
-            border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;
-        }
-        .product-button:hover {
-            background-color: #218838;
-        }
-        .product-buttons-container {
-            display: flex; flex-wrap: wrap; margin-bottom: 20px;
-        }
-        table {
-            width: 100%; margin-top: 20px; border-collapse: collapse; table-layout: fixed;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-            box-sizing: border-box;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-        .action-button, .remove-button {
-            background-color: #6c757d; color: white;
-            padding: 4px 8px; margin: 2px;
-            border: none; border-radius: 5px; cursor: pointer;
-            font-size: 14px; display: inline-block;
-        }
-        .remove-button {
-            background-color: #dc3545;
-        }
-        .total {
-            margin-top: 20px; font-weight: bold; font-size: 18px; text-align: right;
-        }
-        .totals-container {
-            text-align: right; margin-top: 20px;
-        }
-        table input[type="number"] { width: 100%; box-sizing: border-box; }
-        td { overflow: hidden; }
-        .action-button-group {
-            display: flex; justify-content: center; align-items: center;
-        }
-        .action-button-group button { margin: 0 2px; }
-        .export-button {
-            background-color: #17a2b8; color: white; padding: 10px 15px;
-            border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;
-        }
-        .export-button:hover {
-            background-color: #117a8b;
-        }
-        .brand-button, .spec-button {
-            padding: 10px 15px; background-color: #6c757d; color: white; border: none;
-            border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;
-        }
-        .brand-button.active, .spec-button.active {
-            background-color: #007bff;
-        }
-        .progress-container {
-            width: 100%; background-color: #e0e0e0; border-radius: 5px; margin: 10px 0;
-            position: relative; height: 25px;
-        }
-        .progress-bar {
-            height: 100%; border-radius: 5px; width: 0%; text-align: center;
-            color: white; line-height: 25px; font-weight: bold; background-color: #007bff;
-        }
-        .container-info { margin-bottom: 20px; }
-        .box-size-A { color: #28a745; }
-        .box-size-B { color: #007bff; }
-        .box-size-C { color: #fd7e14; }
-        .box-size-D { color: #6f42c1; }
-        .box-size-icon {
-            display: inline-block; width: 12px; height: 12px; margin-right: 5px;
-            vertical-align: middle; border-radius: 50%;
-        }
-        .box-size-icon-A { background-color: #28a745; }
-        .box-size-icon-B { background-color: #007bff; }
-        .box-size-icon-C { background-color: #fd7e14; }
-        .box-size-icon-D { background-color: #6f42c1; }
-        .modal {
-            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
-            width: 100%; height: 100%; overflow: auto;
-            background-color: rgba(0,0,0,0.5);
-        }
-        .modal-content {
-            background-color: #fff; margin: 10% auto; padding: 20px; border-radius: 5px;
-            width: 80%; max-width: 500px; position: relative;
-        }
-        .close-modal {
-            color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;
-            position: absolute; right: 10px; top: 5px;
-        }
-        .close-modal:hover, .close-modal:focus {
-            color: black; text-decoration: none; cursor: pointer;
-        }
-        .modal-content p { margin: 10px 0; }
-        .search-container { position: relative; margin-bottom: 20px; }
-        .search-input {
-            width: 100%; padding: 8px; font-size: 16px; box-sizing: border-box;
-            border-radius: 5px; border: 1px solid #ccc;
-        }
-        .search-results {
-            position: absolute; top: 45px; left: 0; width: 100%; background-color: #fff;
-            border: 1px solid #ccc; border-top: none; max-height: 200px;
-            overflow-y: auto; z-index: 100;
-        }
-        .search-result-item {
-            padding: 8px; cursor: pointer;
-        }
-        .search-result-item:hover {
-            background-color: #f1f1f1;
-        }
-        .box-counts {
-            margin-top: 10px; font-size: 16px; text-align: right;
-        }
-        .lock-button {
-            background-color: #ffc107; color: white; padding: 4px 8px; margin: 2px;
-            border: none; border-radius: 5px; cursor: pointer; font-size: 14px;
-            display: inline-block;
-        }
-        .lock-button:hover {
-            background-color: #e0a800;
-        }
-        .locked {
-            background-color: #f0f0f0;
-        }
-        .target-input {
-            width: 100%; box-sizing: border-box;
-        }
-        table th:first-child, table td:first-child { width: 5%; }
-        table th:nth-child(2), table td:nth-child(2) { width: 10%; }
-        table th:nth-child(3), table td:nth-child(3) { width: 12%; }
-        table th:nth-child(4), table td:nth-child(4) { width: 12%; }
-        table th:nth-child(5), table td:nth-child(5) { width: 12%; }
-        table th:nth-child(6), table td:nth-child(6) { width: 10%; }
-        table th:nth-child(7), table td:nth-child(7) { width: 10%; }
-        table th:nth-child(8), table td:nth-child(8) { width: 10%; }
-        table th:nth-child(9), table td:nth-child(9) { width: auto; }
-        @media (max-width: 1200px) {
-            table th:first-child, table td:first-child { width: 6%; }
-            table th:nth-child(3), table td:nth-child(3),
-            table th:nth-child(4), table td:nth-child(4),
-            table th:nth-child(6), table td:nth-child(6),
-            table th:nth-child(7), table td:nth-child(7),
-            table th:nth-child(8), table td:nth-child(8) {
-                width: 12%;
-            }
-            table th:nth-child(2), table td:nth-child(2),
-            table th:nth-child(5), table td:nth-child(5),
-            table th:nth-child(9), table td:nth-child(9) {
-                width: auto;
-            }
-        }
-        @media (max-width: 768px) {
-            table th:nth-child(4), table td:nth-child(4),
-            table th:nth-child(6), table td:nth-child(6),
-            table th:nth-child(7), table td:nth-child(7) {
-                display: none;
-            }
-            table th:first-child, table td:first-child {
-                width: 10%;
-            }
-            table th:nth-child(3), table td:nth-child(3),
-            table th:nth-child(8), table td:nth-child(8) {
-                width: 20%;
-            }
-            table th:nth-child(2), table td:nth-child(2),
-            table th:nth-child(5), table td:nth-child(5),
-            table th:nth-child(9), table td:nth-child(9) {
-                width: auto;
-            }
-        }
-        #newItemGeneratorBtn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #ccc;
-            color: #333;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-        /* ================================
-           Dark mode styles
-           ================================ */
-        .dark-mode {
-            background-color: #2b2b2b;
-            color: #f5f5f5;
-        }
-        .dark-mode .container {
-            background-color: #3a3a3a;
-        }
-        .dark-mode table,
-        .dark-mode th,
-        .dark-mode td {
-            border-color: #555;
-        }
-        .dark-mode th {
-            background-color: #444;
-        }
-        .dark-mode input,
-        .dark-mode select,
-        .dark-mode textarea {
-            background-color: #555;
-            color: #f5f5f5;
-            border-color: #777;
-        }
-        .dark-mode button {
-            background-color: #555;
-            color: #f5f5f5;
-        }
-    </style>
-    <!-- 匯出 Excel 需要 xlsx.min.js 或 xlsx.full.min.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
-</head>
+  <meta charset="UTF-8">
+  <title>訂單產生器 Order Generator</title>
+  <meta name="viewport" content="width=1050">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Noto Sans TC', Arial, sans-serif;
+      background: linear-gradient(120deg, #f6f7fb 0%, #e9f0ff 100%);
+      padding: 0; margin: 0;
+      color: #273042;
+    }
+    .container {
+      margin: 36px auto 48px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 40px rgba(40,60,140,0.12);
+      max-width: 1050px;
+      padding: 40px 34px 30px 34px;
+      position: relative;
+      overflow: visible;
+    }
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 34px;
+      position: relative;
+    }
+    .header-bar h1 {
+      color: #2c3e50;
+      font-size: 2.1rem;
+      font-weight: 800;
+      flex: 1;
+      text-align: center;
+      letter-spacing: 1.2px;
+      margin: 0;
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px;
+    }
+    .header-bar .fa-cube { color: #68a0fa; }
+    .factory-switch {
+      background-color: #f3f7fa;
+      padding: 9px 19px;
+      border-radius: 9px;
+      box-shadow: 0 2px 8px #e5eaf1;
+      display: flex; gap: 14px;
+      align-items: center;
+      font-size: 1rem;
+    }
+    .factory-switch label {
+      margin: 0;
+      color: #5682c2;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex; align-items: center;
+    }
+    .factory-switch input[type="radio"] { accent-color: #3b79d5; margin-right: 5px; }
 
+    .box-size-button {
+      background: #e9f0ff;
+      color: #5682c2;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 7px;
+      padding: 9px 20px;
+      font-weight: 600;
+      box-shadow: 0 2px 10px #dde8f9;
+      transition: background 0.19s, color 0.19s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .box-size-button:hover { background: #d7e3fa; color: #3364ad;}
+    .export-button {
+      background: #10b7e8;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 11px 24px;
+      font-size: 1.08rem;
+      margin: 28px 0 0 0;
+      font-weight: 700;
+      box-shadow: 0 2px 16px #bee4f4c4;
+      transition: background 0.19s;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .export-button:hover { background: #0993b9;}
 
     select, input[type="number"], input[type="text"] {
       width: 100%; padding: 9px 14px; margin-bottom: 16px; font-size: 1.03rem;
@@ -463,26 +248,18 @@
 <body>
   <div class="container">
     <div class="header-bar">
-
-        <!-- 左：country 切換 (VN / TW / Others) -->
-        <div class="factory-switch">
-            <label><input type="radio" name="countrySelect" value="VN" checked> 越南廠</label>
-            <label><input type="radio" name="countrySelect" value="TW"> 台灣廠</label>
-            <label><input type="radio" name="countrySelect" value="Others"> 其他</label>
-        </div>
-        <h1>訂單產生器</h1>
-        <button class="box-size-button" onclick="openModal()">紙箱規格尺寸</button>
-        <button class="box-size-button" onclick="toggleDarkMode()">切換主題</button>
-    </div>
-
-    <!-- 品牌按鈕區 -->
-    <div id="brandButtons">
-        <label>選擇品牌：</label>
-    </div>
-
-    <!-- 規格按鈕區 -->
-    <div id="specButtons" style="display:none;">
-        <label>選擇規格：</label>
+      <div class="factory-switch">
+        <label><input type="radio" name="countrySelect" value="VN" checked> 越南廠</label>
+        <label><input type="radio" name="countrySelect" value="TW"> 台灣廠</label>
+        <label><input type="radio" name="countrySelect" value="Others"> 其他</label>
+      </div>
+      <h1>
+        <i class="fa-solid fa-cube"></i> 訂單產生器
+        <span style="font-size: 1rem; color:#8ab2e0; margin-left:12px;font-weight:400;">Order Generator</span>
+      </h1>
+      <button class="box-size-button" onclick="openModal()">
+        <i class="fa-solid fa-ruler-combined"></i> 紙箱尺寸
+      </button>
     </div>
     <div class="search-container">
       <input type="text" id="searchInput" class="search-input" placeholder="🔎 以品號搜尋/快速加入" oninput="searchProduct()">
@@ -863,17 +640,10 @@ const allProducts = [
           currentCountry = e.target.value;
           reloadData();
         });
-
-        reloadData();
-
-        // 新品產生器初始化
-        initNewItemModal();
-        packagingTypeChanged();
-        boxSizeChanged();
-        if(localStorage.getItem('darkMode') === '1'){
-            applyDarkMode(true);
-        }
-        loadOrderData();
+      });
+      reloadData();
+      packagingTypeChanged();
+      boxSizeChanged();
     });
 
     function reloadData(){
@@ -1328,81 +1098,6 @@ const allProducts = [
         showTip("已複製結果", "success");
       }
     }
-
-    // ================================
-    // Dark mode
-    // ================================
-    function applyDarkMode(enabled){
-        document.body.classList.toggle('dark-mode', enabled);
-        localStorage.setItem('darkMode', enabled ? '1' : '0');
-    }
-
-    function toggleDarkMode(){
-        const enabled = !document.body.classList.contains('dark-mode');
-        applyDarkMode(enabled);
-    }
-
-
-    // ================================
-    // Local storage for order table
-    // ================================
-    function saveOrderData(){
-        const rows = document.querySelectorAll('#productTable tbody tr');
-        const data = [];
-        rows.forEach(row => {
-            const code = row.cells[1].textContent;
-            const quantity = parseFloat(row.querySelector('.edit-quantity-input')?.value) || 0;
-            const packInput = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
-            const units = packInput ? (parseFloat(packInput.value) || 0) : 0;
-            const cartons = parseFloat(row.querySelector('.edit-cartons-input')?.value) || 0;
-            const pallets = parseFloat(row.querySelector('.edit-pallets-input')?.value) || 0;
-            const target = parseFloat(row.querySelector('.target-input')?.value) || 0;
-            data.push({code, quantity, units, cartons, pallets, target});
-        });
-        localStorage.setItem('orderData', JSON.stringify({country: currentCountry, rows: data}));
-    }
-
-    function loadOrderData(){
-        const saved = localStorage.getItem('orderData');
-        if(!saved) return;
-        try{
-            const obj = JSON.parse(saved);
-            if(obj.country){
-                currentCountry = obj.country;
-                const radio = document.querySelector(`input[name="countrySelect"][value="${currentCountry}"]`);
-                if(radio){ radio.checked = true; }
-            }
-            reloadData();
-            if(Array.isArray(obj.rows)){
-                obj.rows.forEach(item => {
-                    const prod = allProducts.find(p => p.productCode === item.code);
-                    if(prod){
-                        addProduct(prod);
-                        const row = document.querySelector(`#productTable tbody tr[data-product="${item.code}"]`);
-                        if(row){
-                            row.querySelector('.edit-quantity-input').value = item.quantity;
-                            const packInput = row.querySelector('.edit-pack-input') || row.querySelector('.edit-box-input');
-                            if(packInput) packInput.value = item.units;
-                            row.querySelector('.edit-cartons-input').value = item.cartons;
-                            row.querySelector('.edit-pallets-input').value = item.pallets;
-                            row.querySelector('.target-input').value = item.target;
-                        }
-                    }
-                });
-            }
-            updateTotals();
-        }catch(e){
-            console.error('Failed to load orderData', e);
-        }
-    }
-
-    // Save order data whenever totals update
-    const originalUpdateTotals = updateTotals;
-    updateTotals = function(){
-        originalUpdateTotals();
-        saveOrderData();
-    };
-
-</script>
+  </script>
 </body>
 </html>
